@@ -1,0 +1,16 @@
+syntax="proto3";
+
+package push.meta;
+
+option go_package = "meta";
+
+message RequestHeader{
+	string App = 1; //APP的名称，例如：hs,yd
+	string SrvName = 2;//服务名
+	string Version = 3;//服务版本号，例如:1.1
+}
+
+message ResponseHeader{
+	int32 Code = 1;
+	string Msg = 2;
+}

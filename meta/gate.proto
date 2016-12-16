@@ -1,0 +1,21 @@
+syntax="proto3";
+
+package push.meta;
+
+option go_package="meta";
+
+import "common.proto";
+
+service Gate{
+	rpc Push(GatePushRequest)returns (GatePushResponse);
+}
+
+message GatePushRequest{
+	RequestHeader header = 1;
+	string UserId = 2;
+	string Msg = 3;
+}
+
+message GatePushResponse{
+	ResponseHeader header = 1;
+}

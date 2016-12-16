@@ -1,0 +1,31 @@
+syntax="proto3";
+
+package push.meta;
+
+option go_package= "meta";
+
+import "common.proto";
+
+service Data{
+	rpc Online(DataOnlineRequest)returns (DataOnlineResponse);
+	rpc Offline(DataOfflineRequest)returns (DataOfflineResponse);
+}
+
+message DataOnlineRequest{
+	RequestHeader header = 1;
+	string UserId = 2;
+	string IP = 3;//用户上线连接的服务器ip
+}
+
+message DataOnlineResponse{
+	ResponseHeader header = 1;
+}
+
+message DataOfflineRequest{
+	RequestHeader header = 1;
+	string UserId = 2;
+}
+
+message DataOfflineResponse{
+	ResponseHeader header = 1;
+}

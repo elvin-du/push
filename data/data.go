@@ -12,7 +12,8 @@ type Data struct {
 
 func (*Data) Online(ctx context.Context, req *meta.DataOnlineRequest) (*meta.DataOnlineResponse, error) {
 	log.Printf("user:%s login ip:%s", req.UserId, req.IP)
-	return &meta.DataOnlineResponse{}, nil
+	header := &meta.ResponseHeader{Code: 0, Msg: "success"}
+	return &meta.DataOnlineResponse{Header: header}, nil
 
 }
 

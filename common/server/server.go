@@ -2,14 +2,15 @@ package server
 
 import (
 	"log"
-
-	"push/common/etcd"
+	"net"
+	"push/common/client/etcd"
 	"push/common/util"
 	"time"
+
+	"google.golang.org/grpc"
 )
 
-type Server struct {
-	Client            *etcd.ETCDClient
+type RPCServer struct {
 	APPName           string
 	ServiceName       string
 	ServiceVersion    string
@@ -17,17 +18,17 @@ type Server struct {
 	Port              string
 	Meta              map[string]string
 	HeartbeatInterval time.Duration
+	Server            *grpc.Server
 }
 
-func NewServer(app, srvName, srvVer, port string, meta map[string]string, cli *etcd.ETCDClient, heartbeat time.Duration) *Server {
+func NewRPCServer(app, srvName, srvVer, port string, meta map[string]string, heartbeat time.Duration, server *grpc.Server) *RPCServer {
 	ip, err := util.LocalIP()
 	if nil != err {
 		log.Fatal(err)
 		//TODO
 	}
 
-	return &Server{
-		Client:            cli,
+	return &RPCServer{
 		APPName:           app,
 		ServiceName:       srvName,
 		ServiceVersion:    srvVer,
@@ -35,36 +36,48 @@ func NewServer(app, srvName, srvVer, port string, meta map[string]string, cli *e
 		Port:              port,
 		Meta:              meta,
 		HeartbeatInterval: heartbeat,
+		Server:            server,
 	}
 }
 
-func (s *Server) Start() error {
-	err := s.Register()
-	if nil != err {
-		log.Print(err)
-		return err
+func (s *RPCServer) Run() {
+	l, err := net.Listen("tcp", s.Port)
+	if err != nil {
+		log.Fatalf("failed to listen: %v", err)
 	}
+	log.Println("gate rpc listening at:", s.Port)
 
-	go func() error {
+	go func() {
 		for {
-			time.Sleep(s.HeartbeatInterval)
 			err = s.Heartbeat()
 			if nil != err {
+				//注册不成功也不返回，只是记录下来
 				log.Print(err)
-				return err
+				continue
 			}
+
+			time.Sleep(s.HeartbeatInterval)
 		}
 	}()
 
-	return nil
+	err = s.Server.Serve(l)
+	if err != nil {
+		log.Fatalf("failed to listen: %v", err)
+	}
 }
 
-func (s *Server) Register() error {
+func (s *RPCServer) Register() error {
 	return s.doRegister(nil)
 }
 
-func (s *Server) doRegister(meta map[string]string) error {
-	err := s.Client.Register(s.APPName, s.ServiceName, s.ServiceVersion, s.IP, s.Port, meta)
+func (s *RPCServer) doRegister(meta map[string]string) error {
+	client, err := etcd.GetClient()
+	if nil != err {
+		log.Println(err)
+		return err
+	}
+
+	err = client.Register(s.APPName, s.ServiceName, s.ServiceVersion, s.IP, s.Port, meta)
 	if nil != err {
 		log.Println(err)
 		return err
@@ -73,11 +86,17 @@ func (s *Server) doRegister(meta map[string]string) error {
 	return nil
 }
 
-func (s *Server) Heartbeat() error {
+func (s *RPCServer) Heartbeat() error {
 	meta := map[string]string{"weight": "5"}
 	return s.doRegister(meta)
 }
 
-func (s *Server) Get() (ip string, port string, err error) {
-	return s.Client.Get(s.APPName, s.ServiceName, s.ServiceVersion)
+func (s *RPCServer) Get() (ip string, port string, err error) {
+	client, err := etcd.GetClient()
+	if nil != err {
+		log.Println(err)
+		return "", "", err
+	}
+
+	return client.Get(s.APPName, s.ServiceName, s.ServiceVersion)
 }

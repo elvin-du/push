@@ -2,18 +2,13 @@ package main
 
 import (
 	"log"
-
 	"net"
-
-	"push/common/etcd"
 	"push/common/server"
 	"push/common/util"
-
-	"golang.org/x/net/context"
-
 	"push/meta"
 
 	"io/ioutil"
+	"push/data/client"
 
 	"google.golang.org/grpc"
 )
@@ -26,42 +21,18 @@ const (
 )
 
 var (
-	rpcServer *server.Server
+	rpcServer *server.RPCServer
 )
-
-func init() {
-	log.SetFlags(log.Lshortfile)
-}
 
 /*
 开始监听RPC端口
 */
 func StartRPCServer() {
-	l, err := net.Listen("tcp", C_RPC_PORT)
-	if err != nil {
-		log.Fatalf("failed to listen: %v", err)
-	}
-	log.Println("gate rpc listening at:", C_RPC_PORT)
-	//	defer l.Close()
-
 	srv := grpc.NewServer()
 	meta.RegisterGateServer(srv, &Gate{})
 
-	cli, err := etcd.NewETCDClient(util.EtcdEndpoints, util.DialTimeout, util.RequestTimeout)
-	if nil != err {
-		log.Fatalln(err)
-	}
-
-	rpcServer = server.NewServer(util.APPName, C_SERVICE_NAME, C_SERVICE_VERSION, C_RPC_PORT, nil, cli, util.HeartbeatInterval)
-	err = rpcServer.Start()
-	if nil != err {
-		log.Fatalln(err)
-	}
-
-	err = srv.Serve(l)
-	if err != nil {
-		log.Fatalf("failed to listen: %v", err)
-	}
+	rpcServer = server.NewRPCServer(util.APP_NAME, C_SERVICE_NAME, C_SERVICE_VERSION, C_RPC_PORT, nil, util.HEARTBEAT_INTERNAL, srv)
+	rpcServer.Run()
 }
 
 /*
@@ -90,31 +61,11 @@ func StartTcpServer() {
 		conn.Close()
 		log.Println(string(bin))
 
-		//服务发现
-		ip, port, err := rpcServer.Client.Get("YD", "DATA", "1.0")
-		if nil != err {
-			log.Println(err)
-			continue
-		}
-		log.Println(ip, port)
-
-		target := ip + port
-		log.Print(target)
-		cliConn, err := grpc.Dial(target, grpc.WithInsecure())
-		if nil != err {
-			log.Println(err)
-			continue
-		}
-		//        defer cliConn.Close()
-		client := meta.NewDataClient(cliConn)
-
-		resp, err := client.Online(context.Background(), &meta.DataOnlineRequest{UserId: "123", IP: string(bin)})
+		resp, err := client.Online(&meta.DataOnlineRequest{UserId: "123", IP: "12.12.151.2"})
 		if nil != err {
 			log.Println(err)
 			continue
 		}
 		log.Println(resp.String())
-
-		log.Println(string(bin))
 	}
 }

@@ -20,5 +20,4 @@ func (*Data) Online(ctx context.Context, req *meta.DataOnlineRequest) (*meta.Dat
 func (*Data) Offline(ctx context.Context, req *meta.DataOfflineRequest) (*meta.DataOfflineResponse, error) {
 	log.Printf("user:%s offline", req.UserId)
 	return &meta.DataOfflineResponse{}, nil
-
 }

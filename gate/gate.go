@@ -1,3 +1,7 @@
+/*
+GATE对外提供RPC服务接口
+*/
+
 package main
 
 import (
@@ -14,4 +18,3 @@ func (*Gate) Push(ctx context.Context, req *meta.GatePushRequest) (*meta.GatePus
 	log.Printf("userId:%s Msg:%s", req.UserId, req.Msg)
 	return &meta.GatePushResponse{}, nil
 }
-

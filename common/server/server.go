@@ -21,7 +21,7 @@ type RPCServer struct {
 	Server            *grpc.Server
 }
 
-func NewRPCServer(app, srvName, srvVer, port string, meta map[string]string, heartbeat time.Duration, server *grpc.Server) *RPCServer {
+func NewRPCServer(app, serviceName, serviceVer, port string, meta map[string]string, heartbeat time.Duration, server *grpc.Server) *RPCServer {
 	ip, err := util.LocalIP()
 	if nil != err {
 		log.Fatal(err)
@@ -30,8 +30,8 @@ func NewRPCServer(app, srvName, srvVer, port string, meta map[string]string, hea
 
 	return &RPCServer{
 		APPName:           app,
-		ServiceName:       srvName,
-		ServiceVersion:    srvVer,
+		ServiceName:       serviceName,
+		ServiceVersion:    serviceVer,
 		IP:                ip,
 		Port:              port,
 		Meta:              meta,

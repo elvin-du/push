@@ -9,6 +9,7 @@
 		common.proto
 		data.proto
 		gate.proto
+		session.proto
 
 	It has these top-level messages:
 		RequestHeader
@@ -19,6 +20,10 @@
 		DataOfflineResponse
 		GatePushRequest
 		GatePushResponse
+		SessionRegisterRequest
+		SessionRegisterResponse
+		SessionUnregisterRequest
+		SessionUnregisterResponse
 */
 package meta
 

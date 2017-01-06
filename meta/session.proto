@@ -1,0 +1,39 @@
+syntax="proto3";
+
+package push.meta;
+
+option go_package="meta";
+
+import "common.proto";
+
+service Session{
+	rpc Register(SessionRegisterRequest)returns (SessionRegisterResponse);
+	rpc Unregister(SessionUnregisterRequest)returns (SessionUnregisterResponse);
+}
+
+message SessionRegisterRequest{
+	RequestHeader header = 1;
+	string ServiceVersion = 2;
+	string IP = 3;
+	string Port = 4;
+	string UserId = 5;
+	uint64 CreatedAt = 6;
+}
+
+message SessionRegisterResponse{
+	ResponseHeader header = 1;
+}
+
+message SessionUnregisterRequest{
+	RequestHeader header = 1;
+	string UserId = 2;
+}
+
+message SessionUnregisterResponse{
+	ResponseHeader header = 1;
+	string ServiceVersion = 2;
+	string IP = 3;
+	string Port = 4;
+	string UserId = 5;
+	uint64 CreatedAt = 6;
+}

@@ -38,6 +38,20 @@ func (m *GatePushRequest) GetHeader() *RequestHeader {
 	return nil
 }
 
+func (m *GatePushRequest) GetUserId() string {
+	if m != nil {
+		return m.UserId
+	}
+	return ""
+}
+
+func (m *GatePushRequest) GetMsg() string {
+	if m != nil {
+		return m.Msg
+	}
+	return ""
+}
+
 type GatePushResponse struct {
 	Header *ResponseHeader `protobuf:"bytes,1,opt,name=header" json:"header,omitempty"`
 }

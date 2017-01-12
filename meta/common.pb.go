@@ -55,6 +55,27 @@ func (m *RequestHeader) String() string            { return proto.CompactTextStr
 func (*RequestHeader) ProtoMessage()               {}
 func (*RequestHeader) Descriptor() ([]byte, []int) { return fileDescriptorCommon, []int{0} }
 
+func (m *RequestHeader) GetApp() string {
+	if m != nil {
+		return m.App
+	}
+	return ""
+}
+
+func (m *RequestHeader) GetSrvName() string {
+	if m != nil {
+		return m.SrvName
+	}
+	return ""
+}
+
+func (m *RequestHeader) GetVersion() string {
+	if m != nil {
+		return m.Version
+	}
+	return ""
+}
+
 type ResponseHeader struct {
 	Code int32  `protobuf:"varint,1,opt,name=Code,proto3" json:"Code,omitempty"`
 	Msg  string `protobuf:"bytes,2,opt,name=Msg,proto3" json:"Msg,omitempty"`
@@ -64,6 +85,20 @@ func (m *ResponseHeader) Reset()                    { *m = ResponseHeader{} }
 func (m *ResponseHeader) String() string            { return proto.CompactTextString(m) }
 func (*ResponseHeader) ProtoMessage()               {}
 func (*ResponseHeader) Descriptor() ([]byte, []int) { return fileDescriptorCommon, []int{1} }
+
+func (m *ResponseHeader) GetCode() int32 {
+	if m != nil {
+		return m.Code
+	}
+	return 0
+}
+
+func (m *ResponseHeader) GetMsg() string {
+	if m != nil {
+		return m.Msg
+	}
+	return ""
+}
 
 func init() {
 	proto.RegisterType((*RequestHeader)(nil), "push.meta.RequestHeader")

@@ -38,6 +38,20 @@ func (m *DataOnlineRequest) GetHeader() *RequestHeader {
 	return nil
 }
 
+func (m *DataOnlineRequest) GetUserId() string {
+	if m != nil {
+		return m.UserId
+	}
+	return ""
+}
+
+func (m *DataOnlineRequest) GetIP() string {
+	if m != nil {
+		return m.IP
+	}
+	return ""
+}
+
 type DataOnlineResponse struct {
 	Header *ResponseHeader `protobuf:"bytes,1,opt,name=header" json:"header,omitempty"`
 }
@@ -69,6 +83,13 @@ func (m *DataOfflineRequest) GetHeader() *RequestHeader {
 		return m.Header
 	}
 	return nil
+}
+
+func (m *DataOfflineRequest) GetUserId() string {
+	if m != nil {
+		return m.UserId
+	}
+	return ""
 }
 
 type DataOfflineResponse struct {

@@ -1,0 +1,16 @@
+package: push
+import:
+- package: github.com/coreos/etcd
+  version: v3.1.0-rc.1
+  subpackages:
+  - clientv3
+- package: github.com/gin-gonic/gin
+  version: v1.1.4
+- package: github.com/gogo/protobuf
+  version: v0.3
+  subpackages:
+  - proto
+- package: golang.org/x/net
+  subpackages:
+  - context
+- package: google.golang.org/grpc

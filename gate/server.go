@@ -5,9 +5,13 @@ import (
 	"net"
 	"push/common/server"
 	"push/common/util"
+	"push/gate/service"
 	"push/meta"
 
+	"github.com/surgemq/message"
 	"google.golang.org/grpc"
+
+	"io"
 )
 
 const (
@@ -47,7 +51,23 @@ func StartTcpServer() {
 			continue
 		}
 
-		session := NewSession(conn)
-		session.Start()
+		go handleConnection(conn)
 	}
+}
+
+func handleConnection(conn net.Conn) {
+	resp := message.NewConnackMessage()
+}
+
+func getConnectMsg(r io.Reader) (*message.ConnectMessage, error) {
+	var (
+		header = make([]byte, 1)
+	)
+
+	n, err := r.Read(header)
+	if nil != err {
+		log.Println(err)
+		return nil, err
+	}
+
 }

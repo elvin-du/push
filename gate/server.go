@@ -5,13 +5,10 @@ import (
 	"net"
 	"push/common/server"
 	"push/common/util"
-	"push/gate/service"
+	"push/gate/mqtt"
 	"push/meta"
 
-	"github.com/surgemq/message"
 	"google.golang.org/grpc"
-
-	"io"
 )
 
 const (
@@ -22,10 +19,20 @@ const (
 	C_TCP_PORT = ":60001"
 )
 
+var (
+	defaultServer = &Server{
+		Services: make(map[string][]*mqtt.Service),
+	}
+)
+
+type Server struct {
+	Services map[string][]*mqtt.Service //key:userid，一个用户有可能在多台设备上登录
+}
+
 /*
 开始监听RPC端口
 */
-func StartRPCServer() {
+func (s *Server) StartRPCServer() {
 	srv := grpc.NewServer()
 	meta.RegisterGateServer(srv, &Gate{})
 
@@ -36,7 +43,7 @@ func StartRPCServer() {
 /*
 开始监听客户端的连接
 */
-func StartTcpServer() {
+func (s *Server) StartTcpServer() {
 	l, err := net.Listen("tcp", C_TCP_PORT)
 	if err != nil {
 		log.Fatalf("failed to listen: %v", err)
@@ -51,23 +58,31 @@ func StartTcpServer() {
 			continue
 		}
 
-		go handleConnection(conn)
+		go s.handleConnection(conn)
 	}
 }
 
-func handleConnection(conn net.Conn) {
-	resp := message.NewConnackMessage()
-}
+func (s *Server) handleConnection(conn net.Conn) {
+	svc := mqtt.NewService(conn)
 
-func getConnectMsg(r io.Reader) (*message.ConnectMessage, error) {
-	var (
-		header = make([]byte, 1)
-	)
-
-	n, err := r.Read(header)
+	//获取客户端链接信息
+	connMsg, err := svc.GetConnectMessage()
 	if nil != err {
 		log.Println(err)
-		return nil, err
+		return
 	}
+	svc.UserId = string(connMsg.ClientId())
+	svc.ClientId = string(connMsg.ClientId())
 
+	s.SetService(svc)
+
+	//启动两个goroutine进行读写
+	err = svc.Start()
+	if nil != err {
+		log.Println(err)
+	}
+}
+
+func (s *Server) SetService(svc *mqtt.Service) {
+	s.Services[svc.UserId] = append(s.Services[svc.UserId], svc)
 }

@@ -9,6 +9,6 @@ func init() {
 }
 
 func main() {
-	go StartRPCServer()
-	StartTcpServer()
+	go defaultServer.StartRPCServer()
+	defaultServer.StartTcpServer()
 }

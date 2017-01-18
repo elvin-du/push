@@ -7,14 +7,95 @@ option go_package= "meta";
 import "common.proto";
 
 service Data{
+	//上线
 	rpc Online(DataOnlineRequest)returns (DataOnlineResponse);
+	//下线
 	rpc Offline(DataOfflineRequest)returns (DataOfflineResponse);
+
+	rpc SaveOfflineMsg(SaveOfflineMsgRequest)returns(SaveOfflineMsgResponse);
+	rpc GetOfflineMsgs(GetOfflineMsgsRequest)returns(GetOfflineMsgsResponse);
+	rpc DelOfflineMsgs(DelOfflineMsgsRequest)returns(DelOfflineMsgsResponse);
+
+	rpc GetClientInfo(GetClientInfoRequest)returns(GetClientInfoResponse);
+	rpc UpdateClientInfo(UpdateClientInfoRequest)returns(UpdateClientInfoResponse);
+}
+
+message UpdateClientInfoRequest{
+	RequestHeader header = 1;
+	string ClientId = 2;
+	string IP = 3;//用户上线连接的Gate服务器ip
+	string UserId = 4;
+	string platform = 5;
+}
+
+message UpdateClientInfoResponse{
+	RequestHeader header = 1;
+}
+
+message GetClientInfoRequest{
+	RequestHeader header = 1;
+	string UserId = 2;
+}
+
+message GetClientInfoRes{
+	string ClientId = 1;
+	string IP = 2;//用户上线连接的Gate服务器ip
+	string platform = 3;
+}
+
+message GetClientInfoResponse{
+	RequestHeader header = 1;
+	string UserId = 2;
+	repeated GetClientInfoRes Items = 3;
+}
+
+message DelOfflineMsgsRequest{
+	RequestHeader header = 1;
+	repeated string MsgId = 2;
+}
+
+message DelOfflineMsgsResponse{
+	ResponseHeader header = 1;
+}
+
+message GetOfflineMsgsRequest{
+	RequestHeader header = 1;
+	string UserId = 2;
+}
+
+message GetOfflineMsgsRes{
+	string MsgId = 1;
+	string ClientId = 2;
+	uint32 Kind = 3;
+	string Content = 4;
+	string Extra = 5;
+}
+
+message GetOfflineMsgsResponse{
+	ResponseHeader header = 1;
+	string UserId = 2;
+	repeated GetOfflineMsgsRes Items = 3;
+}
+
+message SaveOfflineMsgRequest{
+	RequestHeader header = 1;
+	string ClientId = 2;
+	string UserId = 3;
+	uint32 Kind = 4;
+	string Content = 5;
+	string Extra = 6;
+}
+
+message SaveOfflineMsgResponse{
+	ResponseHeader header = 1;
 }
 
 message DataOnlineRequest{
 	RequestHeader header = 1;
-	string UserId = 2;
-	string IP = 3;//用户上线连接的服务器ip
+	string ClientId = 2;
+	string IP = 3;//用户上线连接的Gate服务器ip
+	string UserId = 4;
+	string platform = 5;
 }
 
 message DataOnlineResponse{
@@ -23,7 +104,7 @@ message DataOnlineResponse{
 
 message DataOfflineRequest{
 	RequestHeader header = 1;
-	string UserId = 2;
+	string ClientId = 2;
 }
 
 message DataOfflineResponse{

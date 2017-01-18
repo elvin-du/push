@@ -12,10 +12,11 @@
 
 ### 协议
 
-	1. connect 
-	2. disconnet 
+	1. connect
+	2. disconnet
 	3. ping
-	
+	4. push
+
 ### 开源工具
 
 	NSQ 异步中间件

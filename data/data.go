@@ -1,7 +1,7 @@
 package main
 
 import (
-	"log"
+	"push/data/dal"
 	"push/meta"
 
 	"golang.org/x/net/context"
@@ -10,14 +10,32 @@ import (
 type Data struct {
 }
 
+//上线
 func (*Data) Online(ctx context.Context, req *meta.DataOnlineRequest) (*meta.DataOnlineResponse, error) {
-	log.Printf("user:%s login ip:%s", req.UserId, req.IP)
-	header := &meta.ResponseHeader{Code: 0, Msg: "success"}
-	return &meta.DataOnlineResponse{Header: header}, nil
-
+	return dal.DefaultMysqlClient.Online(req)
 }
 
+//下线
 func (*Data) Offline(ctx context.Context, req *meta.DataOfflineRequest) (*meta.DataOfflineResponse, error) {
-	log.Printf("user:%s offline", req.UserId)
-	return &meta.DataOfflineResponse{}, nil
+	return dal.DefaultMysqlClient.Offline(req)
+}
+
+func (*Data) SaveOfflineMsg(ctx context.Context, req *meta.SaveOfflineMsgRequest) (*meta.SaveOfflineMsgResponse, error) {
+	return dal.DefaultMysqlClient.SaveOfflineMsg(req)
+}
+
+func (*Data) GetOfflineMsgs(ctx context.Context, req *meta.GetOfflineMsgsRequest) (*meta.GetOfflineMsgsResponse, error) {
+	return dal.DefaultMysqlClient.GetOfflineMsgs(req)
+}
+
+func (*Data) DelOfflineMsgs(ctx context.Context, req *meta.DelOfflineMsgsRequest) (*meta.DelOfflineMsgsResponse, error) {
+	return dal.DefaultMysqlClient.DelOfflineMsgs(req)
+}
+
+func (*Data) GetClientInfo(ctx context.Context, req *meta.GetClientInfoRequest) (*meta.GetClientInfoResponse, error) {
+	return dal.DefaultMysqlClient.GetClientInfo(req)
+}
+
+func (*Data) UpdateClientInfo(ctx context.Context, req *meta.UpdateClientInfoRequest) (*meta.UpdateClientInfoResponse, error) {
+	return dal.DefaultMysqlClient.UpdateClientInfo(req)
 }

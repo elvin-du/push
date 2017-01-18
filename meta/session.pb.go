@@ -41,41 +41,6 @@ func (m *SessionRegisterRequest) GetHeader() *RequestHeader {
 	return nil
 }
 
-func (m *SessionRegisterRequest) GetServiceVersion() string {
-	if m != nil {
-		return m.ServiceVersion
-	}
-	return ""
-}
-
-func (m *SessionRegisterRequest) GetIP() string {
-	if m != nil {
-		return m.IP
-	}
-	return ""
-}
-
-func (m *SessionRegisterRequest) GetPort() string {
-	if m != nil {
-		return m.Port
-	}
-	return ""
-}
-
-func (m *SessionRegisterRequest) GetUserId() string {
-	if m != nil {
-		return m.UserId
-	}
-	return ""
-}
-
-func (m *SessionRegisterRequest) GetCreatedAt() uint64 {
-	if m != nil {
-		return m.CreatedAt
-	}
-	return 0
-}
-
 type SessionRegisterResponse struct {
 	Header *ResponseHeader `protobuf:"bytes,1,opt,name=header" json:"header,omitempty"`
 }
@@ -109,13 +74,6 @@ func (m *SessionUnregisterRequest) GetHeader() *RequestHeader {
 	return nil
 }
 
-func (m *SessionUnregisterRequest) GetUserId() string {
-	if m != nil {
-		return m.UserId
-	}
-	return ""
-}
-
 type SessionUnregisterResponse struct {
 	Header         *ResponseHeader `protobuf:"bytes,1,opt,name=header" json:"header,omitempty"`
 	ServiceVersion string          `protobuf:"bytes,2,opt,name=ServiceVersion,proto3" json:"ServiceVersion,omitempty"`
@@ -135,41 +93,6 @@ func (m *SessionUnregisterResponse) GetHeader() *ResponseHeader {
 		return m.Header
 	}
 	return nil
-}
-
-func (m *SessionUnregisterResponse) GetServiceVersion() string {
-	if m != nil {
-		return m.ServiceVersion
-	}
-	return ""
-}
-
-func (m *SessionUnregisterResponse) GetIP() string {
-	if m != nil {
-		return m.IP
-	}
-	return ""
-}
-
-func (m *SessionUnregisterResponse) GetPort() string {
-	if m != nil {
-		return m.Port
-	}
-	return ""
-}
-
-func (m *SessionUnregisterResponse) GetUserId() string {
-	if m != nil {
-		return m.UserId
-	}
-	return ""
-}
-
-func (m *SessionUnregisterResponse) GetCreatedAt() uint64 {
-	if m != nil {
-		return m.CreatedAt
-	}
-	return 0
 }
 
 func init() {

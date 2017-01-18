@@ -8,6 +8,8 @@ import (
 	"push/gate/mqtt"
 	"push/meta"
 
+	"push/data/client"
+
 	"google.golang.org/grpc"
 )
 
@@ -71,15 +73,46 @@ func (s *Server) handleConnection(conn net.Conn) {
 		log.Println(err)
 		return
 	}
+
 	svc.UserId = string(connMsg.ClientId())
 	svc.ClientId = string(connMsg.ClientId())
 
 	s.SetService(svc)
 
+	onlineReq := &meta.DataOnlineRequest{}
+	onlineReq.ClientId = string(connMsg.ClientId())
+	onlineReq.UserId = string(connMsg.ClientId())
+	onlineReq.IP = conn.RemoteAddr().String()
+
+	//
+	_, err = client.Online(onlineReq)
+	if nil != err {
+		log.Println(err)
+		return
+	}
+
+	//TODO 重发
+	s.CheckOfflineMsg(onlineReq.UserId)
+
 	//启动两个goroutine进行读写
 	err = svc.Start()
 	if nil != err {
 		log.Println(err)
+	}
+}
+
+func (s *Server) CheckOfflineMsg(userId string) {
+	resp, err := client.GetOfflineMsgs(userId)
+	if nil != err {
+		log.Println(err)
+	}
+
+	//TODO
+	svcs := s.Services[userId]
+	for _, v := range svcs {
+		for _, v2 := range resp.Items {
+			go v.Push([]byte(v2.Content))
+		}
 	}
 }
 

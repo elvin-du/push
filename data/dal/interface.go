@@ -1,14 +1,16 @@
 package dal
 
-type GateInfo struct {
-	IP   string `json:"ip"`
-	Port string `json:"port"`
-}
+import (
+	"push/meta"
+)
 
+//数据接口层提供的接口定义
 type DAL interface {
-	GetUserInfoByClientId(cliId string) error
-
-	SaveOfflineMsg() error
-
-	GetGateInfoByUserId(userId string) (*GateInfo, error)
+	Online(req *meta.DataOnlineRequest) (*meta.DataOnlineResponse, error)
+	Offline(req *meta.DataOfflineRequest) (*meta.DataOfflineResponse, error)
+	SaveOfflineMsg(req *meta.SaveOfflineMsgRequest) (*meta.SaveOfflineMsgResponse, error)
+	GetOfflineMsgs(req *meta.GetOfflineMsgsRequest) (*meta.GetOfflineMsgsResponse, error)
+	DelOfflineMsgs(req *meta.DelOfflineMsgsRequest) (*meta.DelOfflineMsgsResponse, error)
+	GetClientInfo(req *meta.GetClientInfoRequest) (*meta.GetClientInfoResponse, error)
+	UpdateClientInfo(req *meta.UpdateClientInfoRequest) (*meta.UpdateClientInfoResponse, error)
 }

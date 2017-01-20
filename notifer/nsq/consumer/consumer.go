@@ -27,10 +27,10 @@ type nsqConsumer struct {
 	stopCh              chan byte
 }
 
-func NewNsqConsumer(sglHandler MsgHandler, bcHandler MsgHandler) *nsqConsumer {
+func NewNsqConsumer(singleMsgHandler MsgHandler, broadcastMsgHandler MsgHandler) *nsqConsumer {
 	return &nsqConsumer{
-		singleMsgHandler:    sglHandler,
-		broadcastMsgHandler: bcHandler,
+		singleMsgHandler:    singleMsgHandler,
+		broadcastMsgHandler: broadcastMsgHandler,
 	}
 }
 

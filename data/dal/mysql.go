@@ -10,6 +10,10 @@ import (
 	_ "github.com/go-sql-driver/mysql"
 )
 
+func init() {
+	log.SetFlags(log.Lshortfile)
+}
+
 var (
 	TBL_CLIENTS      = "clients"
 	TBL_OFFILNE_MSGS = "offline_msgs"
@@ -20,7 +24,7 @@ type Mysql struct {
 }
 
 func NewMysql() *Mysql {
-	db, err := sql.Open("mysql", "root:JTabc.123@tcp(localhost:3306)/push_core")
+	db, err := sql.Open("mysql", "root:@tcp(localhost:4000)/push_core")
 	if nil != err {
 		log.Println(err)
 	}
@@ -29,7 +33,7 @@ func NewMysql() *Mysql {
 }
 
 func (m *Mysql) ReGetDBConn() error {
-	db, err := sql.Open("mysql", "root:JTabc.123@tcp(localhost:3306)/push_core")
+	db, err := sql.Open("mysql", "root:@tcp(localhost:4000)/push_core")
 	if nil != err {
 		log.Println(err)
 		return err

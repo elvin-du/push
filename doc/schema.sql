@@ -26,5 +26,5 @@ CREATE TABLE `offline_msgs` (
   `created_at` BIGINT(20) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `offline_msgs_client_id` (`client_id`),
-  KEY `offline_msgs_client_id` (`user_id`)
+  KEY `offline_msgs_user_id` (`user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;

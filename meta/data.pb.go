@@ -333,7 +333,9 @@ const _ = grpc.SupportPackageIsVersion4
 // Client API for Data service
 
 type DataClient interface {
+	// 上线
 	Online(ctx context.Context, in *DataOnlineRequest, opts ...grpc.CallOption) (*DataOnlineResponse, error)
+	// 下线
 	Offline(ctx context.Context, in *DataOfflineRequest, opts ...grpc.CallOption) (*DataOfflineResponse, error)
 	SaveOfflineMsg(ctx context.Context, in *SaveOfflineMsgRequest, opts ...grpc.CallOption) (*SaveOfflineMsgResponse, error)
 	GetOfflineMsgs(ctx context.Context, in *GetOfflineMsgsRequest, opts ...grpc.CallOption) (*GetOfflineMsgsResponse, error)
@@ -416,7 +418,9 @@ func (c *dataClient) UpdateClientInfo(ctx context.Context, in *UpdateClientInfoR
 // Server API for Data service
 
 type DataServer interface {
+	// 上线
 	Online(context.Context, *DataOnlineRequest) (*DataOnlineResponse, error)
+	// 下线
 	Offline(context.Context, *DataOfflineRequest) (*DataOfflineResponse, error)
 	SaveOfflineMsg(context.Context, *SaveOfflineMsgRequest) (*SaveOfflineMsgResponse, error)
 	GetOfflineMsgs(context.Context, *GetOfflineMsgsRequest) (*GetOfflineMsgsResponse, error)

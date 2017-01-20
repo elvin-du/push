@@ -32,6 +32,8 @@
 		DataOfflineResponse
 		GatePushRequest
 		GatePushResponse
+		GatePushAllRequest
+		GatePushAllResponse
 		SessionRegisterRequest
 		SessionRegisterResponse
 		SessionUnregisterRequest

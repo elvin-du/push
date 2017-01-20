@@ -3,6 +3,9 @@ package mqtt
 import (
 	"errors"
 	"log"
+	"math/rand"
+
+	"github.com/surgemq/message"
 )
 
 var (
@@ -25,5 +28,20 @@ func (s *Service) WriteLoop() error {
 }
 
 func (s *Service) Push(content []byte) {
-	s.outCh <- content
+	dst := make([]byte, 1)
+
+	pubMsg := &message.PublishMessage{}
+	pubMsg.SetQoS(message.QosAtLeastOnce)
+	pubMsg.SetPacketId(uint16(rand.Uint32()))
+	pubMsg.SetPayload(content)
+	pubMsg.SetRemainingLength(int32(len(content)))
+	n, err := pubMsg.Encode(dst)
+	if nil != err {
+		log.Println(err)
+		return
+	}
+
+	dst = dst[:n]
+
+	s.outCh <- dst
 }

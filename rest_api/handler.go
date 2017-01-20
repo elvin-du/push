@@ -1,11 +1,11 @@
 package main
 
 import (
-	"log"
+	"errors"
 	"net/http"
-	"push/data/client"
-	"push/meta"
 	"push/rest_api/nsq/producer"
+
+	"io/ioutil"
 
 	"github.com/gin-gonic/gin"
 )
@@ -31,13 +31,14 @@ type push struct{}
 var _push *push
 
 func (*push) Push(ctx *gin.Context) {
-	resp, err := client.Online(&meta.DataOnlineRequest{UserId: "123", IP: "12.12.151.2"})
+	bin, err := ioutil.ReadAll(ctx.Request.Body)
 	if nil != err {
-		log.Println(err)
+		ctx.AbortWithError(400, errors.New("parameter invalid"))
+		return
 	}
-	log.Println(resp.String())
-	go sigleProducer.Publish([]byte(resp.String()))
-	go broadcastProducer.Publish([]byte(resp.String()))
 
-	ctx.String(http.StatusOK, "hi push")
+	go sigleProducer.Publish(bin)
+	go broadcastProducer.Publish(bin)
+
+	ctx.Status(http.StatusOK)
 }

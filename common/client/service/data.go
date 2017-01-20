@@ -38,7 +38,7 @@ func (e *DataServiceClientManager) GetClient() (*DataServiceClient, error) {
 	case cli := <-e.Pool:
 		return cli, nil
 	default:
-		srvCli, err := NewServieClient(util.APP_NAME, SERVER_NAME, SERVER_VERSION)
+		srvCli, err := GetServieClient(util.APP_NAME, SERVER_NAME, SERVER_VERSION)
 		if nil != err {
 			log.Println(err)
 			return nil, err

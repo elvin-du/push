@@ -2,7 +2,7 @@ package mqtt
 
 import (
 	"net"
-	"sync"
+	"time"
 )
 
 var (
@@ -11,25 +11,26 @@ var (
 
 type Service struct {
 	Conn      net.Conn
-	wgStarted sync.WaitGroup
 	ClientId  string
 	UserId    string
+	Keepalive time.Duration
 
-	outCh chan []byte
+	outCh  chan []byte
+	stopCh chan byte
 }
 
 func NewService(conn net.Conn) *Service {
 	return &Service{
-		Conn:  conn,
-		outCh: make(chan []byte, SERVICE_DEFAULT_OUT_CH_SIZE),
+		Conn:   conn,
+		outCh:  make(chan []byte, SERVICE_DEFAULT_OUT_CH_SIZE),
+		stopCh: make(chan byte),
 	}
 }
 
-func (s *Service) Start() error {
+func (s *Service) Run() {
 	go s.ReadLoop()
 
 	go s.WriteLoop()
 
-	s.wgStarted.Wait()
-	return nil
+	<-s.stopCh
 }

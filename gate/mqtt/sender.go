@@ -16,6 +16,7 @@ func (s *Service) WriteLoop() error {
 	for {
 		select {
 		case out := <-s.outCh:
+			log.Println("should send len", len(out))
 			n, err := s.Conn.Write(out)
 			if nil != err {
 				log.Println(err)
@@ -27,21 +28,25 @@ func (s *Service) WriteLoop() error {
 	return E_WRITE_ERROR
 }
 
-func (s *Service) Push(content []byte) {
-	dst := make([]byte, 1)
-
+func (s *Service) Push(content []byte) error {
 	pubMsg := &message.PublishMessage{}
 	pubMsg.SetQoS(message.QosAtLeastOnce)
 	pubMsg.SetPacketId(uint16(rand.Uint32()))
 	pubMsg.SetPayload(content)
-	pubMsg.SetRemainingLength(int32(len(content)))
-	n, err := pubMsg.Encode(dst)
+
+	return s.Write(pubMsg)
+}
+
+func (s *Service) Write(msg message.Message) error {
+	log.Println("write:", msg.Desc())
+	buf := make([]byte, msg.Len())
+	n, err := msg.Encode(buf)
 	if nil != err {
 		log.Println(err)
-		return
+		return err
 	}
 
-	dst = dst[:n]
+	s.outCh <- buf[:n]
 
-	s.outCh <- dst
+	return nil
 }

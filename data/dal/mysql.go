@@ -57,14 +57,16 @@ func (m *Mysql) Query(query string, args ...interface{}) (*sql.Rows, error) {
 
 //上线
 func (m *Mysql) Online(req *meta.DataOnlineRequest) (*meta.DataOnlineResponse, error) {
-	utc := time.Now().Unix()
-	sqlStr := fmt.Sprintf("INSERT INTO %s SET id='%s',gate_server_ip='%s',user_id='%s',platform='%s',status=1,created_at=%d,updated_at=%d", TBL_CLIENTS, req.ClientId, req.IP, req.UserId, req.Platform, utc, utc)
-	log.Println(sqlStr)
-	_, err := m.Query(sqlStr)
-	if nil != err {
-		log.Println(err)
-		return nil, err
-	}
+//	utc := time.Now().Unix()
+	//TODO
+	log.Printf("%s online sucess", req.ClientId)
+//	sqlStr := fmt.Sprintf("INSERT INTO %s SET id='%s',gate_server_ip='%s',user_id='%s',platform='%s',status=1,created_at=%d,updated_at=%d", TBL_CLIENTS, req.ClientId, req.IP, req.UserId, req.Platform, utc, utc)
+//	log.Println(sqlStr)
+//	_, err := m.Query(sqlStr)
+//	if nil != err {
+//		log.Println(err)
+//		return nil, err
+//	}
 	return &meta.DataOnlineResponse{}, nil
 }
 

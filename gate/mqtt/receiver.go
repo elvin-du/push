@@ -5,6 +5,7 @@ import (
 	"errors"
 	"fmt"
 	"log"
+	"time"
 
 	"github.com/surgemq/message"
 )
@@ -15,11 +16,19 @@ var (
 
 func (s *Service) ReadLoop() error {
 	for {
+		//		err := s.Conn.SetDeadline(time.Now().Add(s.Keepalive))
+		err := s.Conn.SetDeadline(time.Time{})
+		if nil != err {
+			log.Println(err)
+			return err
+		}
+
 		msg, _, _, err := s.ReadMessage()
 		if nil != err {
 			log.Println(err)
 			return err
 		}
+
 		s.Process(msg)
 	}
 

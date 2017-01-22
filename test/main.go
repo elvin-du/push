@@ -2,34 +2,63 @@ package main
 
 import (
 	"log"
-	"net"
+	//	"time"
+
+	"github.com/surgemq/message"
+	"github.com/surgemq/surgemq/service"
 )
 
 var (
-	C_TCP_PORT = ":60001"
+	mqttAddr = "tcp://127.0.0.1:60001"
 )
 
+func init() {
+	log.SetFlags(log.Lshortfile)
+}
+
 func main() {
-	conn, err := net.Dial("tcp", C_TCP_PORT)
+	mqttCli := &service.Client{}
+
+	msg := message.NewConnectMessage()
+	msg.SetVersion(4)
+	msg.SetClientId([]byte("clientid123"))
+	err := mqttCli.Connect(mqttAddr, msg)
+	if nil != err {
+		log.Fatal(err)
+	}
+
+	//	for {
+	//	time.Sleep(time.Second * 60)
+	//		err := mqttCli.Ping(OnComplete)
+	err = mqttCli.Ping(OnComplete)
 	if nil != err {
 		log.Println(err)
 		return
 	}
-	defer conn.Close()
+	//	}
 
-	_, err = conn.Write([]byte("hi i am tester"))
-	if nil != err {
-		log.Println(err)
-		return
-	}
+	//	pubMsg := message.NewPublishMessage()
+	//	pubMsg.SetPayload([]byte("1234"))
+	//	pubMsg.SetPacketId(5)
+	//	pubMsg.SetQoS(message.QosAtLeastOnce)
+	//	//	err = pubMsg.SetTopic([]byte("/yd/push/user/b"))
+	//	//	if nil != err {
+	//	//		log.Fatal(err)
+	//	//	}
 
-	log.Println("send done")
-	bin := make([]byte, 1024)
+	//	err = mqttCli.Publish(pubMsg, pubOnComplete)
+	//	if nil != err {
+	//		log.Fatal(err)
+	//	}
 
-	n, err := conn.Read(bin)
-	if nil != err {
-		log.Println(err)
-		return
-	}
-	log.Println("read:", string(bin[:n]))
+	select {}
+}
+func OnComplete(msg, ack message.Message, err error) error {
+	log.Println(ack.Name())
+	return nil
+}
+
+func subOnPublish(msg *message.PublishMessage) error {
+
+	return nil
 }

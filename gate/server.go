@@ -5,11 +5,12 @@ import (
 	"net"
 	"push/common/server"
 	"push/common/util"
+	"push/data/client"
 	"push/gate/mqtt"
 	"push/meta"
+	"time"
 
-	"push/data/client"
-
+	"github.com/surgemq/message"
 	"google.golang.org/grpc"
 )
 
@@ -66,6 +67,7 @@ func (s *Server) StartTcpServer() {
 
 func (s *Server) handleConnection(conn net.Conn) {
 	svc := mqtt.NewService(conn)
+	svc.Keepalive = time.Minute * 5
 
 	//获取客户端链接信息
 	connMsg, err := svc.GetConnectMessage()
@@ -74,6 +76,22 @@ func (s *Server) handleConnection(conn net.Conn) {
 		return
 	}
 
+	//	err = svc.Conn.SetDeadline(time.Now().Add(svc.Keepalive))
+	err = svc.Conn.SetDeadline(time.Time{})
+	if nil != err {
+		log.Println(err)
+		return
+	}
+
+	connAckMsg := message.NewConnackMessage()
+	connAckMsg.SetReturnCode(message.ConnectionAccepted)
+	err = svc.Write(connAckMsg)
+	if nil != err {
+		log.Println(err)
+		return
+	}
+
+	log.Printf("clientid:%s connected", connMsg.ClientId())
 	svc.UserId = string(connMsg.ClientId())
 	svc.ClientId = string(connMsg.ClientId())
 
@@ -95,10 +113,8 @@ func (s *Server) handleConnection(conn net.Conn) {
 	s.CheckOfflineMsg(onlineReq.UserId)
 
 	//启动两个goroutine进行读写
-	err = svc.Start()
-	if nil != err {
-		log.Println(err)
-	}
+	svc.Run()
+	log.Println("not show")
 }
 
 func (s *Server) CheckOfflineMsg(userId string) {
@@ -109,6 +125,7 @@ func (s *Server) CheckOfflineMsg(userId string) {
 
 	//TODO
 	svcs := s.Services[userId]
+	log.Printf("found %d offline msg for %s", len(resp.Items), userId)
 	for _, v := range svcs {
 		for _, v2 := range resp.Items {
 			go v.Push([]byte(v2.Content))

@@ -16,7 +16,6 @@ func (s *Service) WriteLoop() error {
 	for {
 		select {
 		case out := <-s.outCh:
-			log.Println("should send len", len(out))
 			n, err := s.Conn.Write(out)
 			if nil != err {
 				log.Println(err)

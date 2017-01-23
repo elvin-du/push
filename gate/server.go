@@ -75,13 +75,9 @@ func (s *Server) handleConnection(conn net.Conn) {
 		log.Println(err)
 		return
 	}
-
-	//	err = svc.Conn.SetDeadline(time.Now().Add(svc.Keepalive))
-	err = svc.Conn.SetDeadline(time.Time{})
-	if nil != err {
-		log.Println(err)
-		return
-	}
+	log.Printf("clientid:%s connected", connMsg.ClientId())
+	svc.UserId = string(connMsg.ClientId())
+	svc.ClientId = string(connMsg.ClientId())
 
 	connAckMsg := message.NewConnackMessage()
 	connAckMsg.SetReturnCode(message.ConnectionAccepted)
@@ -90,10 +86,6 @@ func (s *Server) handleConnection(conn net.Conn) {
 		log.Println(err)
 		return
 	}
-
-	log.Printf("clientid:%s connected", connMsg.ClientId())
-	svc.UserId = string(connMsg.ClientId())
-	svc.ClientId = string(connMsg.ClientId())
 
 	s.SetService(svc)
 

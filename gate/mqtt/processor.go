@@ -35,8 +35,6 @@ func (s *Service) processDisConn(msg *message.DisconnectMessage) error {
 func (s *Service) processPingReq(msg *message.PingreqMessage) error {
 	log.Println("ping came")
 	pingResp := message.NewPingrespMessage()
-	pingResp.SetPacketId(msg.PacketId())
-	log.Println(msg.PacketId())
 	s.Write(pingResp)
 	return nil
 }

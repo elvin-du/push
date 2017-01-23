@@ -16,6 +16,12 @@ func (s *Service) WriteLoop() error {
 	for {
 		select {
 		case out := <-s.outCh:
+			err := s.SetWriteDeadline(s.Keepalive)
+			if nil != err {
+				log.Println(err)
+				continue
+			}
+
 			n, err := s.Conn.Write(out)
 			if nil != err {
 				log.Println(err)

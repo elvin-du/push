@@ -81,6 +81,12 @@ func (s *Server) handleConnection(conn net.Conn) {
 
 	connAckMsg := message.NewConnackMessage()
 	connAckMsg.SetReturnCode(message.ConnectionAccepted)
+	err = svc.SetWriteDeadline(svc.Keepalive)
+	if nil != err {
+		log.Println(err)
+		return
+	}
+
 	err = svc.Write(connAckMsg)
 	if nil != err {
 		log.Println(err)

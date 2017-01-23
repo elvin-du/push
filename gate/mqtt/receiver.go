@@ -5,7 +5,6 @@ import (
 	"errors"
 	"fmt"
 	"log"
-	"time"
 
 	"github.com/surgemq/message"
 )
@@ -16,11 +15,10 @@ var (
 
 func (s *Service) ReadLoop() error {
 	for {
-		//		err := s.Conn.SetDeadline(time.Now().Add(s.Keepalive))
-		err := s.Conn.SetDeadline(time.Time{})
+		err := s.SetReadDeadline(s.Keepalive)
 		if nil != err {
 			log.Println(err)
-			return err
+			continue
 		}
 
 		msg, _, _, err := s.ReadMessage()
@@ -151,6 +149,12 @@ func (s *Service) readRaw() ([]byte, error) {
 }
 
 func (s *Service) GetConnectMessage() (*message.ConnectMessage, error) {
+	err := s.SetReadDeadline(s.Keepalive)
+	if err != nil {
+		log.Println(err)
+		return nil, err
+	}
+
 	buf, err := s.readRaw()
 	if err != nil {
 		log.Println(err)

@@ -34,3 +34,11 @@ func (s *Service) Run() {
 
 	<-s.stopCh
 }
+
+func (s *Service) SetReadDeadline(d time.Duration) error {
+	return s.Conn.SetReadDeadline(time.Now().Add(d))
+}
+
+func (s *Service) SetWriteDeadline(d time.Duration) error {
+	return s.Conn.SetWriteDeadline(time.Now().Add(d))
+}

@@ -34,9 +34,10 @@ func (s *Service) WriteLoop() error {
 }
 
 func (s *Service) Push(content []byte) error {
-	pubMsg := &message.PublishMessage{}
+	pubMsg := message.NewPublishMessage()
 	pubMsg.SetQoS(message.QosAtLeastOnce)
 	pubMsg.SetPacketId(uint16(rand.Uint32()))
+	pubMsg.SetTopic([]byte("*"))
 	pubMsg.SetPayload(content)
 
 	return s.Write(pubMsg)

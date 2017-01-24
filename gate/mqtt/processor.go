@@ -24,11 +24,13 @@ func (s *Service) Process(msg message.Message) error {
 
 func (s *Service) processPubAck(msg *message.PubackMessage) error {
 	//TODO pushlish成功，删除消息
+	log.Println(*msg)
 	return nil
 }
 
 func (s *Service) processDisConn(msg *message.DisconnectMessage) error {
 	//TODO 客户端要求断开链接，删除数据库
+	log.Println(*msg)
 	return nil
 }
 

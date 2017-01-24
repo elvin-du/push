@@ -60,6 +60,7 @@ func (b *SingleMsgHandler) Process(i interface{}) error {
 		log.Println(err)
 		return err
 	}
+	log.Printf("gate info:%+v", resp)
 
 	for _, item := range resp.GetItems() {
 		if item.Platform == "android" {
@@ -74,6 +75,8 @@ func (b *SingleMsgHandler) Process(i interface{}) error {
 				log.Println(err)
 				return err
 			}
+		} else if "ios" == item.Platform {
+			//TODO
 		}
 	}
 

@@ -95,10 +95,17 @@ func (s *Server) handleConnection(conn net.Conn) {
 
 	s.SetService(svc)
 
+	gateIp, err := util.LocalIP()
+	if nil != err {
+		log.Println(err)
+		return
+	}
+
 	onlineReq := &meta.DataOnlineRequest{}
 	onlineReq.ClientId = string(connMsg.ClientId())
 	onlineReq.UserId = string(connMsg.ClientId())
-	onlineReq.IP = conn.RemoteAddr().String()
+	onlineReq.IP = gateIp
+	onlineReq.Platform = "android"
 
 	//
 	_, err = client.Online(onlineReq)

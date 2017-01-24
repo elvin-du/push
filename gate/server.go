@@ -104,7 +104,8 @@ func (s *Server) handleConnection(conn net.Conn) {
 	onlineReq := &meta.DataOnlineRequest{}
 	onlineReq.ClientId = string(connMsg.ClientId())
 	onlineReq.UserId = string(connMsg.ClientId())
-	onlineReq.IP = gateIp
+	onlineReq.GateIp = gateIp
+	onlineReq.GatePort = C_RPC_PORT
 	onlineReq.Platform = "android"
 
 	//

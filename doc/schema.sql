@@ -5,8 +5,9 @@ USE `push_core`;
 DROP TABLE IF EXISTS `clients`;
 CREATE TABLE `clients` (
   `id` VARCHAR(36) NOT NULL, -- 一个客户端对应一个设备ID
-  `gate_server_ip` VARCHAR(36) NOT NULL, -- 连接上的Gate服务器的IP
   `user_id` VARCHAR(36) NOT NULL,
+  `gate_server_ip` VARCHAR(36) NOT NULL, -- 连接上的Gate服务器的IP
+  `gate_server_port` VARCHAR(10) NOT NULL, -- 连接上的Gate服务器的Port
   `platform` VARCHAR(30) NOT NULL, -- android,ios
   `status` TINYINT(1) NOT NULL DEFAULT '1', -- 1: oneline,0:offline
   `created_at` BIGINT(20) NOT NULL,

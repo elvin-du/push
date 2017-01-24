@@ -23,9 +23,10 @@ service Data{
 message UpdateClientInfoRequest{
 	RequestHeader header = 1;
 	string ClientId = 2;
-	string IP = 3;//用户上线连接的Gate服务器ip
-	string UserId = 4;
-	string platform = 5;
+	string GateIp = 3;//用户上线连接的Gate服务器ip
+	string GatePort = 4;//用户上线连接的Gate服务器port
+	string UserId = 5;
+	string platform = 6;
 }
 
 message UpdateClientInfoResponse{
@@ -93,9 +94,10 @@ message SaveOfflineMsgResponse{
 message DataOnlineRequest{
 	RequestHeader header = 1;
 	string ClientId = 2;
-	string IP = 3;//用户上线连接的Gate服务器ip
-	string UserId = 4;
-	string platform = 5;
+	string GateIp = 3;//用户上线连接的Gate服务器ip
+	string GatePort = 4;//用户上线连接的Gate服务器port
+	string UserId = 5;
+	string platform = 6;
 }
 
 message DataOnlineResponse{

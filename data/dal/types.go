@@ -3,6 +3,7 @@ package dal
 type ClientInfo struct {
 	Id           string `json:"id"`
 	GateServerIp string `json:"gate_server_ip"`
+	GateServerPort string `json:"gate_server_port"`
 	UserId       string `json:"user_id"`
 	Platform     string `json:"platform"`
 	Status       byte   `json:"status"`

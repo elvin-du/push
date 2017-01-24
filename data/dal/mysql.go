@@ -72,7 +72,8 @@ func (m *Mysql) Online(req *meta.DataOnlineRequest) (*meta.DataOnlineResponse, e
 	//		return nil, err
 	//	}
 	ci := &ClientInfo{}
-	ci.GateServerIp = req.IP
+	ci.GateServerIp = req.GateIp
+	ci.GateServerPort = req.GatePort
 	ci.Id = req.ClientId
 	ci.Platform = req.Platform
 	ci.UserId = req.UserId

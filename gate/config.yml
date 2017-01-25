@@ -1,0 +1,7 @@
+service:
+  rpc:
+    name: "GATE"
+    version: "1.0"
+    port: ":50002"
+  tcp:
+    port: ":60001"

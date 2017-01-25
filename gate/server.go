@@ -6,20 +6,13 @@ import (
 	"push/common/server"
 	"push/common/util"
 	"push/data/client"
+	"push/gate/config"
 	"push/gate/mqtt"
 	"push/meta"
 	"time"
 
 	"github.com/surgemq/message"
 	"google.golang.org/grpc"
-)
-
-const (
-	C_SERVICE_NAME    = "GATE"
-	C_SERVICE_VERSION = "1.0"
-	C_RPC_PORT        = ":50002"
-
-	C_TCP_PORT = ":60001"
 )
 
 var (
@@ -39,7 +32,14 @@ func (s *Server) StartRPCServer() {
 	srv := grpc.NewServer()
 	meta.RegisterGateServer(srv, &Gate{})
 
-	rpcServer := server.NewRPCServer(util.APP_NAME, C_SERVICE_NAME, C_SERVICE_VERSION, C_RPC_PORT, nil, util.HEARTBEAT_INTERNAL, srv)
+	rpcServer := server.NewRPCServer(
+		util.APP_NAME,
+		config.RpcServiceName,
+		config.RpcServiceVersion,
+		config.RpcServicePort,
+		nil,
+		util.HEARTBEAT_INTERNAL,
+		srv)
 	rpcServer.Run()
 }
 
@@ -47,11 +47,11 @@ func (s *Server) StartRPCServer() {
 开始监听客户端的连接
 */
 func (s *Server) StartTcpServer() {
-	l, err := net.Listen("tcp", C_TCP_PORT)
+	l, err := net.Listen("tcp", config.TcpPort)
 	if err != nil {
 		log.Fatalf("failed to listen: %v", err)
 	}
-	log.Println("gate tcp listening at:", C_TCP_PORT)
+	log.Println("gate tcp listening at:", config.TcpPort)
 	defer l.Close()
 
 	for {
@@ -105,7 +105,7 @@ func (s *Server) handleConnection(conn net.Conn) {
 	onlineReq.ClientId = string(connMsg.ClientId())
 	onlineReq.UserId = string(connMsg.ClientId())
 	onlineReq.GateIp = gateIp
-	onlineReq.GatePort = C_RPC_PORT
+	onlineReq.GatePort = config.RpcServicePort
 	onlineReq.Platform = "android"
 
 	//

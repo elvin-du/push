@@ -2,6 +2,7 @@ package main
 
 import (
 	"log"
+	"push/gate/service"
 )
 
 func init() {
@@ -9,6 +10,7 @@ func init() {
 }
 
 func main() {
+	service.Start()
 	go defaultServer.StartRPCServer()
 	defaultServer.StartTcpServer()
 }

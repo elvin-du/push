@@ -6,7 +6,7 @@ import (
 	"push/common/server"
 	"push/common/util"
 	"push/data/client"
-	"push/gate/config"
+	"push/gate/service/config"
 	"push/gate/mqtt"
 	"push/meta"
 	"time"

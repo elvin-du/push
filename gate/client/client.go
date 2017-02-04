@@ -5,7 +5,7 @@ GATE Server对外提供的客户端接口,本接口内部调用RPC服务
 package client
 
 import (
-	"log"
+	"hscore/log"
 	"push/common/client/service"
 	"push/meta"
 
@@ -15,7 +15,7 @@ import (
 func Push(ip, port string, req *meta.GatePushRequest) (*meta.GatePushResponse, error) {
 	cli, err := service.GateClient(ip, port)
 	if nil != err {
-		log.Println(err)
+		log.Error(err)
 		return nil, err
 	}
 	defer service.GatePut(cli)
@@ -27,7 +27,7 @@ func Push(ip, port string, req *meta.GatePushRequest) (*meta.GatePushResponse, e
 func PushAll(req *meta.GatePushAllRequest) (*meta.GatePushAllResponse, error) {
 	//	cli, err := service.GateClient()
 	//	if nil != err {
-	//		log.Println(err)
+	//		log.Error(err)
 	//		return nil, err
 	//	}
 	//	defer service.GatePut(cli)

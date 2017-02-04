@@ -3,7 +3,7 @@ package config
 import (
 	"hscore/config"
 	"hscore/util"
-	"log"
+	"hscore/log"
 )
 
 var (

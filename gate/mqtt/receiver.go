@@ -4,7 +4,7 @@ import (
 	"encoding/binary"
 	"errors"
 	"fmt"
-	"log"
+	"hscore/log"
 
 	"github.com/surgemq/message"
 )
@@ -17,13 +17,13 @@ func (s *Service) ReadLoop() error {
 	for {
 		err := s.SetReadDeadline(s.Keepalive)
 		if nil != err {
-			log.Println(err)
+			log.Error(err)
 			continue
 		}
 
 		msg, _, _, err := s.ReadMessage()
 		if nil != err {
-			log.Println(err)
+			log.Error(err)
 			return err
 		}
 
@@ -85,7 +85,7 @@ func (s *Service) ReadMessage() (message.Message, []byte, int, error) {
 	msg, err := mtype.New()
 	dn, err := msg.Decode(buf)
 	if err != nil {
-		log.Println(err)
+		log.Error(err)
 		return nil, buf, 0, err
 	}
 
@@ -151,20 +151,20 @@ func (s *Service) readRaw() ([]byte, error) {
 func (s *Service) GetConnectMessage() (*message.ConnectMessage, error) {
 	err := s.SetReadDeadline(s.Keepalive)
 	if err != nil {
-		log.Println(err)
+		log.Error(err)
 		return nil, err
 	}
 
 	buf, err := s.readRaw()
 	if err != nil {
-		log.Println(err)
+		log.Error(err)
 		return nil, err
 	}
 
 	msg := message.NewConnectMessage()
 	_, err = msg.Decode(buf)
 	if nil != err {
-		log.Println(err)
+		log.Error(err)
 		return nil, err
 	}
 

@@ -1,7 +1,7 @@
 package main
 
 import (
-	"log"
+	"hscore/log"
 	"net"
 	"push/common/server"
 	"push/common/util"
@@ -51,13 +51,13 @@ func (s *Server) StartTcpServer() {
 	if err != nil {
 		log.Fatalf("failed to listen: %v", err)
 	}
-	log.Println("gate tcp listening at:", config.TcpPort)
+	log.Debugln("gate tcp listening at:", config.TcpPort)
 	defer l.Close()
 
 	for {
 		conn, err := l.Accept()
 		if nil != err {
-			log.Println(err)
+			log.Error(err)
 			continue
 		}
 
@@ -72,10 +72,10 @@ func (s *Server) handleConnection(conn net.Conn) {
 	//获取客户端链接信息
 	connMsg, err := svc.GetConnectMessage()
 	if nil != err {
-		log.Println(err)
+		log.Error(err)
 		return
 	}
-	log.Printf("clientid:%s connected", connMsg.ClientId())
+	log.Debugf("clientid:%s connected", connMsg.ClientId())
 	svc.UserId = string(connMsg.ClientId())
 	svc.ClientId = string(connMsg.ClientId())
 
@@ -83,13 +83,13 @@ func (s *Server) handleConnection(conn net.Conn) {
 	connAckMsg.SetReturnCode(message.ConnectionAccepted)
 	err = svc.SetWriteDeadline(svc.Keepalive)
 	if nil != err {
-		log.Println(err)
+		log.Error(err)
 		return
 	}
 
 	err = svc.Write(connAckMsg)
 	if nil != err {
-		log.Println(err)
+		log.Error(err)
 		return
 	}
 
@@ -97,7 +97,7 @@ func (s *Server) handleConnection(conn net.Conn) {
 
 	gateIp, err := util.LocalIP()
 	if nil != err {
-		log.Println(err)
+		log.Error(err)
 		return
 	}
 
@@ -111,7 +111,7 @@ func (s *Server) handleConnection(conn net.Conn) {
 	//
 	_, err = client.Online(onlineReq)
 	if nil != err {
-		log.Println(err)
+		log.Error(err)
 		return
 	}
 
@@ -120,18 +120,18 @@ func (s *Server) handleConnection(conn net.Conn) {
 
 	//启动两个goroutine进行读写
 	svc.Run()
-	log.Println("not show")
+	log.Debugln("not show")
 }
 
 func (s *Server) CheckOfflineMsg(userId string) {
 	resp, err := client.GetOfflineMsgs(userId)
 	if nil != err {
-		log.Println(err)
+		log.Error(err)
 	}
 
 	//TODO
 	svcs := s.Services[userId]
-	log.Printf("found %d offline msg for %s", len(resp.Items), userId)
+	log.Debugf("found %d offline msg for %s", len(resp.Items), userId)
 	for _, v := range svcs {
 		for _, v2 := range resp.Items {
 			go v.Push([]byte(v2.Content))

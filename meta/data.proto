@@ -67,9 +67,10 @@ message GetOfflineMsgsRequest{
 message GetOfflineMsgsRes{
 	string MsgId = 1;
 	string ClientId = 2;
-	uint32 Kind = 3;
-	string Content = 4;
-	string Extra = 5;
+	uint32 PacketId = 3;
+	uint32 Kind = 4;
+	string Content = 5;
+	string Extra = 6;
 }
 
 message GetOfflineMsgsResponse{

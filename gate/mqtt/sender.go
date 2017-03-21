@@ -3,7 +3,6 @@ package mqtt
 import (
 	"errors"
 	"hscore/log"
-	"math/rand"
 
 	"github.com/surgemq/message"
 )
@@ -33,10 +32,10 @@ func (s *Service) WriteLoop() error {
 	return E_WRITE_ERROR
 }
 
-func (s *Service) Push(content []byte) error {
+func (s *Service) Push(packetId uint16, content []byte) error {
 	pubMsg := message.NewPublishMessage()
 	pubMsg.SetQoS(message.QosAtLeastOnce)
-	pubMsg.SetPacketId(uint16(rand.Uint32()))
+	pubMsg.SetPacketId(packetId)
 	pubMsg.SetTopic([]byte("*"))
 	pubMsg.SetPayload(content)
 

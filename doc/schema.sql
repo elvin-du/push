@@ -20,6 +20,7 @@ DROP TABLE IF EXISTS `offline_msgs`;
 CREATE TABLE `offline_msgs` (
   `id` VARCHAR(36) NOT NULL,
   `client_id` VARCHAR(36) NOT NULL,
+  `packet_id` INT(2) UNSIGNED NOT NULL,
   `user_id` VARCHAR(36) NOT NULL,
   `kind` INT(4) UNSIGNED NOT NULL, -- 消息类型
   `content` VARCHAR(500) NOT NULL,
@@ -27,5 +28,5 @@ CREATE TABLE `offline_msgs` (
   `created_at` BIGINT(20) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `offline_msgs_client_id` (`client_id`),
-  KEY `offline_msgs_user_id` (`user_id`)
+  KEY `offline_msgs_user_id_packet_id` (`user_id`,`packet_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;

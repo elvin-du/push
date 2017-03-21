@@ -14,10 +14,10 @@ service Gate{
 message GatePushRequest{
 	RequestHeader header = 1;
 	string UserId = 2;
-	string Content = 3;
-	int32 Kind = 4;
-	string extra = 5;
-
+	uint32 PacketId = 3;
+	string Content = 4;
+	int32 Kind = 5;
+	string extra = 6;
 }
 
 message GatePushResponse{

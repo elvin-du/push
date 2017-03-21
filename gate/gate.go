@@ -16,11 +16,15 @@ type Gate struct {
 
 func (*Gate) Push(ctx context.Context, req *meta.GatePushRequest) (*meta.GatePushResponse, error) {
 	log.Debugln(*req)
-	svcs := defaultServer.Services[req.UserId]
-	for _, v := range svcs {
-		v.Push([]byte(req.Content))
+	resp := &meta.GatePushResponse{}
+
+	svc := defaultServer.Services[req.UserId]
+	err := svc.Push(uint16(req.PacketId), []byte(req.Content))
+	if nil != err {
+		return resp, err
 	}
-	return &meta.GatePushResponse{}, nil
+
+	return resp, nil
 }
 
 func (*Gate) PushAll(ctx context.Context, req *meta.GatePushAllRequest) (*meta.GatePushAllResponse, error) {

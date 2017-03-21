@@ -86,7 +86,11 @@ func (s *RPCServer) doRegister(meta map[string]string) error {
 	return nil
 }
 
+/*
+每次心跳时都会重新注册一次
+*/
 func (s *RPCServer) Heartbeat() error {
+	//TODO 权重用来做负载均衡
 	meta := map[string]string{"weight": "5"}
 	return s.doRegister(meta)
 }

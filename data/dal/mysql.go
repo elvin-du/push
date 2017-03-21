@@ -24,7 +24,7 @@ type Mysql struct {
 }
 
 func NewMysql() *Mysql {
-	db, err := sql.Open("mysql", "root:@tcp(localhost:4000)/push_core")
+	db, err := sql.Open("mysql", "root:@tcp(localhost:4000)/htz_classic")
 	if nil != err {
 		log.Println(err)
 	}
@@ -33,7 +33,7 @@ func NewMysql() *Mysql {
 }
 
 func (m *Mysql) ReGetDBConn() error {
-	db, err := sql.Open("mysql", "root:@tcp(localhost:4000)/push_core")
+	db, err := sql.Open("mysql", "root:@tcp(localhost:4000)/htz_classic")
 	if nil != err {
 		log.Println(err)
 		return err

@@ -8,7 +8,7 @@
 ### TCP默认端口：
 
 	1. gate tcp: 60001
-	1. rest_api http: 60002
+	2. rest_api http: 60002
 
 ### 协议
 
@@ -19,8 +19,8 @@
 
 ### 开源工具
 
-	NSQ 异步中间件
-	GIN WEB框架
-	Redis 数据持久化
+	1. NSQ 异步中间件
+	2. GIN WEB框架
+	3. Redis 数据持久化
 
 

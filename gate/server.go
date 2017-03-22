@@ -19,12 +19,14 @@ import (
 
 var (
 	defaultServer = &Server{
-		Services: make(map[string]*mqtt.Service),
+		Services:  make(map[string]*mqtt.Service),
+		Keepalive: 60 * 5, //五分钟
 	}
 )
 
 type Server struct {
-	Services map[string]*mqtt.Service //key:userid，一个用户不可以同时在多台设备上登录
+	Services  map[string]*mqtt.Service //key:userid，一个用户不可以同时在多台设备上登录
+	Keepalive int64                    //单位：秒
 }
 
 /*
@@ -56,6 +58,8 @@ func (s *Server) StartTcpServer() {
 	log.Debugln("gate tcp listening at:", config.TcpPort)
 	defer l.Close()
 
+	go s.CronEvery()
+
 	for {
 		conn, err := l.Accept()
 		if nil != err {
@@ -69,11 +73,8 @@ func (s *Server) StartTcpServer() {
 
 func (s *Server) handleConnection(conn net.Conn) {
 	svc := mqtt.NewService(conn)
-	svc.Keepalive = time.Minute * 5
-
-	defer func() {
-		s.DelService(svc)
-	}()
+	svc.SetWriteTimeout(time.Second * 30)
+	svc.SetReadTimeout(time.Minute * 10)
 
 	//获取客户端链接信息
 	connMsg, err := svc.GetConnectMessage()
@@ -83,24 +84,15 @@ func (s *Server) handleConnection(conn net.Conn) {
 	}
 	log.Infof("clientid:%s connected", connMsg.ClientId())
 
-	//启动两个goroutine进行读写
-	go svc.Run()
-
 	svc.UserId = string(connMsg.Username())
 	svc.ClientId = string(connMsg.ClientId())
-	err = svc.SetWriteDeadline(svc.Keepalive)
-	if nil != err {
-		log.Error(err)
-		return
-	}
-
 	connAckMsg := message.NewConnackMessage()
 
 	//合法性检验
 	err = s.Auth(svc.UserId, string(connMsg.Password()))
 	if nil != err {
 		connAckMsg.SetReturnCode(message.ErrNotAuthorized)
-		err = svc.Write(connAckMsg)
+		err = svc.SendMsg(connAckMsg)
 		if nil != err {
 			log.Error(err)
 			return
@@ -112,7 +104,7 @@ func (s *Server) handleConnection(conn net.Conn) {
 	platform, err := s.ParseClientId(svc.ClientId)
 	if nil != err {
 		connAckMsg.SetReturnCode(message.ErrNotAuthorized)
-		err = svc.Write(connAckMsg)
+		err = svc.SendMsg(connAckMsg)
 		if nil != err {
 			log.Error(err)
 			return
@@ -123,21 +115,26 @@ func (s *Server) handleConnection(conn net.Conn) {
 
 	//回应connect消息
 	connAckMsg.SetReturnCode(message.ConnectionAccepted)
-	err = svc.Write(connAckMsg)
+	err = svc.SendMsg(connAckMsg)
 	if nil != err {
 		log.Error(err)
 		return
 	}
 
-	//每一个新用户链接抽象为一个service，并把其保存到相应的server实例中
-	s.SetService(svc)
+	svc.SetTouchTime(time.Now().Unix())
+	//启动两个goroutine进行读写
+	svc.Run()
 
 	s.TryKickOff(svc.ClientId, svc.UserId)
 	s.CheckOfflineMsg(svc.UserId)
 
+	//每一个新用户链接抽象为一个service，并把其保存到相应的server实例中
+	s.SetService(svc)
+
 	gateIp, err := util.LocalIP()
 	if nil != err {
 		log.Error(err)
+		s.DelService(svc)
 		return
 	}
 
@@ -152,10 +149,9 @@ func (s *Server) handleConnection(conn net.Conn) {
 	_, err = dataCli.Online(onlineReq)
 	if nil != err {
 		log.Error(err)
+		s.DelService(svc)
 		return
 	}
-
-	log.Infoln("should not show")
 }
 
 func (s *Server) CheckOfflineMsg(userId string) {
@@ -205,4 +201,14 @@ func (s *Server) ParseClientId(clientId string) (string, error) {
 //TODO
 func (s *Server) Auth(userId, token string) error {
 	return nil
+}
+
+func (s *Server) CronEvery() {
+	for _, user := range s.Services {
+		time.Sleep(time.Second * time.Duration(s.Keepalive))
+		if !user.IsAlive(s.Keepalive) {
+			s.DelService(user)
+			//TODO 通知session
+		}
+	}
 }

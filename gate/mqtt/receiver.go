@@ -5,6 +5,7 @@ import (
 	"errors"
 	"fmt"
 	"hscore/log"
+	"time"
 
 	"github.com/surgemq/message"
 )
@@ -15,19 +16,17 @@ var (
 
 func (s *Service) ReadLoop() error {
 	for {
-		err := s.SetReadDeadline(s.Keepalive)
+		msg, _, _, err := s.ReadMessage()
 		if nil != err {
 			log.Error(err)
 			continue
 		}
 
-		msg, _, _, err := s.ReadMessage()
+		err = s.Process(msg)
 		if nil != err {
-			log.Error(err)
-			return err
+			log.Errorln(err)
+			continue
 		}
-
-		s.Process(msg)
 	}
 
 	return E_READ_ERROR
@@ -35,6 +34,12 @@ func (s *Service) ReadLoop() error {
 
 // ReadPacket read one packet from conn
 func (s *Service) ReadMessage() (message.Message, []byte, int, error) {
+	if s.readTimeout > 0 {
+		s.Conn.SetReadDeadline(time.Now().Add(s.readTimeout))
+	} else {
+		s.Conn.SetReadDeadline(time.Time{})
+	}
+
 	var (
 		// buf for head
 		b = make([]byte, 5)
@@ -94,6 +99,12 @@ func (s *Service) ReadMessage() (message.Message, []byte, int, error) {
 
 // Read a raw message from conn
 func (s *Service) readRaw() ([]byte, error) {
+	if s.readTimeout > 0 {
+		s.Conn.SetReadDeadline(time.Now().Add(s.readTimeout))
+	} else {
+		s.Conn.SetReadDeadline(time.Time{})
+	}
+
 	var (
 		// the message buffer
 		buf []byte
@@ -149,12 +160,6 @@ func (s *Service) readRaw() ([]byte, error) {
 }
 
 func (s *Service) GetConnectMessage() (*message.ConnectMessage, error) {
-	err := s.SetReadDeadline(s.Keepalive)
-	if err != nil {
-		log.Error(err)
-		return nil, err
-	}
-
 	buf, err := s.readRaw()
 	if err != nil {
 		log.Error(err)

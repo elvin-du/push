@@ -10,35 +10,41 @@ var (
 )
 
 type Service struct {
-	Conn      net.Conn
-	ClientId  string
-	UserId    string
-	Keepalive time.Duration
+	Conn         net.Conn
+	ClientId     string
+	UserId       string
+	readTimeout  time.Duration
+	writeTimeout time.Duration
+	touchTime    int64
 
-	outCh  chan []byte
-	stopCh chan byte
+	outCh chan []byte
 }
 
 func NewService(conn net.Conn) *Service {
 	return &Service{
-		Conn:   conn,
-		outCh:  make(chan []byte, SERVICE_DEFAULT_OUT_CH_SIZE),
-		stopCh: make(chan byte),
+		Conn:  conn,
+		outCh: make(chan []byte, SERVICE_DEFAULT_OUT_CH_SIZE),
 	}
 }
 
 func (s *Service) Run() {
 	go s.ReadLoop()
-
 	go s.WriteLoop()
 
-	<-s.stopCh
 }
 
-func (s *Service) SetReadDeadline(d time.Duration) error {
-	return s.Conn.SetReadDeadline(time.Now().Add(d))
+func (s *Service) SetReadTimeout(d time.Duration) {
+	s.readTimeout = d
 }
 
-func (s *Service) SetWriteDeadline(d time.Duration) error {
-	return s.Conn.SetWriteDeadline(time.Now().Add(d))
+func (s *Service) SetWriteTimeout(d time.Duration) {
+	s.writeTimeout = d
+}
+
+func (s *Service) SetTouchTime(t int64) {
+	s.touchTime = t
+}
+
+func (s *Service) IsAlive(t int64) bool {
+	return time.Now().Unix()-s.touchTime < t
 }

@@ -3,7 +3,7 @@ package main
 import (
 	"encoding/binary"
 	"fmt"
-	"log"
+	"hscore/log"
 	"net"
 	"time"
 

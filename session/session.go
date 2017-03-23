@@ -1,7 +1,7 @@
 package main
 
 import (
-	"log"
+	"hscore/log"
 	"push/meta"
 
 	"golang.org/x/net/context"

@@ -4,7 +4,7 @@ import (
 	"push/meta"
 )
 
-type Redis struct {}
+type Redis struct{}
 
 //上线
 func (r *Redis) Online(req *meta.DataOnlineRequest) (*meta.DataOnlineResponse, error) {

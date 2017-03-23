@@ -1,7 +1,7 @@
 package main
 
 import (
-	"log"
+	"hscore/log"
 )
 
 func init() {

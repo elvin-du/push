@@ -2,7 +2,7 @@ package producer
 
 import (
 	"container/list"
-	"log"
+	"hscore/log"
 
 	"github.com/nsqio/go-nsq"
 )

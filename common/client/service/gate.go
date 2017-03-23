@@ -1,7 +1,7 @@
 package service
 
 import (
-	"log"
+	"hscore/log"
 	"push/common/util"
 	"push/meta"
 )
@@ -39,7 +39,7 @@ func (e *GateServiceClientManager) Client(ip, port string) (*GateServiceClient, 
 	default:
 		srvCli, err := NewServieClient(ip, port, util.APP_NAME, GATE_SERVER_NAME, GATE_SERVER_VERSION)
 		if nil != err {
-			log.Println(err)
+			log.Errorln(err)
 			return nil, err
 		}
 
@@ -61,7 +61,7 @@ func (e *GateServiceClientManager) Put(cli *GateServiceClient) error {
 	default:
 		err := cli.ServiceClient.Close()
 		if nil != err {
-			log.Println(err)
+			log.Errorln(err)
 		}
 
 		return err

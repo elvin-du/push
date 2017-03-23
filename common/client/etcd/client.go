@@ -4,7 +4,7 @@ import (
 	"context"
 
 	"fmt"
-	"log"
+	"hscore/log"
 	"strings"
 	"time"
 
@@ -25,7 +25,7 @@ func NewETCDClient(endpoints []string, dialTimeout, requestTimeout time.Duration
 	})
 
 	if nil != err {
-		log.Println(err)
+		log.Errorln(err)
 		return nil, err
 	}
 
@@ -58,7 +58,7 @@ func (e *ETCDClient) Register(app, srvName, version, ip, port string, meta map[s
 	resp, err := e.Client.Grant(ctx, 120)
 	cancel()
 	if nil != err {
-		log.Println(err)
+		log.Errorln(err)
 		return err
 	}
 
@@ -66,7 +66,7 @@ func (e *ETCDClient) Register(app, srvName, version, ip, port string, meta map[s
 	_, err = e.Client.Put(ctx, key, value, clientv3.WithLease(resp.ID))
 	cancel()
 	if nil != err {
-		log.Println(err)
+		log.Errorln(err)
 		return err
 	}
 
@@ -86,7 +86,7 @@ func (e *ETCDClient) Get(app, srvName, version string) (ip string, port string, 
 	resp, err := e.Client.Get(ctx, key, clientv3.WithPrefix())
 	cancel()
 	if nil != err {
-		log.Println(err)
+		log.Errorln(err)
 		return "", "", err
 	}
 
@@ -94,9 +94,9 @@ func (e *ETCDClient) Get(app, srvName, version string) (ip string, port string, 
 	if len(resp.Kvs) > 0 {
 		key := resp.Kvs[0].Key
 		//        val := resp.Kvs[0].Value
-		log.Println("resp", string(key))
+		log.Debugln("resp", string(key))
 		keys := strings.Split(string(key), "/")
-		log.Println(keys)
+		log.Debugln(keys)
 		ip = keys[4]
 		port = keys[5]
 	}

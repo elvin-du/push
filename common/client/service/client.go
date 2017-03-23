@@ -2,7 +2,7 @@ package service
 
 import (
 	//	"golang.org/x/net/context"
-	"log"
+	"hscore/log"
 	"push/common/client/etcd"
 
 	"google.golang.org/grpc"
@@ -18,13 +18,13 @@ type ServiceClient struct {
 func GetServieClient(appName, srvName, srvVer string) (*ServiceClient, error) {
 	etcdCli, err := etcd.GetClient()
 	if nil != err {
-		log.Println(err)
+		log.Errorln(err)
 		return nil, err
 	}
 
 	ip, port, err := etcdCli.Get(appName, srvName, srvVer)
 	if nil != err {
-		log.Println(err)
+		log.Errorln(err)
 		return nil, err
 	}
 
@@ -35,7 +35,7 @@ func NewServieClient(ip, port, appName, srvName, srvVer string) (*ServiceClient,
 	target := ip + port
 	cliConn, err := grpc.Dial(target, grpc.WithInsecure())
 	if nil != err {
-		log.Println(err)
+		log.Errorln(err)
 		return nil, err
 	}
 

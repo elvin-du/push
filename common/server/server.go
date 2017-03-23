@@ -1,7 +1,7 @@
 package server
 
 import (
-	"log"
+	"hscore/log"
 	"net"
 	"push/common/client/etcd"
 	"push/common/util"
@@ -45,14 +45,14 @@ func (s *RPCServer) Run() {
 	if err != nil {
 		log.Fatalf("failed to listen: %v", err)
 	}
-	log.Println("gate rpc listening at:", s.Port)
+	log.Infoln("gate rpc listening at:", s.Port)
 
 	go func() {
 		for {
 			err = s.Heartbeat()
 			if nil != err {
 				//注册不成功也不返回，只是记录下来
-				log.Print(err)
+				log.Errorln(err)
 				continue
 			}
 
@@ -73,13 +73,13 @@ func (s *RPCServer) Register() error {
 func (s *RPCServer) doRegister(meta map[string]string) error {
 	client, err := etcd.GetClient()
 	if nil != err {
-		log.Println(err)
+		log.Errorln(err)
 		return err
 	}
 
 	err = client.Register(s.APPName, s.ServiceName, s.ServiceVersion, s.IP, s.Port, meta)
 	if nil != err {
-		log.Println(err)
+		log.Errorln(err)
 		return err
 	}
 
@@ -98,7 +98,7 @@ func (s *RPCServer) Heartbeat() error {
 func (s *RPCServer) Get() (ip string, port string, err error) {
 	client, err := etcd.GetClient()
 	if nil != err {
-		log.Println(err)
+		log.Errorln(err)
 		return "", "", err
 	}
 

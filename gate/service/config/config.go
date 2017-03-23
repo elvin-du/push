@@ -2,8 +2,8 @@ package config
 
 import (
 	"hscore/config"
-	"hscore/util"
 	"hscore/log"
+	"hscore/util"
 )
 
 var (
@@ -13,7 +13,7 @@ var (
 	TcpPort           string
 )
 
-func init() {
+func Init() {
 	loadConfig()
 	ParseConfig()
 }

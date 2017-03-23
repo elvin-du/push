@@ -1,10 +1,11 @@
 package service
 
 import (
-	_ "push/gate/service/config"
 	"push/common/log"
+	"push/gate/service/config"
 )
 
 func Start() {
-	log.InitLog()
+	config.Init()
+	log.Init()
 }

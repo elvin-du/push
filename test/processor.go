@@ -1,7 +1,7 @@
 package main
 
 import (
-	"log"
+	"hscore/log"
 
 	"github.com/surgemq/message"
 )

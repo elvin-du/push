@@ -3,7 +3,7 @@ package main
 import (
 	"encoding/json"
 	"errors"
-	"log"
+	"hscore/log"
 	dataCli "push/data/client"
 	gateCli "push/gate/client"
 	"push/meta"

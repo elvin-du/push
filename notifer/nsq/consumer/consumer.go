@@ -1,7 +1,7 @@
 package consumer
 
 import (
-	"log"
+	"hscore/log"
 
 	"github.com/nsqio/go-nsq"
 )

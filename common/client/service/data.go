@@ -1,7 +1,7 @@
 package service
 
 import (
-	"log"
+	"hscore/log"
 	"push/common/util"
 	"push/meta"
 )
@@ -40,7 +40,7 @@ func (e *DataServiceClientManager) GetClient() (*DataServiceClient, error) {
 	default:
 		srvCli, err := GetServieClient(util.APP_NAME, SERVER_NAME, SERVER_VERSION)
 		if nil != err {
-			log.Println(err)
+			log.Errorln(err)
 			return nil, err
 		}
 
@@ -62,7 +62,7 @@ func (e *DataServiceClientManager) Put(cli *DataServiceClient) error {
 	default:
 		err := cli.ServiceClient.Close()
 		if nil != err {
-			log.Println(err)
+			log.Errorln(err)
 		}
 
 		return err

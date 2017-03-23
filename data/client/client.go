@@ -5,7 +5,7 @@ DATA Server对外提供的客户端接口,本接口内部调用RPC服务
 package client
 
 import (
-	"log"
+	"hscore/log"
 	"push/common/client/service"
 	"push/meta"
 
@@ -15,7 +15,7 @@ import (
 func Online(req *meta.DataOnlineRequest) (*meta.DataOnlineResponse, error) {
 	cli, err := service.DataClient()
 	if nil != err {
-		log.Println(err)
+		log.Errorln(err)
 		return nil, err
 	}
 	defer service.DataPut(cli)
@@ -26,7 +26,7 @@ func Online(req *meta.DataOnlineRequest) (*meta.DataOnlineResponse, error) {
 func Offline(req *meta.DataOfflineRequest) (*meta.DataOfflineResponse, error) {
 	cli, err := service.DataClient()
 	if nil != err {
-		log.Println(err)
+		log.Errorln(err)
 		return nil, err
 	}
 	defer service.DataPut(cli)
@@ -37,7 +37,7 @@ func Offline(req *meta.DataOfflineRequest) (*meta.DataOfflineResponse, error) {
 func SaveOfflineMsg(req *meta.SaveOfflineMsgRequest) (*meta.SaveOfflineMsgResponse, error) {
 	cli, err := service.DataClient()
 	if nil != err {
-		log.Println(err)
+		log.Errorln(err)
 		return nil, err
 	}
 	defer service.DataPut(cli)
@@ -48,7 +48,7 @@ func SaveOfflineMsg(req *meta.SaveOfflineMsgRequest) (*meta.SaveOfflineMsgRespon
 func GetOfflineMsgs(userId string) (*meta.GetOfflineMsgsResponse, error) {
 	cli, err := service.DataClient()
 	if nil != err {
-		log.Println(err)
+		log.Errorln(err)
 		return nil, err
 	}
 	defer service.DataPut(cli)
@@ -61,7 +61,7 @@ func GetOfflineMsgs(userId string) (*meta.GetOfflineMsgsResponse, error) {
 func DelOfflineMsgs(req *meta.DelOfflineMsgsRequest) (*meta.DelOfflineMsgsResponse, error) {
 	cli, err := service.DataClient()
 	if nil != err {
-		log.Println(err)
+		log.Errorln(err)
 		return nil, err
 	}
 	defer service.DataPut(cli)
@@ -72,7 +72,7 @@ func DelOfflineMsgs(req *meta.DelOfflineMsgsRequest) (*meta.DelOfflineMsgsRespon
 func GetClientInfo(req *meta.GetClientInfoRequest) (*meta.GetClientInfoResponse, error) {
 	cli, err := service.DataClient()
 	if nil != err {
-		log.Println(err)
+		log.Errorln(err)
 		return nil, err
 	}
 	defer service.DataPut(cli)
@@ -83,7 +83,7 @@ func GetClientInfo(req *meta.GetClientInfoRequest) (*meta.GetClientInfoResponse,
 func UpdateClientInfo(req *meta.UpdateClientInfoRequest) (*meta.UpdateClientInfoResponse, error) {
 	cli, err := service.DataClient()
 	if nil != err {
-		log.Println(err)
+		log.Errorln(err)
 		return nil, err
 	}
 	defer service.DataPut(cli)

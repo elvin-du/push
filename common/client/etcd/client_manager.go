@@ -1,7 +1,7 @@
 package etcd
 
 import (
-	"log"
+	"hscore/log"
 	"time"
 )
 
@@ -11,9 +11,9 @@ const (
 
 var (
 	//etcd default config
-	ECTD_ENDPOINTS     = []string{"127.0.0.1:2379"}
-	DIAL_TIMEOUT       = time.Second * 10  //etcd dial timeout
-	REQUEST_TIMEOUT    = time.Second * 10  //etcd request timeout
+	ECTD_ENDPOINTS  = []string{"127.0.0.1:2379"}
+	DIAL_TIMEOUT    = time.Second * 10 //etcd dial timeout
+	REQUEST_TIMEOUT = time.Second * 10 //etcd request timeout
 )
 
 type ETCDClientManager struct {
@@ -39,7 +39,7 @@ func (e *ETCDClientManager) GetClient() (*ETCDClient, error) {
 	default:
 		cli, err := NewETCDClient(ECTD_ENDPOINTS, DIAL_TIMEOUT, REQUEST_TIMEOUT)
 		if nil != err {
-			log.Println(err)
+			log.Errorln(err)
 			return nil, err
 		}
 
@@ -56,7 +56,7 @@ func (e *ETCDClientManager) Put(cli *ETCDClient) error {
 	default:
 		err := cli.Close()
 		if nil != err {
-			log.Println(err)
+			log.Errorln(err)
 		}
 
 		return err

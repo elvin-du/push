@@ -55,8 +55,9 @@ func (s *Server) StartTcpServer() {
 	if err != nil {
 		log.Fatalf("failed to listen: %v", err)
 	}
-	log.Debugln("gate tcp listening at:", config.TcpPort)
 	defer l.Close()
+
+	log.Infoln("gate tcp listening at:", config.TcpPort)
 
 	go s.CronEvery()
 

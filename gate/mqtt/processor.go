@@ -2,6 +2,7 @@ package mqtt
 
 import (
 	"hscore/log"
+	"time"
 
 	"github.com/surgemq/message"
 )
@@ -39,6 +40,12 @@ func (s *Service) processPingReq(msg *message.PingreqMessage) error {
 	log.Debugln("ping came")
 	//TODO 更新用户生命周期
 	pingResp := message.NewPingrespMessage()
-	s.Write(pingResp)
+	err := s.Write(pingResp)
+	if nil != err {
+		log.Errorln(err)
+		return err
+	}
+
+	s.SetTouchTime(time.Now().Unix())
 	return nil
 }

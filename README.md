@@ -22,5 +22,6 @@
 	1. NSQ 异步中间件
 	2. GIN WEB框架
 	3. Redis 数据持久化
+	4. ETCD
 
 

@@ -16,10 +16,11 @@ var (
 
 func (s *Service) ReadLoop() error {
 	for {
+		//TODO 读取信息失败后，直接断开连接?
 		msg, _, _, err := s.ReadMessage()
 		if nil != err {
 			log.Error(err)
-			continue
+			return err
 		}
 
 		err = s.Process(msg)

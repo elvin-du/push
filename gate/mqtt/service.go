@@ -13,6 +13,7 @@ type Service struct {
 	Conn         net.Conn
 	ClientId     string
 	UserId       string
+	Platform     string
 	readTimeout  time.Duration
 	writeTimeout time.Duration
 	touchTime    int64

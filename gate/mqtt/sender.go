@@ -19,7 +19,8 @@ func (s *Service) WriteLoop() error {
 			err := s.Send(out)
 			if nil != err {
 				log.Errorln(err)
-				continue
+				//TODO 直接断开连接？等待心跳机制检查时删除本服务？
+				return err
 			}
 		}
 	}

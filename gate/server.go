@@ -1,7 +1,7 @@
 package main
 
 import (
-	"errors"
+	//	"errors"
 	"hscore/log"
 	"net"
 	"push/common/server"
@@ -20,7 +20,7 @@ import (
 var (
 	defaultServer = &Server{
 		Services:  make(map[string]*mqtt.Service),
-		Keepalive: 60 * 5, //五分钟
+		Keepalive: 60 * 5, //五分钟检查一次客户端连接情况
 	}
 )
 
@@ -47,9 +47,7 @@ func (s *Server) StartRPCServer() {
 	rpcServer.Run()
 }
 
-/*
-开始监听客户端的连接
-*/
+//开始监听客户端的连接
 func (s *Server) StartTcpServer() {
 	l, err := net.Listen("tcp", config.TcpPort)
 	if err != nil {
@@ -59,6 +57,7 @@ func (s *Server) StartTcpServer() {
 
 	log.Infoln("gate tcp listening at:", config.TcpPort)
 
+	//开始监测所有连接本server的客户端的连接状况
 	go s.CronEvery()
 
 	for {
@@ -72,69 +71,93 @@ func (s *Server) StartTcpServer() {
 	}
 }
 
-func (s *Server) handleConnection(conn net.Conn) {
-	svc := mqtt.NewService(conn)
-	svc.SetWriteTimeout(time.Second * 30)
-	svc.SetReadTimeout(time.Minute * 10)
+func (s *Server) checkConnection(svc *mqtt.Service) (err error) {
+	var connMsg *message.ConnectMessage
+	connAckMsg := message.NewConnackMessage()
+	defer func() {
+		//回应connect消息
+		if nil != err {
+			connAckMsg.SetReturnCode(message.ErrNotAuthorized)
+			err2 := svc.SendMsg(connAckMsg)
+			if nil != err2 {
+				log.Error(err2)
+			}
+
+			//直接关闭连接
+			if nil != svc.Conn {
+				err2 = svc.Conn.Close()
+				if nil != err2 {
+					log.Error(err2)
+				}
+			}
+		}
+	}()
 
 	//获取客户端链接信息
-	connMsg, err := svc.GetConnectMessage()
+	connMsg, err = svc.GetConnectMessage()
 	if nil != err {
 		log.Error(err)
-		return
+		return err
 	}
-	log.Infof("clientid:%s connected", connMsg.ClientId())
+	log.Infoln("come to connect,clientid:", string(connMsg.ClientId()))
 
 	svc.UserId = string(connMsg.Username())
 	svc.ClientId = string(connMsg.ClientId())
-	connAckMsg := message.NewConnackMessage()
 
 	//合法性检验
 	err = s.Auth(svc.UserId, string(connMsg.Password()))
 	if nil != err {
-		connAckMsg.SetReturnCode(message.ErrNotAuthorized)
-		err = svc.SendMsg(connAckMsg)
-		if nil != err {
-			log.Error(err)
-			return
-		}
-
-		return
+		log.Error(err)
+		return err
 	}
 
-	platform, err := s.ParseClientId(svc.ClientId)
+	var platform string
+	platform, err = s.ParseClientId(svc.ClientId)
 	if nil != err {
-		connAckMsg.SetReturnCode(message.ErrNotAuthorized)
-		err = svc.SendMsg(connAckMsg)
-		if nil != err {
-			log.Error(err)
-			return
-		}
-
-		return
+		log.Error(err)
+		return err
 	}
+	svc.Platform = platform
 
-	//回应connect消息
+	//连接成功
 	connAckMsg.SetReturnCode(message.ConnectionAccepted)
 	err = svc.SendMsg(connAckMsg)
 	if nil != err {
 		log.Error(err)
-		return
+		return err
 	}
 
 	svc.SetTouchTime(time.Now().Unix())
 	//启动两个goroutine进行读写
 	svc.Run()
 
-	s.TryKickOff(svc.ClientId, svc.UserId)
-	s.CheckOfflineMsg(svc.UserId)
+	return nil
+}
+
+func (s *Server) handleConnection(conn net.Conn) {
+	svc := mqtt.NewService(conn)
+	svc.SetWriteTimeout(time.Second * 30)
+	svc.SetReadTimeout(time.Minute * 10)
+
+	err := s.checkConnection(svc)
+	if nil != err {
+		log.Errorln(err)
+		return
+	}
 
 	//每一个新用户链接抽象为一个service，并把其保存到相应的server实例中
 	s.SetService(svc)
 
+	//一个账号同时只能有一个在线
+	s.TryKickOff(svc.ClientId, svc.UserId)
+
+	//发送离线消息
+	s.CheckOfflineMsg(svc.UserId)
+
 	gateIp, err := util.LocalIP()
 	if nil != err {
 		log.Error(err)
+		//TODO 关闭链接？还是重试？
 		s.DelService(svc)
 		return
 	}
@@ -144,7 +167,7 @@ func (s *Server) handleConnection(conn net.Conn) {
 	onlineReq.UserId = svc.UserId
 	onlineReq.GateIp = gateIp
 	onlineReq.GatePort = config.RpcServicePort
-	onlineReq.Platform = platform
+	onlineReq.Platform = svc.Platform
 
 	//
 	_, err = dataCli.Online(onlineReq)
@@ -159,6 +182,7 @@ func (s *Server) CheckOfflineMsg(userId string) {
 	resp, err := dataCli.GetOfflineMsgs(userId)
 	if nil != err {
 		log.Error(err)
+		return
 	}
 
 	log.Debugf("found %d offline msg for %s", len(resp.Items), userId)
@@ -181,22 +205,23 @@ func (s *Server) SetService(svc *mqtt.Service) {
 
 func (s *Server) DelService(svc *mqtt.Service) {
 	if nil != svc && nil != s.Services {
+		log.Debugln("delete service ", svc)
 		delete(s.Services, svc.UserId)
 	}
 }
 
 /*
 因为需要辨别每次的链接是否是同一个手机，所以需要手机根据硬件生成一个唯一标识来当作clientId,
-clientId格式：OS系统-手机硬件唯一对应标识．例如：android-123abb
+clientId格式：OS系统手机硬件唯一对应标识．例如：ios123abb
 */
 func (s *Server) ParseClientId(clientId string) (string, error) {
-	platform := strings.TrimLeft(clientId, "-")
-	if "android" == platform || "ios" == platform {
-		return platform, nil
+	if strings.HasPrefix(clientId, "ios") {
+		return "ios", nil
 	}
 
-	log.Errorf("clientId:%s", clientId)
-	return "", errors.New("clientId invalid")
+	return "android", nil
+	//	log.Errorln("invalid clientId:", clientId)
+	//	return "", errors.New("clientId invalid")
 }
 
 //TODO
@@ -205,11 +230,26 @@ func (s *Server) Auth(userId, token string) error {
 }
 
 func (s *Server) CronEvery() {
-	for _, user := range s.Services {
+	for {
 		time.Sleep(time.Second * time.Duration(s.Keepalive))
-		if !user.IsAlive(s.Keepalive) {
-			s.DelService(user)
-			//TODO 通知session
+		log.Infoln("it seems", len(s.Services), "clients coneccting,begin to scaning alive")
+		for _, user := range s.Services {
+			log.Debugf("check clientId:%s,userId:%s is alive?", user.ClientId, user.UserId)
+			if !user.IsAlive(s.Keepalive) {
+				log.Debugf("clientId:%s,userId:%s is not alive", user.ClientId, user.UserId)
+				s.DelService(user)
+
+				if nil != user.Conn {
+					err := user.Conn.Close()
+					if nil != err {
+						log.Errorf("close conn for:%+v,clientId:%s,userId:%s,err:%s", *user, user.ClientId, user.UserId, err.Error())
+					} else {
+						log.Infof("close conn for:%+v,clientId:%s,userId:%s,err:%s", *user, user.ClientId, user.UserId, err.Error())
+					}
+				}
+
+				//TODO 通知session
+			}
 		}
 	}
 }

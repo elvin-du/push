@@ -1,7 +1,7 @@
 package main
 
 import (
-	"hscore/log"
+	"log"
 
 	"github.com/surgemq/message"
 )
@@ -23,16 +23,16 @@ func Process(msg message.Message) error {
 }
 
 func processConnAck(msg *message.ConnackMessage) error {
-	log.Println(*msg)
+	log.Println("processConnAck", *msg)
 	return nil
 }
 
 func processPub(msg *message.PublishMessage) error {
-	log.Println(*msg)
+	log.Println("processPub", *msg)
 	return nil
 }
 
 func processPingResp(msg *message.PingrespMessage) error {
-	log.Println(*msg)
+	log.Println("processPingResp", *msg)
 	return nil
 }

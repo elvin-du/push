@@ -45,7 +45,7 @@ func SaveOfflineMsg(req *meta.SaveOfflineMsgRequest) (*meta.SaveOfflineMsgRespon
 	return cli.DataClient.SaveOfflineMsg(context.TODO(), req)
 }
 
-func GetOfflineMsgs(userId string) (*meta.GetOfflineMsgsResponse, error) {
+func GetOfflineMsgs(req *meta.GetOfflineMsgsRequest) (*meta.GetOfflineMsgsResponse, error) {
 	cli, err := service.DataClient()
 	if nil != err {
 		log.Errorln(err)
@@ -53,8 +53,6 @@ func GetOfflineMsgs(userId string) (*meta.GetOfflineMsgsResponse, error) {
 	}
 	defer service.DataPut(cli)
 
-	req := &meta.GetOfflineMsgsRequest{}
-	req.UserId = userId
 	return cli.DataClient.GetOfflineMsgs(context.TODO(), req)
 }
 

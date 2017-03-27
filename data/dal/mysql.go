@@ -10,10 +10,6 @@ import (
 	_ "github.com/go-sql-driver/mysql"
 )
 
-func init() {
-	log.SetFlags(log.Lshortfile)
-}
-
 var (
 	TBL_CLIENTS      = "clients"
 	TBL_OFFILNE_MSGS = "offline_msgs"
@@ -26,7 +22,7 @@ type Mysql struct {
 func NewMysql() *Mysql {
 	db, err := sql.Open("mysql", "root:@tcp(localhost:4000)/htz_classic")
 	if nil != err {
-		log.Println(err)
+		log.Fatalln(err)
 	}
 
 	return &Mysql{DB: db}
@@ -35,7 +31,7 @@ func NewMysql() *Mysql {
 func (m *Mysql) ReGetDBConn() error {
 	db, err := sql.Open("mysql", "root:@tcp(localhost:4000)/htz_classic")
 	if nil != err {
-		log.Println(err)
+		log.Errorln(err)
 		return err
 	}
 	m.DB = db
@@ -47,7 +43,7 @@ func (m *Mysql) Query(query string, args ...interface{}) (*sql.Rows, error) {
 	if nil != m.DB {
 		err := m.ReGetDBConn()
 		if nil != err {
-			log.Println(err)
+			log.Errorln(err)
 			return nil, err
 		}
 	}
@@ -63,7 +59,7 @@ var (
 func (m *Mysql) Online(req *meta.DataOnlineRequest) (*meta.DataOnlineResponse, error) {
 	utc := time.Now().Unix()
 	//TODO
-	log.Printf("%s online sucess", req.ClientId)
+	log.Debugf("%s online sucess", req.ClientId)
 	//	sqlStr := fmt.Sprintf("INSERT INTO %s SET id='%s',gate_server_ip='%s',user_id='%s',platform='%s',status=1,created_at=%d,updated_at=%d", TBL_CLIENTS, req.ClientId, req.IP, req.UserId, req.Platform, utc, utc)
 	//	log.Println(sqlStr)
 	//	_, err := m.Query(sqlStr)
@@ -88,11 +84,11 @@ func (m *Mysql) Online(req *meta.DataOnlineRequest) (*meta.DataOnlineResponse, e
 func (m *Mysql) Offline(req *meta.DataOfflineRequest) (*meta.DataOfflineResponse, error) {
 	utc := time.Now().Unix()
 	sqlStr := fmt.Sprintf("UPDATE %s SET status=0,updated_at=%d WHERE client_id='%s'", TBL_CLIENTS, utc, req.ClientId)
-	log.Println(sqlStr)
+	log.Debugln(sqlStr)
 
 	_, err := m.Query(sqlStr)
 	if nil != err {
-		log.Println(err)
+		log.Errorln(err)
 		return nil, err
 	}
 	return &meta.DataOfflineResponse{}, nil

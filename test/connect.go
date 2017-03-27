@@ -26,7 +26,7 @@ func Connect() error {
 		return err
 	}
 
-	err = connMsg.SetClientId([]byte("ios123"))
+	err = connMsg.SetClientId([]byte("ios123456789123456789123456789123456789123456789"))
 	if nil != err {
 		log.Println(err)
 		return err

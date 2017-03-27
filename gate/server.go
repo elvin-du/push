@@ -36,15 +36,15 @@ func (s *Server) StartRPCServer() {
 	srv := grpc.NewServer()
 	meta.RegisterGateServer(srv, &Gate{})
 
-	rpcServer := server.NewRPCServer(
+	server.NewRPCServer(
 		util.APP_NAME,
 		config.RpcServiceName,
 		config.RpcServiceVersion,
 		config.RpcServicePort,
 		nil,
 		util.HEARTBEAT_INTERNAL,
-		srv)
-	rpcServer.Run()
+		srv,
+	).Run()
 }
 
 //开始监听客户端的连接
@@ -179,7 +179,9 @@ func (s *Server) handleConnection(conn net.Conn) {
 }
 
 func (s *Server) CheckOfflineMsg(userId string) {
-	resp, err := dataCli.GetOfflineMsgs(userId)
+	req := &meta.GetOfflineMsgsRequest{}
+	req.UserId = userId
+	resp, err := dataCli.GetOfflineMsgs(req)
 	if nil != err {
 		log.Error(err)
 		return

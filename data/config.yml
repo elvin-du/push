@@ -9,8 +9,6 @@ log:
 
 service:
   rpc:
-    name: "GATE"
+    name: "DATA"
     version: "1.0"
-    port: ":50002"
-  tcp:
-    port: ":60001"
+    port: ":50001"

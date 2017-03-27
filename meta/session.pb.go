@@ -20,75 +20,110 @@ var _ = proto.Marshal
 var _ = fmt.Errorf
 var _ = math.Inf
 
-type SessionRegisterRequest struct {
+type SessionOnlineRequest struct {
 	Header         *RequestHeader `protobuf:"bytes,1,opt,name=header" json:"header,omitempty"`
-	ServiceVersion string         `protobuf:"bytes,2,opt,name=ServiceVersion,proto3" json:"ServiceVersion,omitempty"`
-	IP             string         `protobuf:"bytes,3,opt,name=IP,proto3" json:"IP,omitempty"`
-	Port           string         `protobuf:"bytes,4,opt,name=Port,proto3" json:"Port,omitempty"`
-	UserId         string         `protobuf:"bytes,5,opt,name=UserId,proto3" json:"UserId,omitempty"`
+	GateServerIP   string         `protobuf:"bytes,2,opt,name=GateServerIP,proto3" json:"GateServerIP,omitempty"`
+	GateServerPort string         `protobuf:"bytes,3,opt,name=GateServerPort,proto3" json:"GateServerPort,omitempty"`
+	UserId         string         `protobuf:"bytes,4,opt,name=UserId,proto3" json:"UserId,omitempty"`
+	ClientId       string         `protobuf:"bytes,5,opt,name=ClientId,proto3" json:"ClientId,omitempty"`
 	CreatedAt      uint64         `protobuf:"varint,6,opt,name=CreatedAt,proto3" json:"CreatedAt,omitempty"`
 }
 
-func (m *SessionRegisterRequest) Reset()                    { *m = SessionRegisterRequest{} }
-func (m *SessionRegisterRequest) String() string            { return proto.CompactTextString(m) }
-func (*SessionRegisterRequest) ProtoMessage()               {}
-func (*SessionRegisterRequest) Descriptor() ([]byte, []int) { return fileDescriptorSession, []int{0} }
+func (m *SessionOnlineRequest) Reset()                    { *m = SessionOnlineRequest{} }
+func (m *SessionOnlineRequest) String() string            { return proto.CompactTextString(m) }
+func (*SessionOnlineRequest) ProtoMessage()               {}
+func (*SessionOnlineRequest) Descriptor() ([]byte, []int) { return fileDescriptorSession, []int{0} }
 
-func (m *SessionRegisterRequest) GetHeader() *RequestHeader {
+func (m *SessionOnlineRequest) GetHeader() *RequestHeader {
 	if m != nil {
 		return m.Header
 	}
 	return nil
 }
 
-type SessionRegisterResponse struct {
+type SessionOnlineResponse struct {
 	Header *ResponseHeader `protobuf:"bytes,1,opt,name=header" json:"header,omitempty"`
 }
 
-func (m *SessionRegisterResponse) Reset()                    { *m = SessionRegisterResponse{} }
-func (m *SessionRegisterResponse) String() string            { return proto.CompactTextString(m) }
-func (*SessionRegisterResponse) ProtoMessage()               {}
-func (*SessionRegisterResponse) Descriptor() ([]byte, []int) { return fileDescriptorSession, []int{1} }
+func (m *SessionOnlineResponse) Reset()                    { *m = SessionOnlineResponse{} }
+func (m *SessionOnlineResponse) String() string            { return proto.CompactTextString(m) }
+func (*SessionOnlineResponse) ProtoMessage()               {}
+func (*SessionOnlineResponse) Descriptor() ([]byte, []int) { return fileDescriptorSession, []int{1} }
 
-func (m *SessionRegisterResponse) GetHeader() *ResponseHeader {
+func (m *SessionOnlineResponse) GetHeader() *ResponseHeader {
 	if m != nil {
 		return m.Header
 	}
 	return nil
 }
 
-type SessionUnregisterRequest struct {
-	Header *RequestHeader `protobuf:"bytes,1,opt,name=header" json:"header,omitempty"`
-	UserId string         `protobuf:"bytes,2,opt,name=UserId,proto3" json:"UserId,omitempty"`
+type SessionOfflineRequest struct {
+	Header   *RequestHeader `protobuf:"bytes,1,opt,name=header" json:"header,omitempty"`
+	UserId   string         `protobuf:"bytes,2,opt,name=UserId,proto3" json:"UserId,omitempty"`
+	ClientId string         `protobuf:"bytes,3,opt,name=ClientId,proto3" json:"ClientId,omitempty"`
 }
 
-func (m *SessionUnregisterRequest) Reset()                    { *m = SessionUnregisterRequest{} }
-func (m *SessionUnregisterRequest) String() string            { return proto.CompactTextString(m) }
-func (*SessionUnregisterRequest) ProtoMessage()               {}
-func (*SessionUnregisterRequest) Descriptor() ([]byte, []int) { return fileDescriptorSession, []int{2} }
+func (m *SessionOfflineRequest) Reset()                    { *m = SessionOfflineRequest{} }
+func (m *SessionOfflineRequest) String() string            { return proto.CompactTextString(m) }
+func (*SessionOfflineRequest) ProtoMessage()               {}
+func (*SessionOfflineRequest) Descriptor() ([]byte, []int) { return fileDescriptorSession, []int{2} }
 
-func (m *SessionUnregisterRequest) GetHeader() *RequestHeader {
+func (m *SessionOfflineRequest) GetHeader() *RequestHeader {
 	if m != nil {
 		return m.Header
 	}
 	return nil
 }
 
-type SessionUnregisterResponse struct {
+type SessionOfflineResponse struct {
+	Header *ResponseHeader `protobuf:"bytes,1,opt,name=header" json:"header,omitempty"`
+}
+
+func (m *SessionOfflineResponse) Reset()                    { *m = SessionOfflineResponse{} }
+func (m *SessionOfflineResponse) String() string            { return proto.CompactTextString(m) }
+func (*SessionOfflineResponse) ProtoMessage()               {}
+func (*SessionOfflineResponse) Descriptor() ([]byte, []int) { return fileDescriptorSession, []int{3} }
+
+func (m *SessionOfflineResponse) GetHeader() *ResponseHeader {
+	if m != nil {
+		return m.Header
+	}
+	return nil
+}
+
+type SessionInfoRequest struct {
+	Header   *RequestHeader `protobuf:"bytes,1,opt,name=header" json:"header,omitempty"`
+	UserId   string         `protobuf:"bytes,2,opt,name=UserId,proto3" json:"UserId,omitempty"`
+	ClientId string         `protobuf:"bytes,3,opt,name=ClientId,proto3" json:"ClientId,omitempty"`
+}
+
+func (m *SessionInfoRequest) Reset()                    { *m = SessionInfoRequest{} }
+func (m *SessionInfoRequest) String() string            { return proto.CompactTextString(m) }
+func (*SessionInfoRequest) ProtoMessage()               {}
+func (*SessionInfoRequest) Descriptor() ([]byte, []int) { return fileDescriptorSession, []int{4} }
+
+func (m *SessionInfoRequest) GetHeader() *RequestHeader {
+	if m != nil {
+		return m.Header
+	}
+	return nil
+}
+
+type SessionInfoResponse struct {
 	Header         *ResponseHeader `protobuf:"bytes,1,opt,name=header" json:"header,omitempty"`
-	ServiceVersion string          `protobuf:"bytes,2,opt,name=ServiceVersion,proto3" json:"ServiceVersion,omitempty"`
-	IP             string          `protobuf:"bytes,3,opt,name=IP,proto3" json:"IP,omitempty"`
-	Port           string          `protobuf:"bytes,4,opt,name=Port,proto3" json:"Port,omitempty"`
-	UserId         string          `protobuf:"bytes,5,opt,name=UserId,proto3" json:"UserId,omitempty"`
+	GateServerIP   string          `protobuf:"bytes,2,opt,name=GateServerIP,proto3" json:"GateServerIP,omitempty"`
+	GateServerPort string          `protobuf:"bytes,3,opt,name=GateServerPort,proto3" json:"GateServerPort,omitempty"`
+	UserId         string          `protobuf:"bytes,4,opt,name=UserId,proto3" json:"UserId,omitempty"`
+	ClientId       string          `protobuf:"bytes,5,opt,name=ClientId,proto3" json:"ClientId,omitempty"`
 	CreatedAt      uint64          `protobuf:"varint,6,opt,name=CreatedAt,proto3" json:"CreatedAt,omitempty"`
 }
 
-func (m *SessionUnregisterResponse) Reset()                    { *m = SessionUnregisterResponse{} }
-func (m *SessionUnregisterResponse) String() string            { return proto.CompactTextString(m) }
-func (*SessionUnregisterResponse) ProtoMessage()               {}
-func (*SessionUnregisterResponse) Descriptor() ([]byte, []int) { return fileDescriptorSession, []int{3} }
+func (m *SessionInfoResponse) Reset()                    { *m = SessionInfoResponse{} }
+func (m *SessionInfoResponse) String() string            { return proto.CompactTextString(m) }
+func (*SessionInfoResponse) ProtoMessage()               {}
+func (*SessionInfoResponse) Descriptor() ([]byte, []int) { return fileDescriptorSession, []int{5} }
 
-func (m *SessionUnregisterResponse) GetHeader() *ResponseHeader {
+func (m *SessionInfoResponse) GetHeader() *ResponseHeader {
 	if m != nil {
 		return m.Header
 	}
@@ -96,10 +131,12 @@ func (m *SessionUnregisterResponse) GetHeader() *ResponseHeader {
 }
 
 func init() {
-	proto.RegisterType((*SessionRegisterRequest)(nil), "push.meta.SessionRegisterRequest")
-	proto.RegisterType((*SessionRegisterResponse)(nil), "push.meta.SessionRegisterResponse")
-	proto.RegisterType((*SessionUnregisterRequest)(nil), "push.meta.SessionUnregisterRequest")
-	proto.RegisterType((*SessionUnregisterResponse)(nil), "push.meta.SessionUnregisterResponse")
+	proto.RegisterType((*SessionOnlineRequest)(nil), "push.meta.SessionOnlineRequest")
+	proto.RegisterType((*SessionOnlineResponse)(nil), "push.meta.SessionOnlineResponse")
+	proto.RegisterType((*SessionOfflineRequest)(nil), "push.meta.SessionOfflineRequest")
+	proto.RegisterType((*SessionOfflineResponse)(nil), "push.meta.SessionOfflineResponse")
+	proto.RegisterType((*SessionInfoRequest)(nil), "push.meta.SessionInfoRequest")
+	proto.RegisterType((*SessionInfoResponse)(nil), "push.meta.SessionInfoResponse")
 }
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -113,8 +150,9 @@ const _ = grpc.SupportPackageIsVersion4
 // Client API for Session service
 
 type SessionClient interface {
-	Register(ctx context.Context, in *SessionRegisterRequest, opts ...grpc.CallOption) (*SessionRegisterResponse, error)
-	Unregister(ctx context.Context, in *SessionUnregisterRequest, opts ...grpc.CallOption) (*SessionUnregisterResponse, error)
+	Online(ctx context.Context, in *SessionOnlineRequest, opts ...grpc.CallOption) (*SessionOnlineResponse, error)
+	Offline(ctx context.Context, in *SessionOfflineRequest, opts ...grpc.CallOption) (*SessionOfflineResponse, error)
+	Info(ctx context.Context, in *SessionInfoRequest, opts ...grpc.CallOption) (*SessionInfoResponse, error)
 }
 
 type sessionClient struct {
@@ -125,18 +163,27 @@ func NewSessionClient(cc *grpc.ClientConn) SessionClient {
 	return &sessionClient{cc}
 }
 
-func (c *sessionClient) Register(ctx context.Context, in *SessionRegisterRequest, opts ...grpc.CallOption) (*SessionRegisterResponse, error) {
-	out := new(SessionRegisterResponse)
-	err := grpc.Invoke(ctx, "/push.meta.Session/Register", in, out, c.cc, opts...)
+func (c *sessionClient) Online(ctx context.Context, in *SessionOnlineRequest, opts ...grpc.CallOption) (*SessionOnlineResponse, error) {
+	out := new(SessionOnlineResponse)
+	err := grpc.Invoke(ctx, "/push.meta.Session/Online", in, out, c.cc, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *sessionClient) Unregister(ctx context.Context, in *SessionUnregisterRequest, opts ...grpc.CallOption) (*SessionUnregisterResponse, error) {
-	out := new(SessionUnregisterResponse)
-	err := grpc.Invoke(ctx, "/push.meta.Session/Unregister", in, out, c.cc, opts...)
+func (c *sessionClient) Offline(ctx context.Context, in *SessionOfflineRequest, opts ...grpc.CallOption) (*SessionOfflineResponse, error) {
+	out := new(SessionOfflineResponse)
+	err := grpc.Invoke(ctx, "/push.meta.Session/Offline", in, out, c.cc, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *sessionClient) Info(ctx context.Context, in *SessionInfoRequest, opts ...grpc.CallOption) (*SessionInfoResponse, error) {
+	out := new(SessionInfoResponse)
+	err := grpc.Invoke(ctx, "/push.meta.Session/Info", in, out, c.cc, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -146,46 +193,65 @@ func (c *sessionClient) Unregister(ctx context.Context, in *SessionUnregisterReq
 // Server API for Session service
 
 type SessionServer interface {
-	Register(context.Context, *SessionRegisterRequest) (*SessionRegisterResponse, error)
-	Unregister(context.Context, *SessionUnregisterRequest) (*SessionUnregisterResponse, error)
+	Online(context.Context, *SessionOnlineRequest) (*SessionOnlineResponse, error)
+	Offline(context.Context, *SessionOfflineRequest) (*SessionOfflineResponse, error)
+	Info(context.Context, *SessionInfoRequest) (*SessionInfoResponse, error)
 }
 
 func RegisterSessionServer(s *grpc.Server, srv SessionServer) {
 	s.RegisterService(&_Session_serviceDesc, srv)
 }
 
-func _Session_Register_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(SessionRegisterRequest)
+func _Session_Online_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(SessionOnlineRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(SessionServer).Register(ctx, in)
+		return srv.(SessionServer).Online(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/push.meta.Session/Register",
+		FullMethod: "/push.meta.Session/Online",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(SessionServer).Register(ctx, req.(*SessionRegisterRequest))
+		return srv.(SessionServer).Online(ctx, req.(*SessionOnlineRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Session_Unregister_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(SessionUnregisterRequest)
+func _Session_Offline_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(SessionOfflineRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(SessionServer).Unregister(ctx, in)
+		return srv.(SessionServer).Offline(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/push.meta.Session/Unregister",
+		FullMethod: "/push.meta.Session/Offline",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(SessionServer).Unregister(ctx, req.(*SessionUnregisterRequest))
+		return srv.(SessionServer).Offline(ctx, req.(*SessionOfflineRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Session_Info_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(SessionInfoRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(SessionServer).Info(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/push.meta.Session/Info",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(SessionServer).Info(ctx, req.(*SessionInfoRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -195,19 +261,23 @@ var _Session_serviceDesc = grpc.ServiceDesc{
 	HandlerType: (*SessionServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
-			MethodName: "Register",
-			Handler:    _Session_Register_Handler,
+			MethodName: "Online",
+			Handler:    _Session_Online_Handler,
 		},
 		{
-			MethodName: "Unregister",
-			Handler:    _Session_Unregister_Handler,
+			MethodName: "Offline",
+			Handler:    _Session_Offline_Handler,
+		},
+		{
+			MethodName: "Info",
+			Handler:    _Session_Info_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
 	Metadata: "session.proto",
 }
 
-func (m *SessionRegisterRequest) Marshal() (dAtA []byte, err error) {
+func (m *SessionOnlineRequest) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
 	n, err := m.MarshalTo(dAtA)
@@ -217,7 +287,7 @@ func (m *SessionRegisterRequest) Marshal() (dAtA []byte, err error) {
 	return dAtA[:n], nil
 }
 
-func (m *SessionRegisterRequest) MarshalTo(dAtA []byte) (int, error) {
+func (m *SessionOnlineRequest) MarshalTo(dAtA []byte) (int, error) {
 	var i int
 	_ = i
 	var l int
@@ -232,29 +302,29 @@ func (m *SessionRegisterRequest) MarshalTo(dAtA []byte) (int, error) {
 		}
 		i += n1
 	}
-	if len(m.ServiceVersion) > 0 {
+	if len(m.GateServerIP) > 0 {
 		dAtA[i] = 0x12
 		i++
-		i = encodeVarintSession(dAtA, i, uint64(len(m.ServiceVersion)))
-		i += copy(dAtA[i:], m.ServiceVersion)
+		i = encodeVarintSession(dAtA, i, uint64(len(m.GateServerIP)))
+		i += copy(dAtA[i:], m.GateServerIP)
 	}
-	if len(m.IP) > 0 {
+	if len(m.GateServerPort) > 0 {
 		dAtA[i] = 0x1a
 		i++
-		i = encodeVarintSession(dAtA, i, uint64(len(m.IP)))
-		i += copy(dAtA[i:], m.IP)
-	}
-	if len(m.Port) > 0 {
-		dAtA[i] = 0x22
-		i++
-		i = encodeVarintSession(dAtA, i, uint64(len(m.Port)))
-		i += copy(dAtA[i:], m.Port)
+		i = encodeVarintSession(dAtA, i, uint64(len(m.GateServerPort)))
+		i += copy(dAtA[i:], m.GateServerPort)
 	}
 	if len(m.UserId) > 0 {
-		dAtA[i] = 0x2a
+		dAtA[i] = 0x22
 		i++
 		i = encodeVarintSession(dAtA, i, uint64(len(m.UserId)))
 		i += copy(dAtA[i:], m.UserId)
+	}
+	if len(m.ClientId) > 0 {
+		dAtA[i] = 0x2a
+		i++
+		i = encodeVarintSession(dAtA, i, uint64(len(m.ClientId)))
+		i += copy(dAtA[i:], m.ClientId)
 	}
 	if m.CreatedAt != 0 {
 		dAtA[i] = 0x30
@@ -264,7 +334,7 @@ func (m *SessionRegisterRequest) MarshalTo(dAtA []byte) (int, error) {
 	return i, nil
 }
 
-func (m *SessionRegisterResponse) Marshal() (dAtA []byte, err error) {
+func (m *SessionOnlineResponse) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
 	n, err := m.MarshalTo(dAtA)
@@ -274,7 +344,7 @@ func (m *SessionRegisterResponse) Marshal() (dAtA []byte, err error) {
 	return dAtA[:n], nil
 }
 
-func (m *SessionRegisterResponse) MarshalTo(dAtA []byte) (int, error) {
+func (m *SessionOnlineResponse) MarshalTo(dAtA []byte) (int, error) {
 	var i int
 	_ = i
 	var l int
@@ -292,7 +362,7 @@ func (m *SessionRegisterResponse) MarshalTo(dAtA []byte) (int, error) {
 	return i, nil
 }
 
-func (m *SessionUnregisterRequest) Marshal() (dAtA []byte, err error) {
+func (m *SessionOfflineRequest) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
 	n, err := m.MarshalTo(dAtA)
@@ -302,7 +372,7 @@ func (m *SessionUnregisterRequest) Marshal() (dAtA []byte, err error) {
 	return dAtA[:n], nil
 }
 
-func (m *SessionUnregisterRequest) MarshalTo(dAtA []byte) (int, error) {
+func (m *SessionOfflineRequest) MarshalTo(dAtA []byte) (int, error) {
 	var i int
 	_ = i
 	var l int
@@ -323,10 +393,16 @@ func (m *SessionUnregisterRequest) MarshalTo(dAtA []byte) (int, error) {
 		i = encodeVarintSession(dAtA, i, uint64(len(m.UserId)))
 		i += copy(dAtA[i:], m.UserId)
 	}
+	if len(m.ClientId) > 0 {
+		dAtA[i] = 0x1a
+		i++
+		i = encodeVarintSession(dAtA, i, uint64(len(m.ClientId)))
+		i += copy(dAtA[i:], m.ClientId)
+	}
 	return i, nil
 }
 
-func (m *SessionUnregisterResponse) Marshal() (dAtA []byte, err error) {
+func (m *SessionOfflineResponse) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
 	n, err := m.MarshalTo(dAtA)
@@ -336,7 +412,7 @@ func (m *SessionUnregisterResponse) Marshal() (dAtA []byte, err error) {
 	return dAtA[:n], nil
 }
 
-func (m *SessionUnregisterResponse) MarshalTo(dAtA []byte) (int, error) {
+func (m *SessionOfflineResponse) MarshalTo(dAtA []byte) (int, error) {
 	var i int
 	_ = i
 	var l int
@@ -351,29 +427,97 @@ func (m *SessionUnregisterResponse) MarshalTo(dAtA []byte) (int, error) {
 		}
 		i += n4
 	}
-	if len(m.ServiceVersion) > 0 {
-		dAtA[i] = 0x12
-		i++
-		i = encodeVarintSession(dAtA, i, uint64(len(m.ServiceVersion)))
-		i += copy(dAtA[i:], m.ServiceVersion)
+	return i, nil
+}
+
+func (m *SessionInfoRequest) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalTo(dAtA)
+	if err != nil {
+		return nil, err
 	}
-	if len(m.IP) > 0 {
-		dAtA[i] = 0x1a
+	return dAtA[:n], nil
+}
+
+func (m *SessionInfoRequest) MarshalTo(dAtA []byte) (int, error) {
+	var i int
+	_ = i
+	var l int
+	_ = l
+	if m.Header != nil {
+		dAtA[i] = 0xa
 		i++
-		i = encodeVarintSession(dAtA, i, uint64(len(m.IP)))
-		i += copy(dAtA[i:], m.IP)
-	}
-	if len(m.Port) > 0 {
-		dAtA[i] = 0x22
-		i++
-		i = encodeVarintSession(dAtA, i, uint64(len(m.Port)))
-		i += copy(dAtA[i:], m.Port)
+		i = encodeVarintSession(dAtA, i, uint64(m.Header.Size()))
+		n5, err := m.Header.MarshalTo(dAtA[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n5
 	}
 	if len(m.UserId) > 0 {
-		dAtA[i] = 0x2a
+		dAtA[i] = 0x12
 		i++
 		i = encodeVarintSession(dAtA, i, uint64(len(m.UserId)))
 		i += copy(dAtA[i:], m.UserId)
+	}
+	if len(m.ClientId) > 0 {
+		dAtA[i] = 0x1a
+		i++
+		i = encodeVarintSession(dAtA, i, uint64(len(m.ClientId)))
+		i += copy(dAtA[i:], m.ClientId)
+	}
+	return i, nil
+}
+
+func (m *SessionInfoResponse) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalTo(dAtA)
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *SessionInfoResponse) MarshalTo(dAtA []byte) (int, error) {
+	var i int
+	_ = i
+	var l int
+	_ = l
+	if m.Header != nil {
+		dAtA[i] = 0xa
+		i++
+		i = encodeVarintSession(dAtA, i, uint64(m.Header.Size()))
+		n6, err := m.Header.MarshalTo(dAtA[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n6
+	}
+	if len(m.GateServerIP) > 0 {
+		dAtA[i] = 0x12
+		i++
+		i = encodeVarintSession(dAtA, i, uint64(len(m.GateServerIP)))
+		i += copy(dAtA[i:], m.GateServerIP)
+	}
+	if len(m.GateServerPort) > 0 {
+		dAtA[i] = 0x1a
+		i++
+		i = encodeVarintSession(dAtA, i, uint64(len(m.GateServerPort)))
+		i += copy(dAtA[i:], m.GateServerPort)
+	}
+	if len(m.UserId) > 0 {
+		dAtA[i] = 0x22
+		i++
+		i = encodeVarintSession(dAtA, i, uint64(len(m.UserId)))
+		i += copy(dAtA[i:], m.UserId)
+	}
+	if len(m.ClientId) > 0 {
+		dAtA[i] = 0x2a
+		i++
+		i = encodeVarintSession(dAtA, i, uint64(len(m.ClientId)))
+		i += copy(dAtA[i:], m.ClientId)
 	}
 	if m.CreatedAt != 0 {
 		dAtA[i] = 0x30
@@ -410,26 +554,26 @@ func encodeVarintSession(dAtA []byte, offset int, v uint64) int {
 	dAtA[offset] = uint8(v)
 	return offset + 1
 }
-func (m *SessionRegisterRequest) Size() (n int) {
+func (m *SessionOnlineRequest) Size() (n int) {
 	var l int
 	_ = l
 	if m.Header != nil {
 		l = m.Header.Size()
 		n += 1 + l + sovSession(uint64(l))
 	}
-	l = len(m.ServiceVersion)
+	l = len(m.GateServerIP)
 	if l > 0 {
 		n += 1 + l + sovSession(uint64(l))
 	}
-	l = len(m.IP)
-	if l > 0 {
-		n += 1 + l + sovSession(uint64(l))
-	}
-	l = len(m.Port)
+	l = len(m.GateServerPort)
 	if l > 0 {
 		n += 1 + l + sovSession(uint64(l))
 	}
 	l = len(m.UserId)
+	if l > 0 {
+		n += 1 + l + sovSession(uint64(l))
+	}
+	l = len(m.ClientId)
 	if l > 0 {
 		n += 1 + l + sovSession(uint64(l))
 	}
@@ -439,7 +583,7 @@ func (m *SessionRegisterRequest) Size() (n int) {
 	return n
 }
 
-func (m *SessionRegisterResponse) Size() (n int) {
+func (m *SessionOnlineResponse) Size() (n int) {
 	var l int
 	_ = l
 	if m.Header != nil {
@@ -449,7 +593,7 @@ func (m *SessionRegisterResponse) Size() (n int) {
 	return n
 }
 
-func (m *SessionUnregisterRequest) Size() (n int) {
+func (m *SessionOfflineRequest) Size() (n int) {
 	var l int
 	_ = l
 	if m.Header != nil {
@@ -460,29 +604,61 @@ func (m *SessionUnregisterRequest) Size() (n int) {
 	if l > 0 {
 		n += 1 + l + sovSession(uint64(l))
 	}
+	l = len(m.ClientId)
+	if l > 0 {
+		n += 1 + l + sovSession(uint64(l))
+	}
 	return n
 }
 
-func (m *SessionUnregisterResponse) Size() (n int) {
+func (m *SessionOfflineResponse) Size() (n int) {
 	var l int
 	_ = l
 	if m.Header != nil {
 		l = m.Header.Size()
 		n += 1 + l + sovSession(uint64(l))
 	}
-	l = len(m.ServiceVersion)
+	return n
+}
+
+func (m *SessionInfoRequest) Size() (n int) {
+	var l int
+	_ = l
+	if m.Header != nil {
+		l = m.Header.Size()
+		n += 1 + l + sovSession(uint64(l))
+	}
+	l = len(m.UserId)
 	if l > 0 {
 		n += 1 + l + sovSession(uint64(l))
 	}
-	l = len(m.IP)
+	l = len(m.ClientId)
 	if l > 0 {
 		n += 1 + l + sovSession(uint64(l))
 	}
-	l = len(m.Port)
+	return n
+}
+
+func (m *SessionInfoResponse) Size() (n int) {
+	var l int
+	_ = l
+	if m.Header != nil {
+		l = m.Header.Size()
+		n += 1 + l + sovSession(uint64(l))
+	}
+	l = len(m.GateServerIP)
+	if l > 0 {
+		n += 1 + l + sovSession(uint64(l))
+	}
+	l = len(m.GateServerPort)
 	if l > 0 {
 		n += 1 + l + sovSession(uint64(l))
 	}
 	l = len(m.UserId)
+	if l > 0 {
+		n += 1 + l + sovSession(uint64(l))
+	}
+	l = len(m.ClientId)
 	if l > 0 {
 		n += 1 + l + sovSession(uint64(l))
 	}
@@ -505,7 +681,7 @@ func sovSession(x uint64) (n int) {
 func sozSession(x uint64) (n int) {
 	return sovSession(uint64((x << 1) ^ uint64((int64(x) >> 63))))
 }
-func (m *SessionRegisterRequest) Unmarshal(dAtA []byte) error {
+func (m *SessionOnlineRequest) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
 	for iNdEx < l {
@@ -528,10 +704,10 @@ func (m *SessionRegisterRequest) Unmarshal(dAtA []byte) error {
 		fieldNum := int32(wire >> 3)
 		wireType := int(wire & 0x7)
 		if wireType == 4 {
-			return fmt.Errorf("proto: SessionRegisterRequest: wiretype end group for non-group")
+			return fmt.Errorf("proto: SessionOnlineRequest: wiretype end group for non-group")
 		}
 		if fieldNum <= 0 {
-			return fmt.Errorf("proto: SessionRegisterRequest: illegal tag %d (wire type %d)", fieldNum, wire)
+			return fmt.Errorf("proto: SessionOnlineRequest: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
 		case 1:
@@ -569,7 +745,7 @@ func (m *SessionRegisterRequest) Unmarshal(dAtA []byte) error {
 			iNdEx = postIndex
 		case 2:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field ServiceVersion", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field GateServerIP", wireType)
 			}
 			var stringLen uint64
 			for shift := uint(0); ; shift += 7 {
@@ -594,11 +770,11 @@ func (m *SessionRegisterRequest) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.ServiceVersion = string(dAtA[iNdEx:postIndex])
+			m.GateServerIP = string(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
 		case 3:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field IP", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field GateServerPort", wireType)
 			}
 			var stringLen uint64
 			for shift := uint(0); ; shift += 7 {
@@ -623,38 +799,9 @@ func (m *SessionRegisterRequest) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.IP = string(dAtA[iNdEx:postIndex])
+			m.GateServerPort = string(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
 		case 4:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Port", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowSession
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthSession
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Port = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		case 5:
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field UserId", wireType)
 			}
@@ -682,6 +829,35 @@ func (m *SessionRegisterRequest) Unmarshal(dAtA []byte) error {
 				return io.ErrUnexpectedEOF
 			}
 			m.UserId = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 5:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ClientId", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowSession
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthSession
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.ClientId = string(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
 		case 6:
 			if wireType != 0 {
@@ -723,7 +899,7 @@ func (m *SessionRegisterRequest) Unmarshal(dAtA []byte) error {
 	}
 	return nil
 }
-func (m *SessionRegisterResponse) Unmarshal(dAtA []byte) error {
+func (m *SessionOnlineResponse) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
 	for iNdEx < l {
@@ -746,10 +922,10 @@ func (m *SessionRegisterResponse) Unmarshal(dAtA []byte) error {
 		fieldNum := int32(wire >> 3)
 		wireType := int(wire & 0x7)
 		if wireType == 4 {
-			return fmt.Errorf("proto: SessionRegisterResponse: wiretype end group for non-group")
+			return fmt.Errorf("proto: SessionOnlineResponse: wiretype end group for non-group")
 		}
 		if fieldNum <= 0 {
-			return fmt.Errorf("proto: SessionRegisterResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+			return fmt.Errorf("proto: SessionOnlineResponse: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
 		case 1:
@@ -806,7 +982,7 @@ func (m *SessionRegisterResponse) Unmarshal(dAtA []byte) error {
 	}
 	return nil
 }
-func (m *SessionUnregisterRequest) Unmarshal(dAtA []byte) error {
+func (m *SessionOfflineRequest) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
 	for iNdEx < l {
@@ -829,10 +1005,10 @@ func (m *SessionUnregisterRequest) Unmarshal(dAtA []byte) error {
 		fieldNum := int32(wire >> 3)
 		wireType := int(wire & 0x7)
 		if wireType == 4 {
-			return fmt.Errorf("proto: SessionUnregisterRequest: wiretype end group for non-group")
+			return fmt.Errorf("proto: SessionOfflineRequest: wiretype end group for non-group")
 		}
 		if fieldNum <= 0 {
-			return fmt.Errorf("proto: SessionUnregisterRequest: illegal tag %d (wire type %d)", fieldNum, wire)
+			return fmt.Errorf("proto: SessionOfflineRequest: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
 		case 1:
@@ -897,6 +1073,35 @@ func (m *SessionUnregisterRequest) Unmarshal(dAtA []byte) error {
 			}
 			m.UserId = string(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ClientId", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowSession
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthSession
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.ClientId = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
 			skippy, err := skipSession(dAtA[iNdEx:])
@@ -918,7 +1123,7 @@ func (m *SessionUnregisterRequest) Unmarshal(dAtA []byte) error {
 	}
 	return nil
 }
-func (m *SessionUnregisterResponse) Unmarshal(dAtA []byte) error {
+func (m *SessionOfflineResponse) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
 	for iNdEx < l {
@@ -941,10 +1146,234 @@ func (m *SessionUnregisterResponse) Unmarshal(dAtA []byte) error {
 		fieldNum := int32(wire >> 3)
 		wireType := int(wire & 0x7)
 		if wireType == 4 {
-			return fmt.Errorf("proto: SessionUnregisterResponse: wiretype end group for non-group")
+			return fmt.Errorf("proto: SessionOfflineResponse: wiretype end group for non-group")
 		}
 		if fieldNum <= 0 {
-			return fmt.Errorf("proto: SessionUnregisterResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+			return fmt.Errorf("proto: SessionOfflineResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Header", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowSession
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthSession
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Header == nil {
+				m.Header = &ResponseHeader{}
+			}
+			if err := m.Header.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipSession(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthSession
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *SessionInfoRequest) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowSession
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= (uint64(b) & 0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: SessionInfoRequest: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: SessionInfoRequest: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Header", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowSession
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthSession
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Header == nil {
+				m.Header = &RequestHeader{}
+			}
+			if err := m.Header.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field UserId", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowSession
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthSession
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.UserId = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ClientId", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowSession
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthSession
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.ClientId = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipSession(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthSession
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *SessionInfoResponse) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowSession
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= (uint64(b) & 0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: SessionInfoResponse: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: SessionInfoResponse: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
 		case 1:
@@ -982,7 +1411,7 @@ func (m *SessionUnregisterResponse) Unmarshal(dAtA []byte) error {
 			iNdEx = postIndex
 		case 2:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field ServiceVersion", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field GateServerIP", wireType)
 			}
 			var stringLen uint64
 			for shift := uint(0); ; shift += 7 {
@@ -1007,11 +1436,11 @@ func (m *SessionUnregisterResponse) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.ServiceVersion = string(dAtA[iNdEx:postIndex])
+			m.GateServerIP = string(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
 		case 3:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field IP", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field GateServerPort", wireType)
 			}
 			var stringLen uint64
 			for shift := uint(0); ; shift += 7 {
@@ -1036,38 +1465,9 @@ func (m *SessionUnregisterResponse) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.IP = string(dAtA[iNdEx:postIndex])
+			m.GateServerPort = string(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
 		case 4:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Port", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowSession
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthSession
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Port = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		case 5:
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field UserId", wireType)
 			}
@@ -1095,6 +1495,35 @@ func (m *SessionUnregisterResponse) Unmarshal(dAtA []byte) error {
 				return io.ErrUnexpectedEOF
 			}
 			m.UserId = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 5:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ClientId", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowSession
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthSession
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.ClientId = string(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
 		case 6:
 			if wireType != 0 {
@@ -1244,26 +1673,29 @@ var (
 func init() { proto.RegisterFile("session.proto", fileDescriptorSession) }
 
 var fileDescriptorSession = []byte{
-	// 330 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xe2, 0xe2, 0x2d, 0x4e, 0x2d, 0x2e,
-	0xce, 0xcc, 0xcf, 0xd3, 0x2b, 0x28, 0xca, 0x2f, 0xc9, 0x17, 0xe2, 0x2c, 0x28, 0x2d, 0xce, 0xd0,
-	0xcb, 0x4d, 0x2d, 0x49, 0x94, 0xe2, 0x49, 0xce, 0xcf, 0xcd, 0x85, 0x49, 0x28, 0x9d, 0x61, 0xe4,
-	0x12, 0x0b, 0x86, 0x28, 0x0d, 0x4a, 0x4d, 0xcf, 0x2c, 0x2e, 0x49, 0x2d, 0x0a, 0x4a, 0x2d, 0x2c,
-	0x4d, 0x2d, 0x2e, 0x11, 0x32, 0xe0, 0x62, 0xcb, 0x48, 0x4d, 0x4c, 0x49, 0x2d, 0x92, 0x60, 0x54,
-	0x60, 0xd4, 0xe0, 0x36, 0x92, 0xd0, 0x83, 0x1b, 0xa2, 0x07, 0x55, 0xe3, 0x01, 0x96, 0x0f, 0x82,
-	0xaa, 0x13, 0x52, 0xe3, 0xe2, 0x0b, 0x4e, 0x2d, 0x2a, 0xcb, 0x4c, 0x4e, 0x0d, 0x4b, 0x2d, 0x02,
-	0x19, 0x29, 0xc1, 0xa4, 0xc0, 0xa8, 0xc1, 0x19, 0x84, 0x26, 0x2a, 0xc4, 0xc7, 0xc5, 0xe4, 0x19,
-	0x20, 0xc1, 0x0c, 0x96, 0x63, 0xf2, 0x0c, 0x10, 0x12, 0xe2, 0x62, 0x09, 0xc8, 0x2f, 0x2a, 0x91,
-	0x60, 0x01, 0x8b, 0x80, 0xd9, 0x42, 0x62, 0x5c, 0x6c, 0xa1, 0xc5, 0xa9, 0x45, 0x9e, 0x29, 0x12,
-	0xac, 0x60, 0x51, 0x28, 0x4f, 0x48, 0x86, 0x8b, 0xd3, 0xb9, 0x28, 0x35, 0xb1, 0x24, 0x35, 0xc5,
-	0xb1, 0x44, 0x82, 0x4d, 0x81, 0x51, 0x83, 0x25, 0x08, 0x21, 0xa0, 0xe4, 0xc3, 0x25, 0x8e, 0xe1,
-	0x9b, 0xe2, 0x82, 0xfc, 0xbc, 0xe2, 0x54, 0x21, 0x43, 0x34, 0xef, 0x48, 0xa2, 0x78, 0x07, 0xa2,
-	0x08, 0xd5, 0x3f, 0x4a, 0x29, 0x5c, 0x12, 0x50, 0xd3, 0x42, 0xf3, 0x8a, 0x28, 0x0e, 0x1d, 0x84,
-	0x8f, 0x98, 0x90, 0x7d, 0xa4, 0x74, 0x81, 0x91, 0x4b, 0x12, 0x8b, 0x35, 0x64, 0x3b, 0x7b, 0xe0,
-	0xa3, 0xc1, 0x68, 0x2b, 0x23, 0x17, 0x3b, 0xd4, 0x4b, 0x42, 0x81, 0x5c, 0x1c, 0xb0, 0xb8, 0x10,
-	0x52, 0x44, 0x72, 0x3c, 0xf6, 0x54, 0x27, 0xa5, 0x84, 0x4f, 0x09, 0x34, 0x4c, 0xc2, 0xb9, 0xb8,
-	0x10, 0x21, 0x25, 0xa4, 0x8c, 0xa9, 0x03, 0x23, 0xba, 0xa4, 0x54, 0xf0, 0x2b, 0x82, 0x18, 0xec,
-	0x24, 0x76, 0xe2, 0x91, 0x1c, 0xe3, 0x85, 0x47, 0x72, 0x8c, 0x0f, 0x1e, 0xc9, 0x31, 0x4e, 0x78,
-	0x2c, 0xc7, 0x10, 0xc5, 0x02, 0xd2, 0x91, 0xc4, 0x06, 0xce, 0x2c, 0xc6, 0x80, 0x00, 0x00, 0x00,
-	0xff, 0xff, 0xdf, 0x9b, 0x56, 0xc1, 0x56, 0x03, 0x00, 0x00,
+	// 371 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xcc, 0x94, 0xc1, 0x4e, 0xf2, 0x40,
+	0x10, 0xc7, 0xbf, 0x85, 0x7e, 0x45, 0x46, 0xf4, 0xb0, 0x2a, 0xa9, 0x8d, 0xd6, 0xda, 0x83, 0xe1,
+	0xd4, 0x28, 0x3e, 0x81, 0x12, 0xa3, 0x95, 0x44, 0x49, 0x89, 0x17, 0x6f, 0xd5, 0x0e, 0x81, 0x04,
+	0x5a, 0xdc, 0x5d, 0x3c, 0x98, 0xf8, 0x0e, 0x3e, 0x96, 0x47, 0x1f, 0xc1, 0x60, 0xc2, 0xcd, 0x77,
+	0x30, 0xb4, 0x2b, 0xa5, 0x15, 0x3c, 0x60, 0x62, 0x3c, 0xce, 0xcc, 0x2f, 0xb3, 0xf9, 0x6d, 0xff,
+	0x5d, 0x58, 0xe1, 0xc8, 0x79, 0x27, 0x0c, 0xec, 0x3e, 0x0b, 0x45, 0x48, 0x8b, 0xfd, 0x01, 0x6f,
+	0xdb, 0x3d, 0x14, 0x9e, 0x5e, 0xba, 0x0d, 0x7b, 0xbd, 0xcf, 0x81, 0x35, 0x22, 0xb0, 0xde, 0x8c,
+	0xd1, 0xcb, 0xa0, 0xdb, 0x09, 0xd0, 0xc5, 0xbb, 0x01, 0x72, 0x41, 0xf7, 0x41, 0x6d, 0xa3, 0xe7,
+	0x23, 0xd3, 0x88, 0x49, 0x2a, 0xcb, 0x55, 0xcd, 0x9e, 0xac, 0xb0, 0x25, 0x73, 0x16, 0xcd, 0x5d,
+	0xc9, 0x51, 0x0b, 0x4a, 0xa7, 0x9e, 0xc0, 0x26, 0xb2, 0x7b, 0x64, 0x4e, 0x43, 0xcb, 0x99, 0xa4,
+	0x52, 0x74, 0x53, 0x3d, 0xba, 0x07, 0xab, 0x49, 0xdd, 0x08, 0x99, 0xd0, 0xf2, 0x11, 0x95, 0xe9,
+	0xd2, 0x32, 0xa8, 0x57, 0x1c, 0x99, 0xe3, 0x6b, 0x4a, 0x34, 0x97, 0x15, 0xd5, 0x61, 0xa9, 0xd6,
+	0xed, 0x60, 0x20, 0x1c, 0x5f, 0xfb, 0x1f, 0x4d, 0x26, 0x35, 0xdd, 0x82, 0x62, 0x8d, 0xa1, 0x27,
+	0xd0, 0x3f, 0x12, 0x9a, 0x6a, 0x92, 0x8a, 0xe2, 0x26, 0x0d, 0xeb, 0x1c, 0x36, 0x32, 0x9e, 0xbc,
+	0x1f, 0x06, 0x1c, 0xe9, 0x41, 0x46, 0x74, 0x33, 0x25, 0x1a, 0x43, 0x69, 0x53, 0xeb, 0x31, 0xd9,
+	0xd5, 0x6a, 0xfd, 0xec, 0xd2, 0x12, 0xd1, 0xdc, 0x5c, 0xd1, 0x7c, 0x5a, 0xd4, 0xaa, 0x43, 0x39,
+	0x7b, 0xfc, 0xe2, 0x2e, 0x0f, 0x40, 0xe5, 0x32, 0x27, 0x68, 0x85, 0xbf, 0x2b, 0x32, 0x22, 0xb0,
+	0x96, 0x3a, 0x7c, 0x61, 0x8d, 0xbf, 0x1d, 0xbe, 0xea, 0x3b, 0x81, 0x82, 0x14, 0xa5, 0x75, 0x50,
+	0xe3, 0x04, 0xd2, 0x9d, 0x29, 0xad, 0x59, 0xff, 0xa0, 0x6e, 0xce, 0x07, 0xe4, 0x4d, 0x5d, 0x40,
+	0x41, 0x66, 0x80, 0xce, 0x82, 0x53, 0xe9, 0xd4, 0x77, 0xbf, 0x21, 0xe4, 0xbe, 0x13, 0x50, 0xc6,
+	0x5f, 0x82, 0x6e, 0x7f, 0x45, 0xa7, 0xe2, 0xa1, 0x1b, 0xf3, 0xc6, 0xf1, 0x9a, 0xe3, 0xf2, 0xf3,
+	0xd0, 0x20, 0x2f, 0x43, 0x83, 0xbc, 0x0e, 0x0d, 0xf2, 0xf4, 0x66, 0xfc, 0xbb, 0x56, 0xc6, 0xec,
+	0x8d, 0x1a, 0x3d, 0x3a, 0x87, 0x1f, 0x01, 0x00, 0x00, 0xff, 0xff, 0x99, 0x32, 0x21, 0xf7, 0x9e,
+	0x04, 0x00, 0x00,
 }

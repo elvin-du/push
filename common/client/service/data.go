@@ -7,9 +7,9 @@ import (
 )
 
 const (
-	MAX_POOL_SIZE  = 10
-	SERVER_NAME    = "DATA"
-	SERVER_VERSION = "1.0"
+	DATA_MAX_POOL_SIZE  = 10
+	DATA_SERVER_NAME    = "DATA"
+	DATA_SERVER_VERSION = "1.0"
 )
 
 type DataServiceClientManager struct {
@@ -22,7 +22,7 @@ type DataServiceClient struct {
 }
 
 var (
-	globalDataServiceClientManager = &DataServiceClientManager{Pool: make(chan *DataServiceClient, MAX_POOL_SIZE)}
+	globalDataServiceClientManager = &DataServiceClientManager{Pool: make(chan *DataServiceClient, DATA_MAX_POOL_SIZE)}
 )
 
 func DataClient() (*DataServiceClient, error) {
@@ -38,7 +38,7 @@ func (e *DataServiceClientManager) GetClient() (*DataServiceClient, error) {
 	case cli := <-e.Pool:
 		return cli, nil
 	default:
-		srvCli, err := GetServieClient(util.APP_NAME, SERVER_NAME, SERVER_VERSION)
+		srvCli, err := GetServieClient(util.APP_NAME, DATA_SERVER_NAME, DATA_SERVER_VERSION)
 		if nil != err {
 			log.Errorln(err)
 			return nil, err

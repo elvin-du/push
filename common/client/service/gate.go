@@ -7,6 +7,7 @@ import (
 )
 
 const (
+	GATE_MAX_POOL_SIZE  = 10
 	GATE_SERVER_NAME    = "GATE"
 	GATE_SERVER_VERSION = "1.0"
 )
@@ -21,7 +22,7 @@ type GateServiceClient struct {
 }
 
 var (
-	globalGateServiceClientManager = &GateServiceClientManager{Pool: make(chan *GateServiceClient, MAX_POOL_SIZE)}
+	globalGateServiceClientManager = &GateServiceClientManager{Pool: make(chan *GateServiceClient, GATE_MAX_POOL_SIZE)}
 )
 
 func GateClient(ip, port string) (*GateServiceClient, error) {

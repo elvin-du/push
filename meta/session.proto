@@ -7,33 +7,45 @@ option go_package="meta";
 import "common.proto";
 
 service Session{
-	rpc Register(SessionRegisterRequest)returns (SessionRegisterResponse);
-	rpc Unregister(SessionUnregisterRequest)returns (SessionUnregisterResponse);
+	rpc Online(SessionOnlineRequest)returns (SessionOnlineResponse);
+	rpc Offline(SessionOfflineRequest)returns (SessionOfflineResponse);
+	rpc Info(SessionInfoRequest)returns (SessionInfoResponse);
 }
 
-message SessionRegisterRequest{
+message SessionOnlineRequest{
 	RequestHeader header = 1;
-	string ServiceVersion = 2;
-	string IP = 3;
-	string Port = 4;
-	string UserId = 5;
+	string GateServerIP = 2;
+	string GateServerPort = 3;
+	string UserId = 4;
+	string ClientId = 5;
 	uint64 CreatedAt = 6;
 }
 
-message SessionRegisterResponse{
+message SessionOnlineResponse{
 	ResponseHeader header = 1;
 }
 
-message SessionUnregisterRequest{
+message SessionOfflineRequest{
 	RequestHeader header = 1;
 	string UserId = 2;
+	string ClientId = 3;
 }
 
-message SessionUnregisterResponse{
+message SessionOfflineResponse{
 	ResponseHeader header = 1;
-	string ServiceVersion = 2;
-	string IP = 3;
-	string Port = 4;
-	string UserId = 5;
+}
+
+message SessionInfoRequest{
+	RequestHeader header = 1;
+	string UserId = 2;
+	string ClientId = 3;
+}
+
+message SessionInfoResponse{
+	ResponseHeader header = 1;
+	string GateServerIP = 2;
+	string GateServerPort = 3;
+	string UserId = 4;
+	string ClientId = 5;
 	uint64 CreatedAt = 6;
 }

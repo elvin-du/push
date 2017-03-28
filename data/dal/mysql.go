@@ -58,25 +58,14 @@ var (
 //上线
 func (m *Mysql) Online(req *meta.DataOnlineRequest) (*meta.DataOnlineResponse, error) {
 	utc := time.Now().Unix()
-	//TODO
-	log.Debugf("%s online sucess", req.ClientId)
-	//	sqlStr := fmt.Sprintf("INSERT INTO %s SET id='%s',gate_server_ip='%s',user_id='%s',platform='%s',status=1,created_at=%d,updated_at=%d", TBL_CLIENTS, req.ClientId, req.IP, req.UserId, req.Platform, utc, utc)
-	//	log.Println(sqlStr)
-	//	_, err := m.Query(sqlStr)
-	//	if nil != err {
-	//		log.Println(err)
-	//		return nil, err
-	//	}
-	ci := &ClientInfo{}
-	ci.GateServerIp = req.GateIp
-	ci.GateServerPort = req.GatePort
-	ci.Id = req.ClientId
-	ci.Platform = req.Platform
-	ci.UserId = req.UserId
-	ci.Status = 1
-	ci.CreatedAt = uint64(utc)
-	ci.UpdatedAt = uint64(utc)
-	tmpDB[ci.UserId] = ci
+	sqlStr := fmt.Sprintf("INSERT INTO %s SET id='%s',gate_server_ip='%s',gate_server_port='%s',user_id='%s',platform='%s',status=1,created_at=%d,updated_at=%d", TBL_CLIENTS, req.ClientId, req.GateIp, req.GatePort, req.UserId, req.Platform, utc, utc)
+	log.Debugln(sqlStr)
+	_, err := m.Query(sqlStr)
+	if nil != err {
+		log.Errorln(err)
+		return nil, err
+	}
+
 	return &meta.DataOnlineResponse{}, nil
 }
 
@@ -107,22 +96,30 @@ func (m *Mysql) DelOfflineMsgs(req *meta.DelOfflineMsgsRequest) (*meta.DelOfflin
 }
 
 func (m *Mysql) GetClientInfo(req *meta.GetClientInfoRequest) (*meta.GetClientInfoResponse, error) {
-	//	sqlStr := fmt.Sprintf("SELECT id,gate_server_ip,user_id,platform,status,created_at,updated_at FROM %s WHERE user_id='%s'", TBL_CLIENTS, req.UserId,req.)
-	//	log.Println(sqlStr)
-	//	_, err := m.Query(sqlStr)
-	//	if nil != err {
-	//		log.Println(err)
-	//		return nil, err
-	//	}
+	sqlStr := fmt.Sprintf("SELECT id,gate_server_ip,gate_server_port,user_id,platform,status,created_at,updated_at FROM %s WHERE user_id='%s'", TBL_CLIENTS, req.UserId)
+	log.Debugln(sqlStr)
+	rows, err := m.Query(sqlStr)
+	if nil != err {
+		log.Errorln(err)
+		return nil, err
+	}
 
 	ret := &meta.GetClientInfoResponse{}
-	v, ok := tmpDB[req.UserId]
-	if ok {
+	for rows.Next() {
 		item := &meta.GetClientInfoRes{}
-		item.ClientId = v.Id
-		item.Platform = v.Platform
-		item.IP = v.GateServerIp
+		rows.Scan(
+			&item.ClientId,
+			&item.GateIp,
+			&item.GatePort,
+			&item.UserId,
+			&item.Platform,
+			&item.Status,
+			&item.CreatedAt,
+			&item.UpdatedAt,
+		)
+		ret.UserId = item.UserId
 		ret.Items = append(ret.Items, item)
+		break //TODO
 	}
 
 	return ret, nil
@@ -142,5 +139,14 @@ func (m *Mysql) GetClientInfo(req *meta.GetClientInfoRequest) (*meta.GetClientIn
 //}
 
 func (m *Mysql) UpdateClientInfo(req *meta.UpdateClientInfoRequest) (*meta.UpdateClientInfoResponse, error) {
+	utc := time.Now().Unix()
+	sqlStr := fmt.Sprintf("UPDATE %s SET id='%s',gate_server_ip='%s',gate_server_port='%s',user_id='%s',platform='%s',status=1,updated_at=%d WHERE user_id='%s'", TBL_CLIENTS, req.ClientId, req.GateIp, req.GatePort, req.UserId, req.Platform, utc, req.UserId)
+	log.Debugln(sqlStr)
+	_, err := m.Query(sqlStr)
+	if nil != err {
+		log.Errorln(err)
+		return nil, err
+	}
+
 	return &meta.UpdateClientInfoResponse{}, nil
 }

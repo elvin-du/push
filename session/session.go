@@ -20,6 +20,10 @@ func (*Session) Offline(ctx context.Context, req *meta.SessionOfflineRequest) (*
 	return &meta.SessionOfflineResponse{}, nil
 }
 
+func (*Session) Update(ctx context.Context, req *meta.SessionUpdateRequest) (*meta.SessionUpdateResponse, error) {
+	return &meta.SessionUpdateResponse{}, nil
+}
+
 func (*Session) Info(ctx context.Context, req *meta.SessionInfoRequest) (*meta.SessionInfoResponse, error) {
 	return &meta.SessionInfoResponse{}, nil
 }

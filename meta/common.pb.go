@@ -36,6 +36,8 @@
 		GatePushAllResponse
 		SessionOnlineRequest
 		SessionOnlineResponse
+		SessionUpdateRequest
+		SessionUpdateResponse
 		SessionOfflineRequest
 		SessionOfflineResponse
 		SessionInfoRequest

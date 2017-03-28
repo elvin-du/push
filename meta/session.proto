@@ -8,6 +8,7 @@ import "common.proto";
 
 service Session{
 	rpc Online(SessionOnlineRequest)returns (SessionOnlineResponse);
+	rpc Update(SessionUpdateRequest)returns (SessionUpdateResponse);
 	rpc Offline(SessionOfflineRequest)returns (SessionOfflineResponse);
 	rpc Info(SessionInfoRequest)returns (SessionInfoResponse);
 }
@@ -20,8 +21,19 @@ message SessionOnlineRequest{
 	string ClientId = 5;
 	uint64 CreatedAt = 6;
 }
-
 message SessionOnlineResponse{
+	ResponseHeader header = 1;
+}
+
+message SessionUpdateRequest{
+	RequestHeader header = 1;
+	string GateServerIP = 2;
+	string GateServerPort = 3;
+	string UserId = 4;
+	string ClientId = 5;
+	uint64 CreatedAt = 6;
+}
+message SessionUpdateResponse{
 	ResponseHeader header = 1;
 }
 
@@ -30,7 +42,6 @@ message SessionOfflineRequest{
 	string UserId = 2;
 	string ClientId = 3;
 }
-
 message SessionOfflineResponse{
 	ResponseHeader header = 1;
 }
@@ -40,7 +51,6 @@ message SessionInfoRequest{
 	string UserId = 2;
 	string ClientId = 3;
 }
-
 message SessionInfoResponse{
 	ResponseHeader header = 1;
 	string GateServerIP = 2;
@@ -48,4 +58,5 @@ message SessionInfoResponse{
 	string UserId = 4;
 	string ClientId = 5;
 	uint64 CreatedAt = 6;
+	uint64 Status = 7;
 }

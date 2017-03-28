@@ -57,6 +57,43 @@ func (m *SessionOnlineResponse) GetHeader() *ResponseHeader {
 	return nil
 }
 
+type SessionUpdateRequest struct {
+	Header         *RequestHeader `protobuf:"bytes,1,opt,name=header" json:"header,omitempty"`
+	GateServerIP   string         `protobuf:"bytes,2,opt,name=GateServerIP,proto3" json:"GateServerIP,omitempty"`
+	GateServerPort string         `protobuf:"bytes,3,opt,name=GateServerPort,proto3" json:"GateServerPort,omitempty"`
+	UserId         string         `protobuf:"bytes,4,opt,name=UserId,proto3" json:"UserId,omitempty"`
+	ClientId       string         `protobuf:"bytes,5,opt,name=ClientId,proto3" json:"ClientId,omitempty"`
+	CreatedAt      uint64         `protobuf:"varint,6,opt,name=CreatedAt,proto3" json:"CreatedAt,omitempty"`
+}
+
+func (m *SessionUpdateRequest) Reset()                    { *m = SessionUpdateRequest{} }
+func (m *SessionUpdateRequest) String() string            { return proto.CompactTextString(m) }
+func (*SessionUpdateRequest) ProtoMessage()               {}
+func (*SessionUpdateRequest) Descriptor() ([]byte, []int) { return fileDescriptorSession, []int{2} }
+
+func (m *SessionUpdateRequest) GetHeader() *RequestHeader {
+	if m != nil {
+		return m.Header
+	}
+	return nil
+}
+
+type SessionUpdateResponse struct {
+	Header *ResponseHeader `protobuf:"bytes,1,opt,name=header" json:"header,omitempty"`
+}
+
+func (m *SessionUpdateResponse) Reset()                    { *m = SessionUpdateResponse{} }
+func (m *SessionUpdateResponse) String() string            { return proto.CompactTextString(m) }
+func (*SessionUpdateResponse) ProtoMessage()               {}
+func (*SessionUpdateResponse) Descriptor() ([]byte, []int) { return fileDescriptorSession, []int{3} }
+
+func (m *SessionUpdateResponse) GetHeader() *ResponseHeader {
+	if m != nil {
+		return m.Header
+	}
+	return nil
+}
+
 type SessionOfflineRequest struct {
 	Header   *RequestHeader `protobuf:"bytes,1,opt,name=header" json:"header,omitempty"`
 	UserId   string         `protobuf:"bytes,2,opt,name=UserId,proto3" json:"UserId,omitempty"`
@@ -66,7 +103,7 @@ type SessionOfflineRequest struct {
 func (m *SessionOfflineRequest) Reset()                    { *m = SessionOfflineRequest{} }
 func (m *SessionOfflineRequest) String() string            { return proto.CompactTextString(m) }
 func (*SessionOfflineRequest) ProtoMessage()               {}
-func (*SessionOfflineRequest) Descriptor() ([]byte, []int) { return fileDescriptorSession, []int{2} }
+func (*SessionOfflineRequest) Descriptor() ([]byte, []int) { return fileDescriptorSession, []int{4} }
 
 func (m *SessionOfflineRequest) GetHeader() *RequestHeader {
 	if m != nil {
@@ -82,7 +119,7 @@ type SessionOfflineResponse struct {
 func (m *SessionOfflineResponse) Reset()                    { *m = SessionOfflineResponse{} }
 func (m *SessionOfflineResponse) String() string            { return proto.CompactTextString(m) }
 func (*SessionOfflineResponse) ProtoMessage()               {}
-func (*SessionOfflineResponse) Descriptor() ([]byte, []int) { return fileDescriptorSession, []int{3} }
+func (*SessionOfflineResponse) Descriptor() ([]byte, []int) { return fileDescriptorSession, []int{5} }
 
 func (m *SessionOfflineResponse) GetHeader() *ResponseHeader {
 	if m != nil {
@@ -100,7 +137,7 @@ type SessionInfoRequest struct {
 func (m *SessionInfoRequest) Reset()                    { *m = SessionInfoRequest{} }
 func (m *SessionInfoRequest) String() string            { return proto.CompactTextString(m) }
 func (*SessionInfoRequest) ProtoMessage()               {}
-func (*SessionInfoRequest) Descriptor() ([]byte, []int) { return fileDescriptorSession, []int{4} }
+func (*SessionInfoRequest) Descriptor() ([]byte, []int) { return fileDescriptorSession, []int{6} }
 
 func (m *SessionInfoRequest) GetHeader() *RequestHeader {
 	if m != nil {
@@ -116,12 +153,13 @@ type SessionInfoResponse struct {
 	UserId         string          `protobuf:"bytes,4,opt,name=UserId,proto3" json:"UserId,omitempty"`
 	ClientId       string          `protobuf:"bytes,5,opt,name=ClientId,proto3" json:"ClientId,omitempty"`
 	CreatedAt      uint64          `protobuf:"varint,6,opt,name=CreatedAt,proto3" json:"CreatedAt,omitempty"`
+	Status         uint64          `protobuf:"varint,7,opt,name=Status,proto3" json:"Status,omitempty"`
 }
 
 func (m *SessionInfoResponse) Reset()                    { *m = SessionInfoResponse{} }
 func (m *SessionInfoResponse) String() string            { return proto.CompactTextString(m) }
 func (*SessionInfoResponse) ProtoMessage()               {}
-func (*SessionInfoResponse) Descriptor() ([]byte, []int) { return fileDescriptorSession, []int{5} }
+func (*SessionInfoResponse) Descriptor() ([]byte, []int) { return fileDescriptorSession, []int{7} }
 
 func (m *SessionInfoResponse) GetHeader() *ResponseHeader {
 	if m != nil {
@@ -133,6 +171,8 @@ func (m *SessionInfoResponse) GetHeader() *ResponseHeader {
 func init() {
 	proto.RegisterType((*SessionOnlineRequest)(nil), "push.meta.SessionOnlineRequest")
 	proto.RegisterType((*SessionOnlineResponse)(nil), "push.meta.SessionOnlineResponse")
+	proto.RegisterType((*SessionUpdateRequest)(nil), "push.meta.SessionUpdateRequest")
+	proto.RegisterType((*SessionUpdateResponse)(nil), "push.meta.SessionUpdateResponse")
 	proto.RegisterType((*SessionOfflineRequest)(nil), "push.meta.SessionOfflineRequest")
 	proto.RegisterType((*SessionOfflineResponse)(nil), "push.meta.SessionOfflineResponse")
 	proto.RegisterType((*SessionInfoRequest)(nil), "push.meta.SessionInfoRequest")
@@ -151,6 +191,7 @@ const _ = grpc.SupportPackageIsVersion4
 
 type SessionClient interface {
 	Online(ctx context.Context, in *SessionOnlineRequest, opts ...grpc.CallOption) (*SessionOnlineResponse, error)
+	Update(ctx context.Context, in *SessionUpdateRequest, opts ...grpc.CallOption) (*SessionUpdateResponse, error)
 	Offline(ctx context.Context, in *SessionOfflineRequest, opts ...grpc.CallOption) (*SessionOfflineResponse, error)
 	Info(ctx context.Context, in *SessionInfoRequest, opts ...grpc.CallOption) (*SessionInfoResponse, error)
 }
@@ -166,6 +207,15 @@ func NewSessionClient(cc *grpc.ClientConn) SessionClient {
 func (c *sessionClient) Online(ctx context.Context, in *SessionOnlineRequest, opts ...grpc.CallOption) (*SessionOnlineResponse, error) {
 	out := new(SessionOnlineResponse)
 	err := grpc.Invoke(ctx, "/push.meta.Session/Online", in, out, c.cc, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *sessionClient) Update(ctx context.Context, in *SessionUpdateRequest, opts ...grpc.CallOption) (*SessionUpdateResponse, error) {
+	out := new(SessionUpdateResponse)
+	err := grpc.Invoke(ctx, "/push.meta.Session/Update", in, out, c.cc, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -194,6 +244,7 @@ func (c *sessionClient) Info(ctx context.Context, in *SessionInfoRequest, opts .
 
 type SessionServer interface {
 	Online(context.Context, *SessionOnlineRequest) (*SessionOnlineResponse, error)
+	Update(context.Context, *SessionUpdateRequest) (*SessionUpdateResponse, error)
 	Offline(context.Context, *SessionOfflineRequest) (*SessionOfflineResponse, error)
 	Info(context.Context, *SessionInfoRequest) (*SessionInfoResponse, error)
 }
@@ -216,6 +267,24 @@ func _Session_Online_Handler(srv interface{}, ctx context.Context, dec func(inte
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(SessionServer).Online(ctx, req.(*SessionOnlineRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Session_Update_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(SessionUpdateRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(SessionServer).Update(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/push.meta.Session/Update",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(SessionServer).Update(ctx, req.(*SessionUpdateRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -263,6 +332,10 @@ var _Session_serviceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "Online",
 			Handler:    _Session_Online_Handler,
+		},
+		{
+			MethodName: "Update",
+			Handler:    _Session_Update_Handler,
 		},
 		{
 			MethodName: "Offline",
@@ -362,6 +435,91 @@ func (m *SessionOnlineResponse) MarshalTo(dAtA []byte) (int, error) {
 	return i, nil
 }
 
+func (m *SessionUpdateRequest) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalTo(dAtA)
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *SessionUpdateRequest) MarshalTo(dAtA []byte) (int, error) {
+	var i int
+	_ = i
+	var l int
+	_ = l
+	if m.Header != nil {
+		dAtA[i] = 0xa
+		i++
+		i = encodeVarintSession(dAtA, i, uint64(m.Header.Size()))
+		n3, err := m.Header.MarshalTo(dAtA[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n3
+	}
+	if len(m.GateServerIP) > 0 {
+		dAtA[i] = 0x12
+		i++
+		i = encodeVarintSession(dAtA, i, uint64(len(m.GateServerIP)))
+		i += copy(dAtA[i:], m.GateServerIP)
+	}
+	if len(m.GateServerPort) > 0 {
+		dAtA[i] = 0x1a
+		i++
+		i = encodeVarintSession(dAtA, i, uint64(len(m.GateServerPort)))
+		i += copy(dAtA[i:], m.GateServerPort)
+	}
+	if len(m.UserId) > 0 {
+		dAtA[i] = 0x22
+		i++
+		i = encodeVarintSession(dAtA, i, uint64(len(m.UserId)))
+		i += copy(dAtA[i:], m.UserId)
+	}
+	if len(m.ClientId) > 0 {
+		dAtA[i] = 0x2a
+		i++
+		i = encodeVarintSession(dAtA, i, uint64(len(m.ClientId)))
+		i += copy(dAtA[i:], m.ClientId)
+	}
+	if m.CreatedAt != 0 {
+		dAtA[i] = 0x30
+		i++
+		i = encodeVarintSession(dAtA, i, uint64(m.CreatedAt))
+	}
+	return i, nil
+}
+
+func (m *SessionUpdateResponse) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalTo(dAtA)
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *SessionUpdateResponse) MarshalTo(dAtA []byte) (int, error) {
+	var i int
+	_ = i
+	var l int
+	_ = l
+	if m.Header != nil {
+		dAtA[i] = 0xa
+		i++
+		i = encodeVarintSession(dAtA, i, uint64(m.Header.Size()))
+		n4, err := m.Header.MarshalTo(dAtA[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n4
+	}
+	return i, nil
+}
+
 func (m *SessionOfflineRequest) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
@@ -381,11 +539,11 @@ func (m *SessionOfflineRequest) MarshalTo(dAtA []byte) (int, error) {
 		dAtA[i] = 0xa
 		i++
 		i = encodeVarintSession(dAtA, i, uint64(m.Header.Size()))
-		n3, err := m.Header.MarshalTo(dAtA[i:])
+		n5, err := m.Header.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n3
+		i += n5
 	}
 	if len(m.UserId) > 0 {
 		dAtA[i] = 0x12
@@ -421,11 +579,11 @@ func (m *SessionOfflineResponse) MarshalTo(dAtA []byte) (int, error) {
 		dAtA[i] = 0xa
 		i++
 		i = encodeVarintSession(dAtA, i, uint64(m.Header.Size()))
-		n4, err := m.Header.MarshalTo(dAtA[i:])
+		n6, err := m.Header.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n4
+		i += n6
 	}
 	return i, nil
 }
@@ -449,11 +607,11 @@ func (m *SessionInfoRequest) MarshalTo(dAtA []byte) (int, error) {
 		dAtA[i] = 0xa
 		i++
 		i = encodeVarintSession(dAtA, i, uint64(m.Header.Size()))
-		n5, err := m.Header.MarshalTo(dAtA[i:])
+		n7, err := m.Header.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n5
+		i += n7
 	}
 	if len(m.UserId) > 0 {
 		dAtA[i] = 0x12
@@ -489,11 +647,11 @@ func (m *SessionInfoResponse) MarshalTo(dAtA []byte) (int, error) {
 		dAtA[i] = 0xa
 		i++
 		i = encodeVarintSession(dAtA, i, uint64(m.Header.Size()))
-		n6, err := m.Header.MarshalTo(dAtA[i:])
+		n8, err := m.Header.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n6
+		i += n8
 	}
 	if len(m.GateServerIP) > 0 {
 		dAtA[i] = 0x12
@@ -523,6 +681,11 @@ func (m *SessionInfoResponse) MarshalTo(dAtA []byte) (int, error) {
 		dAtA[i] = 0x30
 		i++
 		i = encodeVarintSession(dAtA, i, uint64(m.CreatedAt))
+	}
+	if m.Status != 0 {
+		dAtA[i] = 0x38
+		i++
+		i = encodeVarintSession(dAtA, i, uint64(m.Status))
 	}
 	return i, nil
 }
@@ -584,6 +747,45 @@ func (m *SessionOnlineRequest) Size() (n int) {
 }
 
 func (m *SessionOnlineResponse) Size() (n int) {
+	var l int
+	_ = l
+	if m.Header != nil {
+		l = m.Header.Size()
+		n += 1 + l + sovSession(uint64(l))
+	}
+	return n
+}
+
+func (m *SessionUpdateRequest) Size() (n int) {
+	var l int
+	_ = l
+	if m.Header != nil {
+		l = m.Header.Size()
+		n += 1 + l + sovSession(uint64(l))
+	}
+	l = len(m.GateServerIP)
+	if l > 0 {
+		n += 1 + l + sovSession(uint64(l))
+	}
+	l = len(m.GateServerPort)
+	if l > 0 {
+		n += 1 + l + sovSession(uint64(l))
+	}
+	l = len(m.UserId)
+	if l > 0 {
+		n += 1 + l + sovSession(uint64(l))
+	}
+	l = len(m.ClientId)
+	if l > 0 {
+		n += 1 + l + sovSession(uint64(l))
+	}
+	if m.CreatedAt != 0 {
+		n += 1 + sovSession(uint64(m.CreatedAt))
+	}
+	return n
+}
+
+func (m *SessionUpdateResponse) Size() (n int) {
 	var l int
 	_ = l
 	if m.Header != nil {
@@ -664,6 +866,9 @@ func (m *SessionInfoResponse) Size() (n int) {
 	}
 	if m.CreatedAt != 0 {
 		n += 1 + sovSession(uint64(m.CreatedAt))
+	}
+	if m.Status != 0 {
+		n += 1 + sovSession(uint64(m.Status))
 	}
 	return n
 }
@@ -926,6 +1131,307 @@ func (m *SessionOnlineResponse) Unmarshal(dAtA []byte) error {
 		}
 		if fieldNum <= 0 {
 			return fmt.Errorf("proto: SessionOnlineResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Header", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowSession
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthSession
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Header == nil {
+				m.Header = &ResponseHeader{}
+			}
+			if err := m.Header.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipSession(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthSession
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *SessionUpdateRequest) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowSession
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= (uint64(b) & 0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: SessionUpdateRequest: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: SessionUpdateRequest: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Header", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowSession
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthSession
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Header == nil {
+				m.Header = &RequestHeader{}
+			}
+			if err := m.Header.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field GateServerIP", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowSession
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthSession
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.GateServerIP = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field GateServerPort", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowSession
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthSession
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.GateServerPort = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 4:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field UserId", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowSession
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthSession
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.UserId = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 5:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ClientId", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowSession
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthSession
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.ClientId = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 6:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field CreatedAt", wireType)
+			}
+			m.CreatedAt = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowSession
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.CreatedAt |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		default:
+			iNdEx = preIndex
+			skippy, err := skipSession(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthSession
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *SessionUpdateResponse) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowSession
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= (uint64(b) & 0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: SessionUpdateResponse: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: SessionUpdateResponse: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
 		case 1:
@@ -1544,6 +2050,25 @@ func (m *SessionInfoResponse) Unmarshal(dAtA []byte) error {
 					break
 				}
 			}
+		case 7:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Status", wireType)
+			}
+			m.Status = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowSession
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.Status |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
 		default:
 			iNdEx = preIndex
 			skippy, err := skipSession(dAtA[iNdEx:])
@@ -1673,29 +2198,31 @@ var (
 func init() { proto.RegisterFile("session.proto", fileDescriptorSession) }
 
 var fileDescriptorSession = []byte{
-	// 371 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xcc, 0x94, 0xc1, 0x4e, 0xf2, 0x40,
-	0x10, 0xc7, 0xbf, 0x85, 0x7e, 0x45, 0x46, 0xf4, 0xb0, 0x2a, 0xa9, 0x8d, 0xd6, 0xda, 0x83, 0xe1,
-	0xd4, 0x28, 0x3e, 0x81, 0x12, 0xa3, 0x95, 0x44, 0x49, 0x89, 0x17, 0x6f, 0xd5, 0x0e, 0x81, 0x04,
-	0x5a, 0xdc, 0x5d, 0x3c, 0x98, 0xf8, 0x0e, 0x3e, 0x96, 0x47, 0x1f, 0xc1, 0x60, 0xc2, 0xcd, 0x77,
-	0x30, 0xb4, 0x2b, 0xa5, 0x15, 0x3c, 0x60, 0x62, 0x3c, 0xce, 0xcc, 0x2f, 0xb3, 0xf9, 0x6d, 0xff,
-	0x5d, 0x58, 0xe1, 0xc8, 0x79, 0x27, 0x0c, 0xec, 0x3e, 0x0b, 0x45, 0x48, 0x8b, 0xfd, 0x01, 0x6f,
-	0xdb, 0x3d, 0x14, 0x9e, 0x5e, 0xba, 0x0d, 0x7b, 0xbd, 0xcf, 0x81, 0x35, 0x22, 0xb0, 0xde, 0x8c,
-	0xd1, 0xcb, 0xa0, 0xdb, 0x09, 0xd0, 0xc5, 0xbb, 0x01, 0x72, 0x41, 0xf7, 0x41, 0x6d, 0xa3, 0xe7,
-	0x23, 0xd3, 0x88, 0x49, 0x2a, 0xcb, 0x55, 0xcd, 0x9e, 0xac, 0xb0, 0x25, 0x73, 0x16, 0xcd, 0x5d,
-	0xc9, 0x51, 0x0b, 0x4a, 0xa7, 0x9e, 0xc0, 0x26, 0xb2, 0x7b, 0x64, 0x4e, 0x43, 0xcb, 0x99, 0xa4,
-	0x52, 0x74, 0x53, 0x3d, 0xba, 0x07, 0xab, 0x49, 0xdd, 0x08, 0x99, 0xd0, 0xf2, 0x11, 0x95, 0xe9,
-	0xd2, 0x32, 0xa8, 0x57, 0x1c, 0x99, 0xe3, 0x6b, 0x4a, 0x34, 0x97, 0x15, 0xd5, 0x61, 0xa9, 0xd6,
-	0xed, 0x60, 0x20, 0x1c, 0x5f, 0xfb, 0x1f, 0x4d, 0x26, 0x35, 0xdd, 0x82, 0x62, 0x8d, 0xa1, 0x27,
-	0xd0, 0x3f, 0x12, 0x9a, 0x6a, 0x92, 0x8a, 0xe2, 0x26, 0x0d, 0xeb, 0x1c, 0x36, 0x32, 0x9e, 0xbc,
-	0x1f, 0x06, 0x1c, 0xe9, 0x41, 0x46, 0x74, 0x33, 0x25, 0x1a, 0x43, 0x69, 0x53, 0xeb, 0x31, 0xd9,
-	0xd5, 0x6a, 0xfd, 0xec, 0xd2, 0x12, 0xd1, 0xdc, 0x5c, 0xd1, 0x7c, 0x5a, 0xd4, 0xaa, 0x43, 0x39,
-	0x7b, 0xfc, 0xe2, 0x2e, 0x0f, 0x40, 0xe5, 0x32, 0x27, 0x68, 0x85, 0xbf, 0x2b, 0x32, 0x22, 0xb0,
-	0x96, 0x3a, 0x7c, 0x61, 0x8d, 0xbf, 0x1d, 0xbe, 0xea, 0x3b, 0x81, 0x82, 0x14, 0xa5, 0x75, 0x50,
-	0xe3, 0x04, 0xd2, 0x9d, 0x29, 0xad, 0x59, 0xff, 0xa0, 0x6e, 0xce, 0x07, 0xe4, 0x4d, 0x5d, 0x40,
-	0x41, 0x66, 0x80, 0xce, 0x82, 0x53, 0xe9, 0xd4, 0x77, 0xbf, 0x21, 0xe4, 0xbe, 0x13, 0x50, 0xc6,
-	0x5f, 0x82, 0x6e, 0x7f, 0x45, 0xa7, 0xe2, 0xa1, 0x1b, 0xf3, 0xc6, 0xf1, 0x9a, 0xe3, 0xf2, 0xf3,
-	0xd0, 0x20, 0x2f, 0x43, 0x83, 0xbc, 0x0e, 0x0d, 0xf2, 0xf4, 0x66, 0xfc, 0xbb, 0x56, 0xc6, 0xec,
-	0x8d, 0x1a, 0x3d, 0x3a, 0x87, 0x1f, 0x01, 0x00, 0x00, 0xff, 0xff, 0x99, 0x32, 0x21, 0xf7, 0x9e,
-	0x04, 0x00, 0x00,
+	// 413 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xe4, 0x95, 0x41, 0x4a, 0xc3, 0x40,
+	0x14, 0x86, 0x9d, 0x36, 0xa6, 0xf6, 0x59, 0x5d, 0x8c, 0x5a, 0xc6, 0xa0, 0x31, 0x66, 0x21, 0x5d,
+	0x05, 0xad, 0x27, 0xd0, 0x22, 0x1a, 0x0b, 0x5a, 0x52, 0xba, 0x71, 0x17, 0xcd, 0x94, 0x16, 0xda,
+	0x24, 0x66, 0xa6, 0x2e, 0x04, 0xef, 0xe0, 0x79, 0x3c, 0x81, 0x4b, 0x8f, 0x20, 0x15, 0x3c, 0x86,
+	0x48, 0x93, 0x69, 0xd3, 0xc4, 0xd4, 0x45, 0x05, 0x11, 0x5c, 0xbe, 0xf9, 0x7f, 0xfe, 0xe1, 0x7b,
+	0xf3, 0x5e, 0x02, 0x2b, 0x8c, 0x32, 0xd6, 0xf5, 0x5c, 0xc3, 0x0f, 0x3c, 0xee, 0xe1, 0xa2, 0x3f,
+	0x60, 0x1d, 0xa3, 0x4f, 0xb9, 0xad, 0x94, 0x6e, 0xbc, 0x7e, 0x7f, 0x2c, 0xe8, 0xef, 0x08, 0xd6,
+	0x9b, 0x91, 0xf5, 0xd2, 0xed, 0x75, 0x5d, 0x6a, 0xd1, 0xdb, 0x01, 0x65, 0x1c, 0xef, 0x83, 0xdc,
+	0xa1, 0xb6, 0x43, 0x03, 0x82, 0x34, 0x54, 0x59, 0xae, 0x12, 0x63, 0x12, 0x61, 0x08, 0xcf, 0x59,
+	0xa8, 0x5b, 0xc2, 0x87, 0x75, 0x28, 0x9d, 0xda, 0x9c, 0x36, 0x69, 0x70, 0x47, 0x03, 0xb3, 0x41,
+	0x72, 0x1a, 0xaa, 0x14, 0xad, 0xc4, 0x19, 0xde, 0x83, 0xd5, 0xb8, 0x6e, 0x78, 0x01, 0x27, 0xf9,
+	0xd0, 0x95, 0x3a, 0xc5, 0x65, 0x90, 0x5b, 0x8c, 0x06, 0xa6, 0x43, 0xa4, 0x50, 0x17, 0x15, 0x56,
+	0x60, 0xa9, 0xd6, 0xeb, 0x52, 0x97, 0x9b, 0x0e, 0x59, 0x0c, 0x95, 0x49, 0x8d, 0xb7, 0xa0, 0x58,
+	0x0b, 0xa8, 0xcd, 0xa9, 0x73, 0xc4, 0x89, 0xac, 0xa1, 0x8a, 0x64, 0xc5, 0x07, 0xfa, 0x39, 0x6c,
+	0xa4, 0x38, 0x99, 0xef, 0xb9, 0x8c, 0xe2, 0x83, 0x14, 0xe8, 0x66, 0x02, 0x34, 0x32, 0x25, 0x49,
+	0xa7, 0x9b, 0xd6, 0xf2, 0x1d, 0x9b, 0xff, 0x83, 0xa6, 0x8d, 0x39, 0xe7, 0x6f, 0xda, 0x43, 0xfc,
+	0x00, 0xed, 0xf6, 0xcf, 0x26, 0x2d, 0x06, 0xcd, 0xcd, 0x04, 0xcd, 0x27, 0x41, 0xf5, 0x3a, 0x94,
+	0xd3, 0xd7, 0xcf, 0xcf, 0x72, 0x0f, 0x58, 0x84, 0x99, 0x6e, 0xdb, 0xfb, 0x5d, 0x90, 0x0f, 0x04,
+	0x6b, 0x89, 0xcb, 0xe7, 0xc6, 0xf8, 0xdb, 0xc3, 0x37, 0x4a, 0x6c, 0x72, 0x9b, 0x0f, 0x18, 0x29,
+	0x84, 0x92, 0xa8, 0xaa, 0x4f, 0x39, 0x28, 0x88, 0x06, 0xe0, 0x3a, 0xc8, 0xd1, 0x3a, 0xe3, 0x9d,
+	0x29, 0xdc, 0xac, 0x0f, 0x9a, 0xa2, 0xcd, 0x36, 0x88, 0x0e, 0xd6, 0x41, 0x8e, 0xc6, 0x3c, 0x2b,
+	0x2c, 0xb1, 0xe8, 0x59, 0x61, 0xa9, 0x0d, 0xb9, 0x80, 0x82, 0x18, 0x34, 0x9c, 0x75, 0x73, 0x62,
+	0x05, 0x94, 0xdd, 0x6f, 0x1c, 0x22, 0xef, 0x04, 0xa4, 0xd1, 0x73, 0xe3, 0xed, 0xaf, 0xd6, 0xa9,
+	0x19, 0x54, 0xd4, 0x59, 0x72, 0x14, 0x73, 0x5c, 0x7e, 0x1e, 0xaa, 0xe8, 0x65, 0xa8, 0xa2, 0xd7,
+	0xa1, 0x8a, 0x1e, 0xdf, 0xd4, 0x85, 0x2b, 0x69, 0xe4, 0xbd, 0x96, 0xc3, 0xdf, 0xc1, 0xe1, 0x67,
+	0x00, 0x00, 0x00, 0xff, 0xff, 0x82, 0x1f, 0x0a, 0x83, 0x38, 0x06, 0x00, 0x00,
 }

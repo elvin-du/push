@@ -26,7 +26,7 @@ message UpdateClientInfoRequest{
 	string GateIp = 3;//用户上线连接的Gate服务器ip
 	string GatePort = 4;//用户上线连接的Gate服务器port
 	string UserId = 5;
-	string platform = 6;
+	string Platform = 6;
 }
 
 message UpdateClientInfoResponse{
@@ -40,8 +40,13 @@ message GetClientInfoRequest{
 
 message GetClientInfoRes{
 	string ClientId = 1;
-	string IP = 2;//用户上线连接的Gate服务器ip
-	string platform = 3;
+	string UserId = 2;
+	string GateIp = 3;//用户上线连接的Gate服务器ip
+	string GatePort = 4;//用户上线连接的Gate服务器port
+	string Platform = 5;
+	uint32 Status = 6;
+	uint64 CreatedAt = 7;
+	uint64 UpdatedAt= 8;
 }
 
 message GetClientInfoResponse{
@@ -98,7 +103,7 @@ message DataOnlineRequest{
 	string GateIp = 3;//用户上线连接的Gate服务器ip
 	string GatePort = 4;//用户上线连接的Gate服务器port
 	string UserId = 5;
-	string platform = 6;
+	string Platform = 6;
 }
 
 message DataOnlineResponse{

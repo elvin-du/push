@@ -20,240 +20,20 @@ var _ = proto.Marshal
 var _ = fmt.Errorf
 var _ = math.Inf
 
-type UpdateClientInfoRequest struct {
-	Header   *RequestHeader `protobuf:"bytes,1,opt,name=header" json:"header,omitempty"`
-	ClientId string         `protobuf:"bytes,2,opt,name=ClientId,proto3" json:"ClientId,omitempty"`
-	GateIp   string         `protobuf:"bytes,3,opt,name=GateIp,proto3" json:"GateIp,omitempty"`
-	GatePort string         `protobuf:"bytes,4,opt,name=GatePort,proto3" json:"GatePort,omitempty"`
-	UserId   string         `protobuf:"bytes,5,opt,name=UserId,proto3" json:"UserId,omitempty"`
-	Platform string         `protobuf:"bytes,6,opt,name=Platform,proto3" json:"Platform,omitempty"`
-}
-
-func (m *UpdateClientInfoRequest) Reset()                    { *m = UpdateClientInfoRequest{} }
-func (m *UpdateClientInfoRequest) String() string            { return proto.CompactTextString(m) }
-func (*UpdateClientInfoRequest) ProtoMessage()               {}
-func (*UpdateClientInfoRequest) Descriptor() ([]byte, []int) { return fileDescriptorData, []int{0} }
-
-func (m *UpdateClientInfoRequest) GetHeader() *RequestHeader {
-	if m != nil {
-		return m.Header
-	}
-	return nil
-}
-
-type UpdateClientInfoResponse struct {
-	Header *RequestHeader `protobuf:"bytes,1,opt,name=header" json:"header,omitempty"`
-}
-
-func (m *UpdateClientInfoResponse) Reset()                    { *m = UpdateClientInfoResponse{} }
-func (m *UpdateClientInfoResponse) String() string            { return proto.CompactTextString(m) }
-func (*UpdateClientInfoResponse) ProtoMessage()               {}
-func (*UpdateClientInfoResponse) Descriptor() ([]byte, []int) { return fileDescriptorData, []int{1} }
-
-func (m *UpdateClientInfoResponse) GetHeader() *RequestHeader {
-	if m != nil {
-		return m.Header
-	}
-	return nil
-}
-
-type GetClientInfoRequest struct {
-	Header *RequestHeader `protobuf:"bytes,1,opt,name=header" json:"header,omitempty"`
-	UserId string         `protobuf:"bytes,2,opt,name=UserId,proto3" json:"UserId,omitempty"`
-}
-
-func (m *GetClientInfoRequest) Reset()                    { *m = GetClientInfoRequest{} }
-func (m *GetClientInfoRequest) String() string            { return proto.CompactTextString(m) }
-func (*GetClientInfoRequest) ProtoMessage()               {}
-func (*GetClientInfoRequest) Descriptor() ([]byte, []int) { return fileDescriptorData, []int{2} }
-
-func (m *GetClientInfoRequest) GetHeader() *RequestHeader {
-	if m != nil {
-		return m.Header
-	}
-	return nil
-}
-
-type GetClientInfoRes struct {
-	ClientId  string `protobuf:"bytes,1,opt,name=ClientId,proto3" json:"ClientId,omitempty"`
-	UserId    string `protobuf:"bytes,2,opt,name=UserId,proto3" json:"UserId,omitempty"`
-	GateIp    string `protobuf:"bytes,3,opt,name=GateIp,proto3" json:"GateIp,omitempty"`
-	GatePort  string `protobuf:"bytes,4,opt,name=GatePort,proto3" json:"GatePort,omitempty"`
-	Platform  string `protobuf:"bytes,5,opt,name=Platform,proto3" json:"Platform,omitempty"`
-	Status    uint32 `protobuf:"varint,6,opt,name=Status,proto3" json:"Status,omitempty"`
-	CreatedAt uint64 `protobuf:"varint,7,opt,name=CreatedAt,proto3" json:"CreatedAt,omitempty"`
-	UpdatedAt uint64 `protobuf:"varint,8,opt,name=UpdatedAt,proto3" json:"UpdatedAt,omitempty"`
-}
-
-func (m *GetClientInfoRes) Reset()                    { *m = GetClientInfoRes{} }
-func (m *GetClientInfoRes) String() string            { return proto.CompactTextString(m) }
-func (*GetClientInfoRes) ProtoMessage()               {}
-func (*GetClientInfoRes) Descriptor() ([]byte, []int) { return fileDescriptorData, []int{3} }
-
-type GetClientInfoResponse struct {
-	Header *RequestHeader      `protobuf:"bytes,1,opt,name=header" json:"header,omitempty"`
-	UserId string              `protobuf:"bytes,2,opt,name=UserId,proto3" json:"UserId,omitempty"`
-	Items  []*GetClientInfoRes `protobuf:"bytes,3,rep,name=Items" json:"Items,omitempty"`
-}
-
-func (m *GetClientInfoResponse) Reset()                    { *m = GetClientInfoResponse{} }
-func (m *GetClientInfoResponse) String() string            { return proto.CompactTextString(m) }
-func (*GetClientInfoResponse) ProtoMessage()               {}
-func (*GetClientInfoResponse) Descriptor() ([]byte, []int) { return fileDescriptorData, []int{4} }
-
-func (m *GetClientInfoResponse) GetHeader() *RequestHeader {
-	if m != nil {
-		return m.Header
-	}
-	return nil
-}
-
-func (m *GetClientInfoResponse) GetItems() []*GetClientInfoRes {
-	if m != nil {
-		return m.Items
-	}
-	return nil
-}
-
-type DelOfflineMsgsRequest struct {
-	Header *RequestHeader `protobuf:"bytes,1,opt,name=header" json:"header,omitempty"`
-	MsgId  []string       `protobuf:"bytes,2,rep,name=MsgId" json:"MsgId,omitempty"`
-}
-
-func (m *DelOfflineMsgsRequest) Reset()                    { *m = DelOfflineMsgsRequest{} }
-func (m *DelOfflineMsgsRequest) String() string            { return proto.CompactTextString(m) }
-func (*DelOfflineMsgsRequest) ProtoMessage()               {}
-func (*DelOfflineMsgsRequest) Descriptor() ([]byte, []int) { return fileDescriptorData, []int{5} }
-
-func (m *DelOfflineMsgsRequest) GetHeader() *RequestHeader {
-	if m != nil {
-		return m.Header
-	}
-	return nil
-}
-
-type DelOfflineMsgsResponse struct {
-	Header *ResponseHeader `protobuf:"bytes,1,opt,name=header" json:"header,omitempty"`
-}
-
-func (m *DelOfflineMsgsResponse) Reset()                    { *m = DelOfflineMsgsResponse{} }
-func (m *DelOfflineMsgsResponse) String() string            { return proto.CompactTextString(m) }
-func (*DelOfflineMsgsResponse) ProtoMessage()               {}
-func (*DelOfflineMsgsResponse) Descriptor() ([]byte, []int) { return fileDescriptorData, []int{6} }
-
-func (m *DelOfflineMsgsResponse) GetHeader() *ResponseHeader {
-	if m != nil {
-		return m.Header
-	}
-	return nil
-}
-
-type GetOfflineMsgsRequest struct {
-	Header *RequestHeader `protobuf:"bytes,1,opt,name=header" json:"header,omitempty"`
-	UserId string         `protobuf:"bytes,2,opt,name=UserId,proto3" json:"UserId,omitempty"`
-}
-
-func (m *GetOfflineMsgsRequest) Reset()                    { *m = GetOfflineMsgsRequest{} }
-func (m *GetOfflineMsgsRequest) String() string            { return proto.CompactTextString(m) }
-func (*GetOfflineMsgsRequest) ProtoMessage()               {}
-func (*GetOfflineMsgsRequest) Descriptor() ([]byte, []int) { return fileDescriptorData, []int{7} }
-
-func (m *GetOfflineMsgsRequest) GetHeader() *RequestHeader {
-	if m != nil {
-		return m.Header
-	}
-	return nil
-}
-
-type GetOfflineMsgsRes struct {
-	MsgId    string `protobuf:"bytes,1,opt,name=MsgId,proto3" json:"MsgId,omitempty"`
-	ClientId string `protobuf:"bytes,2,opt,name=ClientId,proto3" json:"ClientId,omitempty"`
-	PacketId uint32 `protobuf:"varint,3,opt,name=PacketId,proto3" json:"PacketId,omitempty"`
-	Kind     uint32 `protobuf:"varint,4,opt,name=Kind,proto3" json:"Kind,omitempty"`
-	Content  string `protobuf:"bytes,5,opt,name=Content,proto3" json:"Content,omitempty"`
-	Extra    string `protobuf:"bytes,6,opt,name=Extra,proto3" json:"Extra,omitempty"`
-}
-
-func (m *GetOfflineMsgsRes) Reset()                    { *m = GetOfflineMsgsRes{} }
-func (m *GetOfflineMsgsRes) String() string            { return proto.CompactTextString(m) }
-func (*GetOfflineMsgsRes) ProtoMessage()               {}
-func (*GetOfflineMsgsRes) Descriptor() ([]byte, []int) { return fileDescriptorData, []int{8} }
-
-type GetOfflineMsgsResponse struct {
-	Header *ResponseHeader      `protobuf:"bytes,1,opt,name=header" json:"header,omitempty"`
-	UserId string               `protobuf:"bytes,2,opt,name=UserId,proto3" json:"UserId,omitempty"`
-	Items  []*GetOfflineMsgsRes `protobuf:"bytes,3,rep,name=Items" json:"Items,omitempty"`
-}
-
-func (m *GetOfflineMsgsResponse) Reset()                    { *m = GetOfflineMsgsResponse{} }
-func (m *GetOfflineMsgsResponse) String() string            { return proto.CompactTextString(m) }
-func (*GetOfflineMsgsResponse) ProtoMessage()               {}
-func (*GetOfflineMsgsResponse) Descriptor() ([]byte, []int) { return fileDescriptorData, []int{9} }
-
-func (m *GetOfflineMsgsResponse) GetHeader() *ResponseHeader {
-	if m != nil {
-		return m.Header
-	}
-	return nil
-}
-
-func (m *GetOfflineMsgsResponse) GetItems() []*GetOfflineMsgsRes {
-	if m != nil {
-		return m.Items
-	}
-	return nil
-}
-
-type SaveOfflineMsgRequest struct {
-	Header   *RequestHeader `protobuf:"bytes,1,opt,name=header" json:"header,omitempty"`
-	ClientId string         `protobuf:"bytes,2,opt,name=ClientId,proto3" json:"ClientId,omitempty"`
-	UserId   string         `protobuf:"bytes,3,opt,name=UserId,proto3" json:"UserId,omitempty"`
-	Kind     uint32         `protobuf:"varint,4,opt,name=Kind,proto3" json:"Kind,omitempty"`
-	Content  string         `protobuf:"bytes,5,opt,name=Content,proto3" json:"Content,omitempty"`
-	Extra    string         `protobuf:"bytes,6,opt,name=Extra,proto3" json:"Extra,omitempty"`
-}
-
-func (m *SaveOfflineMsgRequest) Reset()                    { *m = SaveOfflineMsgRequest{} }
-func (m *SaveOfflineMsgRequest) String() string            { return proto.CompactTextString(m) }
-func (*SaveOfflineMsgRequest) ProtoMessage()               {}
-func (*SaveOfflineMsgRequest) Descriptor() ([]byte, []int) { return fileDescriptorData, []int{10} }
-
-func (m *SaveOfflineMsgRequest) GetHeader() *RequestHeader {
-	if m != nil {
-		return m.Header
-	}
-	return nil
-}
-
-type SaveOfflineMsgResponse struct {
-	Header *ResponseHeader `protobuf:"bytes,1,opt,name=header" json:"header,omitempty"`
-}
-
-func (m *SaveOfflineMsgResponse) Reset()                    { *m = SaveOfflineMsgResponse{} }
-func (m *SaveOfflineMsgResponse) String() string            { return proto.CompactTextString(m) }
-func (*SaveOfflineMsgResponse) ProtoMessage()               {}
-func (*SaveOfflineMsgResponse) Descriptor() ([]byte, []int) { return fileDescriptorData, []int{11} }
-
-func (m *SaveOfflineMsgResponse) GetHeader() *ResponseHeader {
-	if m != nil {
-		return m.Header
-	}
-	return nil
-}
-
 type DataOnlineRequest struct {
-	Header   *RequestHeader `protobuf:"bytes,1,opt,name=header" json:"header,omitempty"`
-	ClientId string         `protobuf:"bytes,2,opt,name=ClientId,proto3" json:"ClientId,omitempty"`
-	GateIp   string         `protobuf:"bytes,3,opt,name=GateIp,proto3" json:"GateIp,omitempty"`
-	GatePort string         `protobuf:"bytes,4,opt,name=GatePort,proto3" json:"GatePort,omitempty"`
-	UserId   string         `protobuf:"bytes,5,opt,name=UserId,proto3" json:"UserId,omitempty"`
-	Platform string         `protobuf:"bytes,6,opt,name=Platform,proto3" json:"Platform,omitempty"`
+	Header         *RequestHeader `protobuf:"bytes,1,opt,name=header" json:"header,omitempty"`
+	GateServerIP   string         `protobuf:"bytes,2,opt,name=GateServerIP,proto3" json:"GateServerIP,omitempty"`
+	GateServerPort string         `protobuf:"bytes,3,opt,name=GateServerPort,proto3" json:"GateServerPort,omitempty"`
+	AppId          string         `protobuf:"bytes,4,opt,name=AppId,proto3" json:"AppId,omitempty"`
+	ClientId       string         `protobuf:"bytes,5,opt,name=ClientId,proto3" json:"ClientId,omitempty"`
+	Platform       string         `protobuf:"bytes,6,opt,name=Platform,proto3" json:"Platform,omitempty"`
+	CreatedAt      uint64         `protobuf:"varint,7,opt,name=CreatedAt,proto3" json:"CreatedAt,omitempty"`
 }
 
 func (m *DataOnlineRequest) Reset()                    { *m = DataOnlineRequest{} }
 func (m *DataOnlineRequest) String() string            { return proto.CompactTextString(m) }
 func (*DataOnlineRequest) ProtoMessage()               {}
-func (*DataOnlineRequest) Descriptor() ([]byte, []int) { return fileDescriptorData, []int{12} }
+func (*DataOnlineRequest) Descriptor() ([]byte, []int) { return fileDescriptorData, []int{0} }
 
 func (m *DataOnlineRequest) GetHeader() *RequestHeader {
 	if m != nil {
@@ -269,7 +49,7 @@ type DataOnlineResponse struct {
 func (m *DataOnlineResponse) Reset()                    { *m = DataOnlineResponse{} }
 func (m *DataOnlineResponse) String() string            { return proto.CompactTextString(m) }
 func (*DataOnlineResponse) ProtoMessage()               {}
-func (*DataOnlineResponse) Descriptor() ([]byte, []int) { return fileDescriptorData, []int{13} }
+func (*DataOnlineResponse) Descriptor() ([]byte, []int) { return fileDescriptorData, []int{1} }
 
 func (m *DataOnlineResponse) GetHeader() *ResponseHeader {
 	if m != nil {
@@ -280,13 +60,14 @@ func (m *DataOnlineResponse) GetHeader() *ResponseHeader {
 
 type DataOfflineRequest struct {
 	Header   *RequestHeader `protobuf:"bytes,1,opt,name=header" json:"header,omitempty"`
-	ClientId string         `protobuf:"bytes,2,opt,name=ClientId,proto3" json:"ClientId,omitempty"`
+	AppId    string         `protobuf:"bytes,2,opt,name=AppId,proto3" json:"AppId,omitempty"`
+	ClientId string         `protobuf:"bytes,3,opt,name=ClientId,proto3" json:"ClientId,omitempty"`
 }
 
 func (m *DataOfflineRequest) Reset()                    { *m = DataOfflineRequest{} }
 func (m *DataOfflineRequest) String() string            { return proto.CompactTextString(m) }
 func (*DataOfflineRequest) ProtoMessage()               {}
-func (*DataOfflineRequest) Descriptor() ([]byte, []int) { return fileDescriptorData, []int{14} }
+func (*DataOfflineRequest) Descriptor() ([]byte, []int) { return fileDescriptorData, []int{2} }
 
 func (m *DataOfflineRequest) GetHeader() *RequestHeader {
 	if m != nil {
@@ -302,7 +83,7 @@ type DataOfflineResponse struct {
 func (m *DataOfflineResponse) Reset()                    { *m = DataOfflineResponse{} }
 func (m *DataOfflineResponse) String() string            { return proto.CompactTextString(m) }
 func (*DataOfflineResponse) ProtoMessage()               {}
-func (*DataOfflineResponse) Descriptor() ([]byte, []int) { return fileDescriptorData, []int{15} }
+func (*DataOfflineResponse) Descriptor() ([]byte, []int) { return fileDescriptorData, []int{3} }
 
 func (m *DataOfflineResponse) GetHeader() *ResponseHeader {
 	if m != nil {
@@ -311,23 +92,234 @@ func (m *DataOfflineResponse) GetHeader() *ResponseHeader {
 	return nil
 }
 
+type GetClientInfoRequest struct {
+	Header   *RequestHeader `protobuf:"bytes,1,opt,name=header" json:"header,omitempty"`
+	AppId    string         `protobuf:"bytes,2,opt,name=AppId,proto3" json:"AppId,omitempty"`
+	ClientId string         `protobuf:"bytes,3,opt,name=ClientId,proto3" json:"ClientId,omitempty"`
+}
+
+func (m *GetClientInfoRequest) Reset()                    { *m = GetClientInfoRequest{} }
+func (m *GetClientInfoRequest) String() string            { return proto.CompactTextString(m) }
+func (*GetClientInfoRequest) ProtoMessage()               {}
+func (*GetClientInfoRequest) Descriptor() ([]byte, []int) { return fileDescriptorData, []int{4} }
+
+func (m *GetClientInfoRequest) GetHeader() *RequestHeader {
+	if m != nil {
+		return m.Header
+	}
+	return nil
+}
+
+type GetClientInfoResponse struct {
+	Header         *ResponseHeader `protobuf:"bytes,1,opt,name=header" json:"header,omitempty"`
+	GateServerIP   string          `protobuf:"bytes,2,opt,name=GateServerIP,proto3" json:"GateServerIP,omitempty"`
+	GateServerPort string          `protobuf:"bytes,3,opt,name=GateServerPort,proto3" json:"GateServerPort,omitempty"`
+	AppId          string          `protobuf:"bytes,4,opt,name=AppId,proto3" json:"AppId,omitempty"`
+	ClientId       string          `protobuf:"bytes,5,opt,name=ClientId,proto3" json:"ClientId,omitempty"`
+	Platform       string          `protobuf:"bytes,6,opt,name=Platform,proto3" json:"Platform,omitempty"`
+	Status         uint64          `protobuf:"varint,7,opt,name=Status,proto3" json:"Status,omitempty"`
+	CreatedAt      uint64          `protobuf:"varint,8,opt,name=CreatedAt,proto3" json:"CreatedAt,omitempty"`
+	UpdatedAt      uint64          `protobuf:"varint,9,opt,name=UpdatedAt,proto3" json:"UpdatedAt,omitempty"`
+}
+
+func (m *GetClientInfoResponse) Reset()                    { *m = GetClientInfoResponse{} }
+func (m *GetClientInfoResponse) String() string            { return proto.CompactTextString(m) }
+func (*GetClientInfoResponse) ProtoMessage()               {}
+func (*GetClientInfoResponse) Descriptor() ([]byte, []int) { return fileDescriptorData, []int{5} }
+
+func (m *GetClientInfoResponse) GetHeader() *ResponseHeader {
+	if m != nil {
+		return m.Header
+	}
+	return nil
+}
+
+type UpdateClientInfoRequest struct {
+	Header         *RequestHeader `protobuf:"bytes,1,opt,name=header" json:"header,omitempty"`
+	GateServerIP   string         `protobuf:"bytes,2,opt,name=GateServerIP,proto3" json:"GateServerIP,omitempty"`
+	GateServerPort string         `protobuf:"bytes,3,opt,name=GateServerPort,proto3" json:"GateServerPort,omitempty"`
+	AppId          string         `protobuf:"bytes,4,opt,name=AppId,proto3" json:"AppId,omitempty"`
+	ClientId       string         `protobuf:"bytes,5,opt,name=ClientId,proto3" json:"ClientId,omitempty"`
+	Platform       string         `protobuf:"bytes,6,opt,name=Platform,proto3" json:"Platform,omitempty"`
+	UpdatedAt      uint64         `protobuf:"varint,7,opt,name=UpdatedAt,proto3" json:"UpdatedAt,omitempty"`
+}
+
+func (m *UpdateClientInfoRequest) Reset()                    { *m = UpdateClientInfoRequest{} }
+func (m *UpdateClientInfoRequest) String() string            { return proto.CompactTextString(m) }
+func (*UpdateClientInfoRequest) ProtoMessage()               {}
+func (*UpdateClientInfoRequest) Descriptor() ([]byte, []int) { return fileDescriptorData, []int{6} }
+
+func (m *UpdateClientInfoRequest) GetHeader() *RequestHeader {
+	if m != nil {
+		return m.Header
+	}
+	return nil
+}
+
+type UpdateClientInfoResponse struct {
+	Header *RequestHeader `protobuf:"bytes,1,opt,name=header" json:"header,omitempty"`
+}
+
+func (m *UpdateClientInfoResponse) Reset()                    { *m = UpdateClientInfoResponse{} }
+func (m *UpdateClientInfoResponse) String() string            { return proto.CompactTextString(m) }
+func (*UpdateClientInfoResponse) ProtoMessage()               {}
+func (*UpdateClientInfoResponse) Descriptor() ([]byte, []int) { return fileDescriptorData, []int{7} }
+
+func (m *UpdateClientInfoResponse) GetHeader() *RequestHeader {
+	if m != nil {
+		return m.Header
+	}
+	return nil
+}
+
+type SaveOfflineMsgRequest struct {
+	Header    *RequestHeader `protobuf:"bytes,1,opt,name=header" json:"header,omitempty"`
+	ClientId  string         `protobuf:"bytes,2,opt,name=ClientId,proto3" json:"ClientId,omitempty"`
+	AppId     string         `protobuf:"bytes,3,opt,name=AppId,proto3" json:"AppId,omitempty"`
+	PacketId  uint32         `protobuf:"varint,4,opt,name=PacketId,proto3" json:"PacketId,omitempty"`
+	Kind      uint32         `protobuf:"varint,5,opt,name=Kind,proto3" json:"Kind,omitempty"`
+	Content   string         `protobuf:"bytes,6,opt,name=Content,proto3" json:"Content,omitempty"`
+	Extra     string         `protobuf:"bytes,7,opt,name=Extra,proto3" json:"Extra,omitempty"`
+	CreatedAt uint64         `protobuf:"varint,8,opt,name=CreatedAt,proto3" json:"CreatedAt,omitempty"`
+}
+
+func (m *SaveOfflineMsgRequest) Reset()                    { *m = SaveOfflineMsgRequest{} }
+func (m *SaveOfflineMsgRequest) String() string            { return proto.CompactTextString(m) }
+func (*SaveOfflineMsgRequest) ProtoMessage()               {}
+func (*SaveOfflineMsgRequest) Descriptor() ([]byte, []int) { return fileDescriptorData, []int{8} }
+
+func (m *SaveOfflineMsgRequest) GetHeader() *RequestHeader {
+	if m != nil {
+		return m.Header
+	}
+	return nil
+}
+
+type SaveOfflineMsgResponse struct {
+	Header *ResponseHeader `protobuf:"bytes,1,opt,name=header" json:"header,omitempty"`
+}
+
+func (m *SaveOfflineMsgResponse) Reset()                    { *m = SaveOfflineMsgResponse{} }
+func (m *SaveOfflineMsgResponse) String() string            { return proto.CompactTextString(m) }
+func (*SaveOfflineMsgResponse) ProtoMessage()               {}
+func (*SaveOfflineMsgResponse) Descriptor() ([]byte, []int) { return fileDescriptorData, []int{9} }
+
+func (m *SaveOfflineMsgResponse) GetHeader() *ResponseHeader {
+	if m != nil {
+		return m.Header
+	}
+	return nil
+}
+
+type GetOfflineMsgsRequest struct {
+	Header   *RequestHeader `protobuf:"bytes,1,opt,name=header" json:"header,omitempty"`
+	ClientId string         `protobuf:"bytes,2,opt,name=ClientId,proto3" json:"ClientId,omitempty"`
+	AppId    string         `protobuf:"bytes,3,opt,name=AppId,proto3" json:"AppId,omitempty"`
+}
+
+func (m *GetOfflineMsgsRequest) Reset()                    { *m = GetOfflineMsgsRequest{} }
+func (m *GetOfflineMsgsRequest) String() string            { return proto.CompactTextString(m) }
+func (*GetOfflineMsgsRequest) ProtoMessage()               {}
+func (*GetOfflineMsgsRequest) Descriptor() ([]byte, []int) { return fileDescriptorData, []int{10} }
+
+func (m *GetOfflineMsgsRequest) GetHeader() *RequestHeader {
+	if m != nil {
+		return m.Header
+	}
+	return nil
+}
+
+type GetOfflineMsgsRes struct {
+	MsgId     string `protobuf:"bytes,1,opt,name=MsgId,proto3" json:"MsgId,omitempty"`
+	ClientId  string `protobuf:"bytes,2,opt,name=ClientId,proto3" json:"ClientId,omitempty"`
+	AppId     string `protobuf:"bytes,3,opt,name=AppId,proto3" json:"AppId,omitempty"`
+	PacketId  uint32 `protobuf:"varint,4,opt,name=PacketId,proto3" json:"PacketId,omitempty"`
+	Kind      uint32 `protobuf:"varint,5,opt,name=Kind,proto3" json:"Kind,omitempty"`
+	Content   string `protobuf:"bytes,6,opt,name=Content,proto3" json:"Content,omitempty"`
+	Extra     string `protobuf:"bytes,7,opt,name=Extra,proto3" json:"Extra,omitempty"`
+	CreatedAt uint64 `protobuf:"varint,8,opt,name=CreatedAt,proto3" json:"CreatedAt,omitempty"`
+}
+
+func (m *GetOfflineMsgsRes) Reset()                    { *m = GetOfflineMsgsRes{} }
+func (m *GetOfflineMsgsRes) String() string            { return proto.CompactTextString(m) }
+func (*GetOfflineMsgsRes) ProtoMessage()               {}
+func (*GetOfflineMsgsRes) Descriptor() ([]byte, []int) { return fileDescriptorData, []int{11} }
+
+type GetOfflineMsgsResponse struct {
+	Header   *ResponseHeader      `protobuf:"bytes,1,opt,name=header" json:"header,omitempty"`
+	ClientId string               `protobuf:"bytes,2,opt,name=ClientId,proto3" json:"ClientId,omitempty"`
+	AppId    string               `protobuf:"bytes,3,opt,name=AppId,proto3" json:"AppId,omitempty"`
+	Items    []*GetOfflineMsgsRes `protobuf:"bytes,4,rep,name=Items" json:"Items,omitempty"`
+}
+
+func (m *GetOfflineMsgsResponse) Reset()                    { *m = GetOfflineMsgsResponse{} }
+func (m *GetOfflineMsgsResponse) String() string            { return proto.CompactTextString(m) }
+func (*GetOfflineMsgsResponse) ProtoMessage()               {}
+func (*GetOfflineMsgsResponse) Descriptor() ([]byte, []int) { return fileDescriptorData, []int{12} }
+
+func (m *GetOfflineMsgsResponse) GetHeader() *ResponseHeader {
+	if m != nil {
+		return m.Header
+	}
+	return nil
+}
+
+func (m *GetOfflineMsgsResponse) GetItems() []*GetOfflineMsgsRes {
+	if m != nil {
+		return m.Items
+	}
+	return nil
+}
+
+type DelOfflineMsgsRequest struct {
+	Header *RequestHeader `protobuf:"bytes,1,opt,name=header" json:"header,omitempty"`
+	MsgId  []string       `protobuf:"bytes,2,rep,name=MsgId" json:"MsgId,omitempty"`
+}
+
+func (m *DelOfflineMsgsRequest) Reset()                    { *m = DelOfflineMsgsRequest{} }
+func (m *DelOfflineMsgsRequest) String() string            { return proto.CompactTextString(m) }
+func (*DelOfflineMsgsRequest) ProtoMessage()               {}
+func (*DelOfflineMsgsRequest) Descriptor() ([]byte, []int) { return fileDescriptorData, []int{13} }
+
+func (m *DelOfflineMsgsRequest) GetHeader() *RequestHeader {
+	if m != nil {
+		return m.Header
+	}
+	return nil
+}
+
+type DelOfflineMsgsResponse struct {
+	Header *ResponseHeader `protobuf:"bytes,1,opt,name=header" json:"header,omitempty"`
+}
+
+func (m *DelOfflineMsgsResponse) Reset()                    { *m = DelOfflineMsgsResponse{} }
+func (m *DelOfflineMsgsResponse) String() string            { return proto.CompactTextString(m) }
+func (*DelOfflineMsgsResponse) ProtoMessage()               {}
+func (*DelOfflineMsgsResponse) Descriptor() ([]byte, []int) { return fileDescriptorData, []int{14} }
+
+func (m *DelOfflineMsgsResponse) GetHeader() *ResponseHeader {
+	if m != nil {
+		return m.Header
+	}
+	return nil
+}
+
 func init() {
-	proto.RegisterType((*UpdateClientInfoRequest)(nil), "push.meta.UpdateClientInfoRequest")
-	proto.RegisterType((*UpdateClientInfoResponse)(nil), "push.meta.UpdateClientInfoResponse")
-	proto.RegisterType((*GetClientInfoRequest)(nil), "push.meta.GetClientInfoRequest")
-	proto.RegisterType((*GetClientInfoRes)(nil), "push.meta.GetClientInfoRes")
-	proto.RegisterType((*GetClientInfoResponse)(nil), "push.meta.GetClientInfoResponse")
-	proto.RegisterType((*DelOfflineMsgsRequest)(nil), "push.meta.DelOfflineMsgsRequest")
-	proto.RegisterType((*DelOfflineMsgsResponse)(nil), "push.meta.DelOfflineMsgsResponse")
-	proto.RegisterType((*GetOfflineMsgsRequest)(nil), "push.meta.GetOfflineMsgsRequest")
-	proto.RegisterType((*GetOfflineMsgsRes)(nil), "push.meta.GetOfflineMsgsRes")
-	proto.RegisterType((*GetOfflineMsgsResponse)(nil), "push.meta.GetOfflineMsgsResponse")
-	proto.RegisterType((*SaveOfflineMsgRequest)(nil), "push.meta.SaveOfflineMsgRequest")
-	proto.RegisterType((*SaveOfflineMsgResponse)(nil), "push.meta.SaveOfflineMsgResponse")
 	proto.RegisterType((*DataOnlineRequest)(nil), "push.meta.DataOnlineRequest")
 	proto.RegisterType((*DataOnlineResponse)(nil), "push.meta.DataOnlineResponse")
 	proto.RegisterType((*DataOfflineRequest)(nil), "push.meta.DataOfflineRequest")
 	proto.RegisterType((*DataOfflineResponse)(nil), "push.meta.DataOfflineResponse")
+	proto.RegisterType((*GetClientInfoRequest)(nil), "push.meta.GetClientInfoRequest")
+	proto.RegisterType((*GetClientInfoResponse)(nil), "push.meta.GetClientInfoResponse")
+	proto.RegisterType((*UpdateClientInfoRequest)(nil), "push.meta.UpdateClientInfoRequest")
+	proto.RegisterType((*UpdateClientInfoResponse)(nil), "push.meta.UpdateClientInfoResponse")
+	proto.RegisterType((*SaveOfflineMsgRequest)(nil), "push.meta.SaveOfflineMsgRequest")
+	proto.RegisterType((*SaveOfflineMsgResponse)(nil), "push.meta.SaveOfflineMsgResponse")
+	proto.RegisterType((*GetOfflineMsgsRequest)(nil), "push.meta.GetOfflineMsgsRequest")
+	proto.RegisterType((*GetOfflineMsgsRes)(nil), "push.meta.GetOfflineMsgsRes")
+	proto.RegisterType((*GetOfflineMsgsResponse)(nil), "push.meta.GetOfflineMsgsResponse")
+	proto.RegisterType((*DelOfflineMsgsRequest)(nil), "push.meta.DelOfflineMsgsRequest")
+	proto.RegisterType((*DelOfflineMsgsResponse)(nil), "push.meta.DelOfflineMsgsResponse")
 }
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -341,15 +333,13 @@ const _ = grpc.SupportPackageIsVersion4
 // Client API for Data service
 
 type DataClient interface {
-	// 上线
 	Online(ctx context.Context, in *DataOnlineRequest, opts ...grpc.CallOption) (*DataOnlineResponse, error)
-	// 下线
 	Offline(ctx context.Context, in *DataOfflineRequest, opts ...grpc.CallOption) (*DataOfflineResponse, error)
+	GetClientInfo(ctx context.Context, in *GetClientInfoRequest, opts ...grpc.CallOption) (*GetClientInfoResponse, error)
+	UpdateClientInfo(ctx context.Context, in *UpdateClientInfoRequest, opts ...grpc.CallOption) (*UpdateClientInfoResponse, error)
 	SaveOfflineMsg(ctx context.Context, in *SaveOfflineMsgRequest, opts ...grpc.CallOption) (*SaveOfflineMsgResponse, error)
 	GetOfflineMsgs(ctx context.Context, in *GetOfflineMsgsRequest, opts ...grpc.CallOption) (*GetOfflineMsgsResponse, error)
 	DelOfflineMsgs(ctx context.Context, in *DelOfflineMsgsRequest, opts ...grpc.CallOption) (*DelOfflineMsgsResponse, error)
-	GetClientInfo(ctx context.Context, in *GetClientInfoRequest, opts ...grpc.CallOption) (*GetClientInfoResponse, error)
-	UpdateClientInfo(ctx context.Context, in *UpdateClientInfoRequest, opts ...grpc.CallOption) (*UpdateClientInfoResponse, error)
 }
 
 type dataClient struct {
@@ -372,6 +362,24 @@ func (c *dataClient) Online(ctx context.Context, in *DataOnlineRequest, opts ...
 func (c *dataClient) Offline(ctx context.Context, in *DataOfflineRequest, opts ...grpc.CallOption) (*DataOfflineResponse, error) {
 	out := new(DataOfflineResponse)
 	err := grpc.Invoke(ctx, "/push.meta.Data/Offline", in, out, c.cc, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *dataClient) GetClientInfo(ctx context.Context, in *GetClientInfoRequest, opts ...grpc.CallOption) (*GetClientInfoResponse, error) {
+	out := new(GetClientInfoResponse)
+	err := grpc.Invoke(ctx, "/push.meta.Data/GetClientInfo", in, out, c.cc, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *dataClient) UpdateClientInfo(ctx context.Context, in *UpdateClientInfoRequest, opts ...grpc.CallOption) (*UpdateClientInfoResponse, error) {
+	out := new(UpdateClientInfoResponse)
+	err := grpc.Invoke(ctx, "/push.meta.Data/UpdateClientInfo", in, out, c.cc, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -405,36 +413,16 @@ func (c *dataClient) DelOfflineMsgs(ctx context.Context, in *DelOfflineMsgsReque
 	return out, nil
 }
 
-func (c *dataClient) GetClientInfo(ctx context.Context, in *GetClientInfoRequest, opts ...grpc.CallOption) (*GetClientInfoResponse, error) {
-	out := new(GetClientInfoResponse)
-	err := grpc.Invoke(ctx, "/push.meta.Data/GetClientInfo", in, out, c.cc, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *dataClient) UpdateClientInfo(ctx context.Context, in *UpdateClientInfoRequest, opts ...grpc.CallOption) (*UpdateClientInfoResponse, error) {
-	out := new(UpdateClientInfoResponse)
-	err := grpc.Invoke(ctx, "/push.meta.Data/UpdateClientInfo", in, out, c.cc, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
 // Server API for Data service
 
 type DataServer interface {
-	// 上线
 	Online(context.Context, *DataOnlineRequest) (*DataOnlineResponse, error)
-	// 下线
 	Offline(context.Context, *DataOfflineRequest) (*DataOfflineResponse, error)
+	GetClientInfo(context.Context, *GetClientInfoRequest) (*GetClientInfoResponse, error)
+	UpdateClientInfo(context.Context, *UpdateClientInfoRequest) (*UpdateClientInfoResponse, error)
 	SaveOfflineMsg(context.Context, *SaveOfflineMsgRequest) (*SaveOfflineMsgResponse, error)
 	GetOfflineMsgs(context.Context, *GetOfflineMsgsRequest) (*GetOfflineMsgsResponse, error)
 	DelOfflineMsgs(context.Context, *DelOfflineMsgsRequest) (*DelOfflineMsgsResponse, error)
-	GetClientInfo(context.Context, *GetClientInfoRequest) (*GetClientInfoResponse, error)
-	UpdateClientInfo(context.Context, *UpdateClientInfoRequest) (*UpdateClientInfoResponse, error)
 }
 
 func RegisterDataServer(s *grpc.Server, srv DataServer) {
@@ -473,6 +461,42 @@ func _Data_Offline_Handler(srv interface{}, ctx context.Context, dec func(interf
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(DataServer).Offline(ctx, req.(*DataOfflineRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Data_GetClientInfo_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetClientInfoRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(DataServer).GetClientInfo(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/push.meta.Data/GetClientInfo",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(DataServer).GetClientInfo(ctx, req.(*GetClientInfoRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Data_UpdateClientInfo_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UpdateClientInfoRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(DataServer).UpdateClientInfo(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/push.meta.Data/UpdateClientInfo",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(DataServer).UpdateClientInfo(ctx, req.(*UpdateClientInfoRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -531,42 +555,6 @@ func _Data_DelOfflineMsgs_Handler(srv interface{}, ctx context.Context, dec func
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Data_GetClientInfo_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(GetClientInfoRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(DataServer).GetClientInfo(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/push.meta.Data/GetClientInfo",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(DataServer).GetClientInfo(ctx, req.(*GetClientInfoRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _Data_UpdateClientInfo_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(UpdateClientInfoRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(DataServer).UpdateClientInfo(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/push.meta.Data/UpdateClientInfo",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(DataServer).UpdateClientInfo(ctx, req.(*UpdateClientInfoRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
 var _Data_serviceDesc = grpc.ServiceDesc{
 	ServiceName: "push.meta.Data",
 	HandlerType: (*DataServer)(nil),
@@ -580,6 +568,14 @@ var _Data_serviceDesc = grpc.ServiceDesc{
 			Handler:    _Data_Offline_Handler,
 		},
 		{
+			MethodName: "GetClientInfo",
+			Handler:    _Data_GetClientInfo_Handler,
+		},
+		{
+			MethodName: "UpdateClientInfo",
+			Handler:    _Data_UpdateClientInfo_Handler,
+		},
+		{
 			MethodName: "SaveOfflineMsg",
 			Handler:    _Data_SaveOfflineMsg_Handler,
 		},
@@ -591,20 +587,12 @@ var _Data_serviceDesc = grpc.ServiceDesc{
 			MethodName: "DelOfflineMsgs",
 			Handler:    _Data_DelOfflineMsgs_Handler,
 		},
-		{
-			MethodName: "GetClientInfo",
-			Handler:    _Data_GetClientInfo_Handler,
-		},
-		{
-			MethodName: "UpdateClientInfo",
-			Handler:    _Data_UpdateClientInfo_Handler,
-		},
 	},
 	Streams:  []grpc.StreamDesc{},
 	Metadata: "data.proto",
 }
 
-func (m *UpdateClientInfoRequest) Marshal() (dAtA []byte, err error) {
+func (m *DataOnlineRequest) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
 	n, err := m.MarshalTo(dAtA)
@@ -614,7 +602,7 @@ func (m *UpdateClientInfoRequest) Marshal() (dAtA []byte, err error) {
 	return dAtA[:n], nil
 }
 
-func (m *UpdateClientInfoRequest) MarshalTo(dAtA []byte) (int, error) {
+func (m *DataOnlineRequest) MarshalTo(dAtA []byte) (int, error) {
 	var i int
 	_ = i
 	var l int
@@ -629,29 +617,29 @@ func (m *UpdateClientInfoRequest) MarshalTo(dAtA []byte) (int, error) {
 		}
 		i += n1
 	}
-	if len(m.ClientId) > 0 {
+	if len(m.GateServerIP) > 0 {
 		dAtA[i] = 0x12
+		i++
+		i = encodeVarintData(dAtA, i, uint64(len(m.GateServerIP)))
+		i += copy(dAtA[i:], m.GateServerIP)
+	}
+	if len(m.GateServerPort) > 0 {
+		dAtA[i] = 0x1a
+		i++
+		i = encodeVarintData(dAtA, i, uint64(len(m.GateServerPort)))
+		i += copy(dAtA[i:], m.GateServerPort)
+	}
+	if len(m.AppId) > 0 {
+		dAtA[i] = 0x22
+		i++
+		i = encodeVarintData(dAtA, i, uint64(len(m.AppId)))
+		i += copy(dAtA[i:], m.AppId)
+	}
+	if len(m.ClientId) > 0 {
+		dAtA[i] = 0x2a
 		i++
 		i = encodeVarintData(dAtA, i, uint64(len(m.ClientId)))
 		i += copy(dAtA[i:], m.ClientId)
-	}
-	if len(m.GateIp) > 0 {
-		dAtA[i] = 0x1a
-		i++
-		i = encodeVarintData(dAtA, i, uint64(len(m.GateIp)))
-		i += copy(dAtA[i:], m.GateIp)
-	}
-	if len(m.GatePort) > 0 {
-		dAtA[i] = 0x22
-		i++
-		i = encodeVarintData(dAtA, i, uint64(len(m.GatePort)))
-		i += copy(dAtA[i:], m.GatePort)
-	}
-	if len(m.UserId) > 0 {
-		dAtA[i] = 0x2a
-		i++
-		i = encodeVarintData(dAtA, i, uint64(len(m.UserId)))
-		i += copy(dAtA[i:], m.UserId)
 	}
 	if len(m.Platform) > 0 {
 		dAtA[i] = 0x32
@@ -659,10 +647,15 @@ func (m *UpdateClientInfoRequest) MarshalTo(dAtA []byte) (int, error) {
 		i = encodeVarintData(dAtA, i, uint64(len(m.Platform)))
 		i += copy(dAtA[i:], m.Platform)
 	}
+	if m.CreatedAt != 0 {
+		dAtA[i] = 0x38
+		i++
+		i = encodeVarintData(dAtA, i, uint64(m.CreatedAt))
+	}
 	return i, nil
 }
 
-func (m *UpdateClientInfoResponse) Marshal() (dAtA []byte, err error) {
+func (m *DataOnlineResponse) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
 	n, err := m.MarshalTo(dAtA)
@@ -672,7 +665,7 @@ func (m *UpdateClientInfoResponse) Marshal() (dAtA []byte, err error) {
 	return dAtA[:n], nil
 }
 
-func (m *UpdateClientInfoResponse) MarshalTo(dAtA []byte) (int, error) {
+func (m *DataOnlineResponse) MarshalTo(dAtA []byte) (int, error) {
 	var i int
 	_ = i
 	var l int
@@ -686,6 +679,74 @@ func (m *UpdateClientInfoResponse) MarshalTo(dAtA []byte) (int, error) {
 			return 0, err
 		}
 		i += n2
+	}
+	return i, nil
+}
+
+func (m *DataOfflineRequest) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalTo(dAtA)
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *DataOfflineRequest) MarshalTo(dAtA []byte) (int, error) {
+	var i int
+	_ = i
+	var l int
+	_ = l
+	if m.Header != nil {
+		dAtA[i] = 0xa
+		i++
+		i = encodeVarintData(dAtA, i, uint64(m.Header.Size()))
+		n3, err := m.Header.MarshalTo(dAtA[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n3
+	}
+	if len(m.AppId) > 0 {
+		dAtA[i] = 0x12
+		i++
+		i = encodeVarintData(dAtA, i, uint64(len(m.AppId)))
+		i += copy(dAtA[i:], m.AppId)
+	}
+	if len(m.ClientId) > 0 {
+		dAtA[i] = 0x1a
+		i++
+		i = encodeVarintData(dAtA, i, uint64(len(m.ClientId)))
+		i += copy(dAtA[i:], m.ClientId)
+	}
+	return i, nil
+}
+
+func (m *DataOfflineResponse) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalTo(dAtA)
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *DataOfflineResponse) MarshalTo(dAtA []byte) (int, error) {
+	var i int
+	_ = i
+	var l int
+	_ = l
+	if m.Header != nil {
+		dAtA[i] = 0xa
+		i++
+		i = encodeVarintData(dAtA, i, uint64(m.Header.Size()))
+		n4, err := m.Header.MarshalTo(dAtA[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n4
 	}
 	return i, nil
 }
@@ -709,80 +770,23 @@ func (m *GetClientInfoRequest) MarshalTo(dAtA []byte) (int, error) {
 		dAtA[i] = 0xa
 		i++
 		i = encodeVarintData(dAtA, i, uint64(m.Header.Size()))
-		n3, err := m.Header.MarshalTo(dAtA[i:])
+		n5, err := m.Header.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n3
+		i += n5
 	}
-	if len(m.UserId) > 0 {
+	if len(m.AppId) > 0 {
 		dAtA[i] = 0x12
 		i++
-		i = encodeVarintData(dAtA, i, uint64(len(m.UserId)))
-		i += copy(dAtA[i:], m.UserId)
+		i = encodeVarintData(dAtA, i, uint64(len(m.AppId)))
+		i += copy(dAtA[i:], m.AppId)
 	}
-	return i, nil
-}
-
-func (m *GetClientInfoRes) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
-}
-
-func (m *GetClientInfoRes) MarshalTo(dAtA []byte) (int, error) {
-	var i int
-	_ = i
-	var l int
-	_ = l
 	if len(m.ClientId) > 0 {
-		dAtA[i] = 0xa
+		dAtA[i] = 0x1a
 		i++
 		i = encodeVarintData(dAtA, i, uint64(len(m.ClientId)))
 		i += copy(dAtA[i:], m.ClientId)
-	}
-	if len(m.UserId) > 0 {
-		dAtA[i] = 0x12
-		i++
-		i = encodeVarintData(dAtA, i, uint64(len(m.UserId)))
-		i += copy(dAtA[i:], m.UserId)
-	}
-	if len(m.GateIp) > 0 {
-		dAtA[i] = 0x1a
-		i++
-		i = encodeVarintData(dAtA, i, uint64(len(m.GateIp)))
-		i += copy(dAtA[i:], m.GateIp)
-	}
-	if len(m.GatePort) > 0 {
-		dAtA[i] = 0x22
-		i++
-		i = encodeVarintData(dAtA, i, uint64(len(m.GatePort)))
-		i += copy(dAtA[i:], m.GatePort)
-	}
-	if len(m.Platform) > 0 {
-		dAtA[i] = 0x2a
-		i++
-		i = encodeVarintData(dAtA, i, uint64(len(m.Platform)))
-		i += copy(dAtA[i:], m.Platform)
-	}
-	if m.Status != 0 {
-		dAtA[i] = 0x30
-		i++
-		i = encodeVarintData(dAtA, i, uint64(m.Status))
-	}
-	if m.CreatedAt != 0 {
-		dAtA[i] = 0x38
-		i++
-		i = encodeVarintData(dAtA, i, uint64(m.CreatedAt))
-	}
-	if m.UpdatedAt != 0 {
-		dAtA[i] = 0x40
-		i++
-		i = encodeVarintData(dAtA, i, uint64(m.UpdatedAt))
 	}
 	return i, nil
 }
@@ -806,105 +810,61 @@ func (m *GetClientInfoResponse) MarshalTo(dAtA []byte) (int, error) {
 		dAtA[i] = 0xa
 		i++
 		i = encodeVarintData(dAtA, i, uint64(m.Header.Size()))
-		n4, err := m.Header.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += n4
-	}
-	if len(m.UserId) > 0 {
-		dAtA[i] = 0x12
-		i++
-		i = encodeVarintData(dAtA, i, uint64(len(m.UserId)))
-		i += copy(dAtA[i:], m.UserId)
-	}
-	if len(m.Items) > 0 {
-		for _, msg := range m.Items {
-			dAtA[i] = 0x1a
-			i++
-			i = encodeVarintData(dAtA, i, uint64(msg.Size()))
-			n, err := msg.MarshalTo(dAtA[i:])
-			if err != nil {
-				return 0, err
-			}
-			i += n
-		}
-	}
-	return i, nil
-}
-
-func (m *DelOfflineMsgsRequest) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
-}
-
-func (m *DelOfflineMsgsRequest) MarshalTo(dAtA []byte) (int, error) {
-	var i int
-	_ = i
-	var l int
-	_ = l
-	if m.Header != nil {
-		dAtA[i] = 0xa
-		i++
-		i = encodeVarintData(dAtA, i, uint64(m.Header.Size()))
-		n5, err := m.Header.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += n5
-	}
-	if len(m.MsgId) > 0 {
-		for _, s := range m.MsgId {
-			dAtA[i] = 0x12
-			i++
-			l = len(s)
-			for l >= 1<<7 {
-				dAtA[i] = uint8(uint64(l)&0x7f | 0x80)
-				l >>= 7
-				i++
-			}
-			dAtA[i] = uint8(l)
-			i++
-			i += copy(dAtA[i:], s)
-		}
-	}
-	return i, nil
-}
-
-func (m *DelOfflineMsgsResponse) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
-}
-
-func (m *DelOfflineMsgsResponse) MarshalTo(dAtA []byte) (int, error) {
-	var i int
-	_ = i
-	var l int
-	_ = l
-	if m.Header != nil {
-		dAtA[i] = 0xa
-		i++
-		i = encodeVarintData(dAtA, i, uint64(m.Header.Size()))
 		n6, err := m.Header.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
 		i += n6
 	}
+	if len(m.GateServerIP) > 0 {
+		dAtA[i] = 0x12
+		i++
+		i = encodeVarintData(dAtA, i, uint64(len(m.GateServerIP)))
+		i += copy(dAtA[i:], m.GateServerIP)
+	}
+	if len(m.GateServerPort) > 0 {
+		dAtA[i] = 0x1a
+		i++
+		i = encodeVarintData(dAtA, i, uint64(len(m.GateServerPort)))
+		i += copy(dAtA[i:], m.GateServerPort)
+	}
+	if len(m.AppId) > 0 {
+		dAtA[i] = 0x22
+		i++
+		i = encodeVarintData(dAtA, i, uint64(len(m.AppId)))
+		i += copy(dAtA[i:], m.AppId)
+	}
+	if len(m.ClientId) > 0 {
+		dAtA[i] = 0x2a
+		i++
+		i = encodeVarintData(dAtA, i, uint64(len(m.ClientId)))
+		i += copy(dAtA[i:], m.ClientId)
+	}
+	if len(m.Platform) > 0 {
+		dAtA[i] = 0x32
+		i++
+		i = encodeVarintData(dAtA, i, uint64(len(m.Platform)))
+		i += copy(dAtA[i:], m.Platform)
+	}
+	if m.Status != 0 {
+		dAtA[i] = 0x38
+		i++
+		i = encodeVarintData(dAtA, i, uint64(m.Status))
+	}
+	if m.CreatedAt != 0 {
+		dAtA[i] = 0x40
+		i++
+		i = encodeVarintData(dAtA, i, uint64(m.CreatedAt))
+	}
+	if m.UpdatedAt != 0 {
+		dAtA[i] = 0x48
+		i++
+		i = encodeVarintData(dAtA, i, uint64(m.UpdatedAt))
+	}
 	return i, nil
 }
 
-func (m *GetOfflineMsgsRequest) Marshal() (dAtA []byte, err error) {
+func (m *UpdateClientInfoRequest) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
 	n, err := m.MarshalTo(dAtA)
@@ -914,7 +874,7 @@ func (m *GetOfflineMsgsRequest) Marshal() (dAtA []byte, err error) {
 	return dAtA[:n], nil
 }
 
-func (m *GetOfflineMsgsRequest) MarshalTo(dAtA []byte) (int, error) {
+func (m *UpdateClientInfoRequest) MarshalTo(dAtA []byte) (int, error) {
 	var i int
 	_ = i
 	var l int
@@ -929,68 +889,45 @@ func (m *GetOfflineMsgsRequest) MarshalTo(dAtA []byte) (int, error) {
 		}
 		i += n7
 	}
-	if len(m.UserId) > 0 {
+	if len(m.GateServerIP) > 0 {
 		dAtA[i] = 0x12
 		i++
-		i = encodeVarintData(dAtA, i, uint64(len(m.UserId)))
-		i += copy(dAtA[i:], m.UserId)
+		i = encodeVarintData(dAtA, i, uint64(len(m.GateServerIP)))
+		i += copy(dAtA[i:], m.GateServerIP)
 	}
-	return i, nil
-}
-
-func (m *GetOfflineMsgsRes) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
-}
-
-func (m *GetOfflineMsgsRes) MarshalTo(dAtA []byte) (int, error) {
-	var i int
-	_ = i
-	var l int
-	_ = l
-	if len(m.MsgId) > 0 {
-		dAtA[i] = 0xa
+	if len(m.GateServerPort) > 0 {
+		dAtA[i] = 0x1a
 		i++
-		i = encodeVarintData(dAtA, i, uint64(len(m.MsgId)))
-		i += copy(dAtA[i:], m.MsgId)
+		i = encodeVarintData(dAtA, i, uint64(len(m.GateServerPort)))
+		i += copy(dAtA[i:], m.GateServerPort)
+	}
+	if len(m.AppId) > 0 {
+		dAtA[i] = 0x22
+		i++
+		i = encodeVarintData(dAtA, i, uint64(len(m.AppId)))
+		i += copy(dAtA[i:], m.AppId)
 	}
 	if len(m.ClientId) > 0 {
-		dAtA[i] = 0x12
+		dAtA[i] = 0x2a
 		i++
 		i = encodeVarintData(dAtA, i, uint64(len(m.ClientId)))
 		i += copy(dAtA[i:], m.ClientId)
 	}
-	if m.PacketId != 0 {
-		dAtA[i] = 0x18
-		i++
-		i = encodeVarintData(dAtA, i, uint64(m.PacketId))
-	}
-	if m.Kind != 0 {
-		dAtA[i] = 0x20
-		i++
-		i = encodeVarintData(dAtA, i, uint64(m.Kind))
-	}
-	if len(m.Content) > 0 {
-		dAtA[i] = 0x2a
-		i++
-		i = encodeVarintData(dAtA, i, uint64(len(m.Content)))
-		i += copy(dAtA[i:], m.Content)
-	}
-	if len(m.Extra) > 0 {
+	if len(m.Platform) > 0 {
 		dAtA[i] = 0x32
 		i++
-		i = encodeVarintData(dAtA, i, uint64(len(m.Extra)))
-		i += copy(dAtA[i:], m.Extra)
+		i = encodeVarintData(dAtA, i, uint64(len(m.Platform)))
+		i += copy(dAtA[i:], m.Platform)
+	}
+	if m.UpdatedAt != 0 {
+		dAtA[i] = 0x38
+		i++
+		i = encodeVarintData(dAtA, i, uint64(m.UpdatedAt))
 	}
 	return i, nil
 }
 
-func (m *GetOfflineMsgsResponse) Marshal() (dAtA []byte, err error) {
+func (m *UpdateClientInfoResponse) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
 	n, err := m.MarshalTo(dAtA)
@@ -1000,7 +937,7 @@ func (m *GetOfflineMsgsResponse) Marshal() (dAtA []byte, err error) {
 	return dAtA[:n], nil
 }
 
-func (m *GetOfflineMsgsResponse) MarshalTo(dAtA []byte) (int, error) {
+func (m *UpdateClientInfoResponse) MarshalTo(dAtA []byte) (int, error) {
 	var i int
 	_ = i
 	var l int
@@ -1014,24 +951,6 @@ func (m *GetOfflineMsgsResponse) MarshalTo(dAtA []byte) (int, error) {
 			return 0, err
 		}
 		i += n8
-	}
-	if len(m.UserId) > 0 {
-		dAtA[i] = 0x12
-		i++
-		i = encodeVarintData(dAtA, i, uint64(len(m.UserId)))
-		i += copy(dAtA[i:], m.UserId)
-	}
-	if len(m.Items) > 0 {
-		for _, msg := range m.Items {
-			dAtA[i] = 0x1a
-			i++
-			i = encodeVarintData(dAtA, i, uint64(msg.Size()))
-			n, err := msg.MarshalTo(dAtA[i:])
-			if err != nil {
-				return 0, err
-			}
-			i += n
-		}
 	}
 	return i, nil
 }
@@ -1067,28 +986,38 @@ func (m *SaveOfflineMsgRequest) MarshalTo(dAtA []byte) (int, error) {
 		i = encodeVarintData(dAtA, i, uint64(len(m.ClientId)))
 		i += copy(dAtA[i:], m.ClientId)
 	}
-	if len(m.UserId) > 0 {
+	if len(m.AppId) > 0 {
 		dAtA[i] = 0x1a
 		i++
-		i = encodeVarintData(dAtA, i, uint64(len(m.UserId)))
-		i += copy(dAtA[i:], m.UserId)
+		i = encodeVarintData(dAtA, i, uint64(len(m.AppId)))
+		i += copy(dAtA[i:], m.AppId)
+	}
+	if m.PacketId != 0 {
+		dAtA[i] = 0x20
+		i++
+		i = encodeVarintData(dAtA, i, uint64(m.PacketId))
 	}
 	if m.Kind != 0 {
-		dAtA[i] = 0x20
+		dAtA[i] = 0x28
 		i++
 		i = encodeVarintData(dAtA, i, uint64(m.Kind))
 	}
 	if len(m.Content) > 0 {
-		dAtA[i] = 0x2a
+		dAtA[i] = 0x32
 		i++
 		i = encodeVarintData(dAtA, i, uint64(len(m.Content)))
 		i += copy(dAtA[i:], m.Content)
 	}
 	if len(m.Extra) > 0 {
-		dAtA[i] = 0x32
+		dAtA[i] = 0x3a
 		i++
 		i = encodeVarintData(dAtA, i, uint64(len(m.Extra)))
 		i += copy(dAtA[i:], m.Extra)
+	}
+	if m.CreatedAt != 0 {
+		dAtA[i] = 0x40
+		i++
+		i = encodeVarintData(dAtA, i, uint64(m.CreatedAt))
 	}
 	return i, nil
 }
@@ -1121,7 +1050,7 @@ func (m *SaveOfflineMsgResponse) MarshalTo(dAtA []byte) (int, error) {
 	return i, nil
 }
 
-func (m *DataOnlineRequest) Marshal() (dAtA []byte, err error) {
+func (m *GetOfflineMsgsRequest) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
 	n, err := m.MarshalTo(dAtA)
@@ -1131,7 +1060,7 @@ func (m *DataOnlineRequest) Marshal() (dAtA []byte, err error) {
 	return dAtA[:n], nil
 }
 
-func (m *DataOnlineRequest) MarshalTo(dAtA []byte) (int, error) {
+func (m *GetOfflineMsgsRequest) MarshalTo(dAtA []byte) (int, error) {
 	var i int
 	_ = i
 	var l int
@@ -1152,34 +1081,16 @@ func (m *DataOnlineRequest) MarshalTo(dAtA []byte) (int, error) {
 		i = encodeVarintData(dAtA, i, uint64(len(m.ClientId)))
 		i += copy(dAtA[i:], m.ClientId)
 	}
-	if len(m.GateIp) > 0 {
+	if len(m.AppId) > 0 {
 		dAtA[i] = 0x1a
 		i++
-		i = encodeVarintData(dAtA, i, uint64(len(m.GateIp)))
-		i += copy(dAtA[i:], m.GateIp)
-	}
-	if len(m.GatePort) > 0 {
-		dAtA[i] = 0x22
-		i++
-		i = encodeVarintData(dAtA, i, uint64(len(m.GatePort)))
-		i += copy(dAtA[i:], m.GatePort)
-	}
-	if len(m.UserId) > 0 {
-		dAtA[i] = 0x2a
-		i++
-		i = encodeVarintData(dAtA, i, uint64(len(m.UserId)))
-		i += copy(dAtA[i:], m.UserId)
-	}
-	if len(m.Platform) > 0 {
-		dAtA[i] = 0x32
-		i++
-		i = encodeVarintData(dAtA, i, uint64(len(m.Platform)))
-		i += copy(dAtA[i:], m.Platform)
+		i = encodeVarintData(dAtA, i, uint64(len(m.AppId)))
+		i += copy(dAtA[i:], m.AppId)
 	}
 	return i, nil
 }
 
-func (m *DataOnlineResponse) Marshal() (dAtA []byte, err error) {
+func (m *GetOfflineMsgsRes) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
 	n, err := m.MarshalTo(dAtA)
@@ -1189,7 +1100,70 @@ func (m *DataOnlineResponse) Marshal() (dAtA []byte, err error) {
 	return dAtA[:n], nil
 }
 
-func (m *DataOnlineResponse) MarshalTo(dAtA []byte) (int, error) {
+func (m *GetOfflineMsgsRes) MarshalTo(dAtA []byte) (int, error) {
+	var i int
+	_ = i
+	var l int
+	_ = l
+	if len(m.MsgId) > 0 {
+		dAtA[i] = 0xa
+		i++
+		i = encodeVarintData(dAtA, i, uint64(len(m.MsgId)))
+		i += copy(dAtA[i:], m.MsgId)
+	}
+	if len(m.ClientId) > 0 {
+		dAtA[i] = 0x12
+		i++
+		i = encodeVarintData(dAtA, i, uint64(len(m.ClientId)))
+		i += copy(dAtA[i:], m.ClientId)
+	}
+	if len(m.AppId) > 0 {
+		dAtA[i] = 0x1a
+		i++
+		i = encodeVarintData(dAtA, i, uint64(len(m.AppId)))
+		i += copy(dAtA[i:], m.AppId)
+	}
+	if m.PacketId != 0 {
+		dAtA[i] = 0x20
+		i++
+		i = encodeVarintData(dAtA, i, uint64(m.PacketId))
+	}
+	if m.Kind != 0 {
+		dAtA[i] = 0x28
+		i++
+		i = encodeVarintData(dAtA, i, uint64(m.Kind))
+	}
+	if len(m.Content) > 0 {
+		dAtA[i] = 0x32
+		i++
+		i = encodeVarintData(dAtA, i, uint64(len(m.Content)))
+		i += copy(dAtA[i:], m.Content)
+	}
+	if len(m.Extra) > 0 {
+		dAtA[i] = 0x3a
+		i++
+		i = encodeVarintData(dAtA, i, uint64(len(m.Extra)))
+		i += copy(dAtA[i:], m.Extra)
+	}
+	if m.CreatedAt != 0 {
+		dAtA[i] = 0x40
+		i++
+		i = encodeVarintData(dAtA, i, uint64(m.CreatedAt))
+	}
+	return i, nil
+}
+
+func (m *GetOfflineMsgsResponse) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalTo(dAtA)
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *GetOfflineMsgsResponse) MarshalTo(dAtA []byte) (int, error) {
 	var i int
 	_ = i
 	var l int
@@ -1204,10 +1178,34 @@ func (m *DataOnlineResponse) MarshalTo(dAtA []byte) (int, error) {
 		}
 		i += n12
 	}
+	if len(m.ClientId) > 0 {
+		dAtA[i] = 0x12
+		i++
+		i = encodeVarintData(dAtA, i, uint64(len(m.ClientId)))
+		i += copy(dAtA[i:], m.ClientId)
+	}
+	if len(m.AppId) > 0 {
+		dAtA[i] = 0x1a
+		i++
+		i = encodeVarintData(dAtA, i, uint64(len(m.AppId)))
+		i += copy(dAtA[i:], m.AppId)
+	}
+	if len(m.Items) > 0 {
+		for _, msg := range m.Items {
+			dAtA[i] = 0x22
+			i++
+			i = encodeVarintData(dAtA, i, uint64(msg.Size()))
+			n, err := msg.MarshalTo(dAtA[i:])
+			if err != nil {
+				return 0, err
+			}
+			i += n
+		}
+	}
 	return i, nil
 }
 
-func (m *DataOfflineRequest) Marshal() (dAtA []byte, err error) {
+func (m *DelOfflineMsgsRequest) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
 	n, err := m.MarshalTo(dAtA)
@@ -1217,7 +1215,7 @@ func (m *DataOfflineRequest) Marshal() (dAtA []byte, err error) {
 	return dAtA[:n], nil
 }
 
-func (m *DataOfflineRequest) MarshalTo(dAtA []byte) (int, error) {
+func (m *DelOfflineMsgsRequest) MarshalTo(dAtA []byte) (int, error) {
 	var i int
 	_ = i
 	var l int
@@ -1232,16 +1230,25 @@ func (m *DataOfflineRequest) MarshalTo(dAtA []byte) (int, error) {
 		}
 		i += n13
 	}
-	if len(m.ClientId) > 0 {
-		dAtA[i] = 0x12
-		i++
-		i = encodeVarintData(dAtA, i, uint64(len(m.ClientId)))
-		i += copy(dAtA[i:], m.ClientId)
+	if len(m.MsgId) > 0 {
+		for _, s := range m.MsgId {
+			dAtA[i] = 0x12
+			i++
+			l = len(s)
+			for l >= 1<<7 {
+				dAtA[i] = uint8(uint64(l)&0x7f | 0x80)
+				l >>= 7
+				i++
+			}
+			dAtA[i] = uint8(l)
+			i++
+			i += copy(dAtA[i:], s)
+		}
 	}
 	return i, nil
 }
 
-func (m *DataOfflineResponse) Marshal() (dAtA []byte, err error) {
+func (m *DelOfflineMsgsResponse) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
 	n, err := m.MarshalTo(dAtA)
@@ -1251,7 +1258,7 @@ func (m *DataOfflineResponse) Marshal() (dAtA []byte, err error) {
 	return dAtA[:n], nil
 }
 
-func (m *DataOfflineResponse) MarshalTo(dAtA []byte) (int, error) {
+func (m *DelOfflineMsgsResponse) MarshalTo(dAtA []byte) (int, error) {
 	var i int
 	_ = i
 	var l int
@@ -1296,26 +1303,26 @@ func encodeVarintData(dAtA []byte, offset int, v uint64) int {
 	dAtA[offset] = uint8(v)
 	return offset + 1
 }
-func (m *UpdateClientInfoRequest) Size() (n int) {
+func (m *DataOnlineRequest) Size() (n int) {
 	var l int
 	_ = l
 	if m.Header != nil {
 		l = m.Header.Size()
 		n += 1 + l + sovData(uint64(l))
 	}
+	l = len(m.GateServerIP)
+	if l > 0 {
+		n += 1 + l + sovData(uint64(l))
+	}
+	l = len(m.GateServerPort)
+	if l > 0 {
+		n += 1 + l + sovData(uint64(l))
+	}
+	l = len(m.AppId)
+	if l > 0 {
+		n += 1 + l + sovData(uint64(l))
+	}
 	l = len(m.ClientId)
-	if l > 0 {
-		n += 1 + l + sovData(uint64(l))
-	}
-	l = len(m.GateIp)
-	if l > 0 {
-		n += 1 + l + sovData(uint64(l))
-	}
-	l = len(m.GatePort)
-	if l > 0 {
-		n += 1 + l + sovData(uint64(l))
-	}
-	l = len(m.UserId)
 	if l > 0 {
 		n += 1 + l + sovData(uint64(l))
 	}
@@ -1323,10 +1330,41 @@ func (m *UpdateClientInfoRequest) Size() (n int) {
 	if l > 0 {
 		n += 1 + l + sovData(uint64(l))
 	}
+	if m.CreatedAt != 0 {
+		n += 1 + sovData(uint64(m.CreatedAt))
+	}
 	return n
 }
 
-func (m *UpdateClientInfoResponse) Size() (n int) {
+func (m *DataOnlineResponse) Size() (n int) {
+	var l int
+	_ = l
+	if m.Header != nil {
+		l = m.Header.Size()
+		n += 1 + l + sovData(uint64(l))
+	}
+	return n
+}
+
+func (m *DataOfflineRequest) Size() (n int) {
+	var l int
+	_ = l
+	if m.Header != nil {
+		l = m.Header.Size()
+		n += 1 + l + sovData(uint64(l))
+	}
+	l = len(m.AppId)
+	if l > 0 {
+		n += 1 + l + sovData(uint64(l))
+	}
+	l = len(m.ClientId)
+	if l > 0 {
+		n += 1 + l + sovData(uint64(l))
+	}
+	return n
+}
+
+func (m *DataOfflineResponse) Size() (n int) {
 	var l int
 	_ = l
 	if m.Header != nil {
@@ -1343,29 +1381,37 @@ func (m *GetClientInfoRequest) Size() (n int) {
 		l = m.Header.Size()
 		n += 1 + l + sovData(uint64(l))
 	}
-	l = len(m.UserId)
+	l = len(m.AppId)
+	if l > 0 {
+		n += 1 + l + sovData(uint64(l))
+	}
+	l = len(m.ClientId)
 	if l > 0 {
 		n += 1 + l + sovData(uint64(l))
 	}
 	return n
 }
 
-func (m *GetClientInfoRes) Size() (n int) {
+func (m *GetClientInfoResponse) Size() (n int) {
 	var l int
 	_ = l
+	if m.Header != nil {
+		l = m.Header.Size()
+		n += 1 + l + sovData(uint64(l))
+	}
+	l = len(m.GateServerIP)
+	if l > 0 {
+		n += 1 + l + sovData(uint64(l))
+	}
+	l = len(m.GateServerPort)
+	if l > 0 {
+		n += 1 + l + sovData(uint64(l))
+	}
+	l = len(m.AppId)
+	if l > 0 {
+		n += 1 + l + sovData(uint64(l))
+	}
 	l = len(m.ClientId)
-	if l > 0 {
-		n += 1 + l + sovData(uint64(l))
-	}
-	l = len(m.UserId)
-	if l > 0 {
-		n += 1 + l + sovData(uint64(l))
-	}
-	l = len(m.GateIp)
-	if l > 0 {
-		n += 1 + l + sovData(uint64(l))
-	}
-	l = len(m.GatePort)
 	if l > 0 {
 		n += 1 + l + sovData(uint64(l))
 	}
@@ -1385,14 +1431,159 @@ func (m *GetClientInfoRes) Size() (n int) {
 	return n
 }
 
-func (m *GetClientInfoResponse) Size() (n int) {
+func (m *UpdateClientInfoRequest) Size() (n int) {
 	var l int
 	_ = l
 	if m.Header != nil {
 		l = m.Header.Size()
 		n += 1 + l + sovData(uint64(l))
 	}
-	l = len(m.UserId)
+	l = len(m.GateServerIP)
+	if l > 0 {
+		n += 1 + l + sovData(uint64(l))
+	}
+	l = len(m.GateServerPort)
+	if l > 0 {
+		n += 1 + l + sovData(uint64(l))
+	}
+	l = len(m.AppId)
+	if l > 0 {
+		n += 1 + l + sovData(uint64(l))
+	}
+	l = len(m.ClientId)
+	if l > 0 {
+		n += 1 + l + sovData(uint64(l))
+	}
+	l = len(m.Platform)
+	if l > 0 {
+		n += 1 + l + sovData(uint64(l))
+	}
+	if m.UpdatedAt != 0 {
+		n += 1 + sovData(uint64(m.UpdatedAt))
+	}
+	return n
+}
+
+func (m *UpdateClientInfoResponse) Size() (n int) {
+	var l int
+	_ = l
+	if m.Header != nil {
+		l = m.Header.Size()
+		n += 1 + l + sovData(uint64(l))
+	}
+	return n
+}
+
+func (m *SaveOfflineMsgRequest) Size() (n int) {
+	var l int
+	_ = l
+	if m.Header != nil {
+		l = m.Header.Size()
+		n += 1 + l + sovData(uint64(l))
+	}
+	l = len(m.ClientId)
+	if l > 0 {
+		n += 1 + l + sovData(uint64(l))
+	}
+	l = len(m.AppId)
+	if l > 0 {
+		n += 1 + l + sovData(uint64(l))
+	}
+	if m.PacketId != 0 {
+		n += 1 + sovData(uint64(m.PacketId))
+	}
+	if m.Kind != 0 {
+		n += 1 + sovData(uint64(m.Kind))
+	}
+	l = len(m.Content)
+	if l > 0 {
+		n += 1 + l + sovData(uint64(l))
+	}
+	l = len(m.Extra)
+	if l > 0 {
+		n += 1 + l + sovData(uint64(l))
+	}
+	if m.CreatedAt != 0 {
+		n += 1 + sovData(uint64(m.CreatedAt))
+	}
+	return n
+}
+
+func (m *SaveOfflineMsgResponse) Size() (n int) {
+	var l int
+	_ = l
+	if m.Header != nil {
+		l = m.Header.Size()
+		n += 1 + l + sovData(uint64(l))
+	}
+	return n
+}
+
+func (m *GetOfflineMsgsRequest) Size() (n int) {
+	var l int
+	_ = l
+	if m.Header != nil {
+		l = m.Header.Size()
+		n += 1 + l + sovData(uint64(l))
+	}
+	l = len(m.ClientId)
+	if l > 0 {
+		n += 1 + l + sovData(uint64(l))
+	}
+	l = len(m.AppId)
+	if l > 0 {
+		n += 1 + l + sovData(uint64(l))
+	}
+	return n
+}
+
+func (m *GetOfflineMsgsRes) Size() (n int) {
+	var l int
+	_ = l
+	l = len(m.MsgId)
+	if l > 0 {
+		n += 1 + l + sovData(uint64(l))
+	}
+	l = len(m.ClientId)
+	if l > 0 {
+		n += 1 + l + sovData(uint64(l))
+	}
+	l = len(m.AppId)
+	if l > 0 {
+		n += 1 + l + sovData(uint64(l))
+	}
+	if m.PacketId != 0 {
+		n += 1 + sovData(uint64(m.PacketId))
+	}
+	if m.Kind != 0 {
+		n += 1 + sovData(uint64(m.Kind))
+	}
+	l = len(m.Content)
+	if l > 0 {
+		n += 1 + l + sovData(uint64(l))
+	}
+	l = len(m.Extra)
+	if l > 0 {
+		n += 1 + l + sovData(uint64(l))
+	}
+	if m.CreatedAt != 0 {
+		n += 1 + sovData(uint64(m.CreatedAt))
+	}
+	return n
+}
+
+func (m *GetOfflineMsgsResponse) Size() (n int) {
+	var l int
+	_ = l
+	if m.Header != nil {
+		l = m.Header.Size()
+		n += 1 + l + sovData(uint64(l))
+	}
+	l = len(m.ClientId)
+	if l > 0 {
+		n += 1 + l + sovData(uint64(l))
+	}
+	l = len(m.AppId)
 	if l > 0 {
 		n += 1 + l + sovData(uint64(l))
 	}
@@ -1431,171 +1622,6 @@ func (m *DelOfflineMsgsResponse) Size() (n int) {
 	return n
 }
 
-func (m *GetOfflineMsgsRequest) Size() (n int) {
-	var l int
-	_ = l
-	if m.Header != nil {
-		l = m.Header.Size()
-		n += 1 + l + sovData(uint64(l))
-	}
-	l = len(m.UserId)
-	if l > 0 {
-		n += 1 + l + sovData(uint64(l))
-	}
-	return n
-}
-
-func (m *GetOfflineMsgsRes) Size() (n int) {
-	var l int
-	_ = l
-	l = len(m.MsgId)
-	if l > 0 {
-		n += 1 + l + sovData(uint64(l))
-	}
-	l = len(m.ClientId)
-	if l > 0 {
-		n += 1 + l + sovData(uint64(l))
-	}
-	if m.PacketId != 0 {
-		n += 1 + sovData(uint64(m.PacketId))
-	}
-	if m.Kind != 0 {
-		n += 1 + sovData(uint64(m.Kind))
-	}
-	l = len(m.Content)
-	if l > 0 {
-		n += 1 + l + sovData(uint64(l))
-	}
-	l = len(m.Extra)
-	if l > 0 {
-		n += 1 + l + sovData(uint64(l))
-	}
-	return n
-}
-
-func (m *GetOfflineMsgsResponse) Size() (n int) {
-	var l int
-	_ = l
-	if m.Header != nil {
-		l = m.Header.Size()
-		n += 1 + l + sovData(uint64(l))
-	}
-	l = len(m.UserId)
-	if l > 0 {
-		n += 1 + l + sovData(uint64(l))
-	}
-	if len(m.Items) > 0 {
-		for _, e := range m.Items {
-			l = e.Size()
-			n += 1 + l + sovData(uint64(l))
-		}
-	}
-	return n
-}
-
-func (m *SaveOfflineMsgRequest) Size() (n int) {
-	var l int
-	_ = l
-	if m.Header != nil {
-		l = m.Header.Size()
-		n += 1 + l + sovData(uint64(l))
-	}
-	l = len(m.ClientId)
-	if l > 0 {
-		n += 1 + l + sovData(uint64(l))
-	}
-	l = len(m.UserId)
-	if l > 0 {
-		n += 1 + l + sovData(uint64(l))
-	}
-	if m.Kind != 0 {
-		n += 1 + sovData(uint64(m.Kind))
-	}
-	l = len(m.Content)
-	if l > 0 {
-		n += 1 + l + sovData(uint64(l))
-	}
-	l = len(m.Extra)
-	if l > 0 {
-		n += 1 + l + sovData(uint64(l))
-	}
-	return n
-}
-
-func (m *SaveOfflineMsgResponse) Size() (n int) {
-	var l int
-	_ = l
-	if m.Header != nil {
-		l = m.Header.Size()
-		n += 1 + l + sovData(uint64(l))
-	}
-	return n
-}
-
-func (m *DataOnlineRequest) Size() (n int) {
-	var l int
-	_ = l
-	if m.Header != nil {
-		l = m.Header.Size()
-		n += 1 + l + sovData(uint64(l))
-	}
-	l = len(m.ClientId)
-	if l > 0 {
-		n += 1 + l + sovData(uint64(l))
-	}
-	l = len(m.GateIp)
-	if l > 0 {
-		n += 1 + l + sovData(uint64(l))
-	}
-	l = len(m.GatePort)
-	if l > 0 {
-		n += 1 + l + sovData(uint64(l))
-	}
-	l = len(m.UserId)
-	if l > 0 {
-		n += 1 + l + sovData(uint64(l))
-	}
-	l = len(m.Platform)
-	if l > 0 {
-		n += 1 + l + sovData(uint64(l))
-	}
-	return n
-}
-
-func (m *DataOnlineResponse) Size() (n int) {
-	var l int
-	_ = l
-	if m.Header != nil {
-		l = m.Header.Size()
-		n += 1 + l + sovData(uint64(l))
-	}
-	return n
-}
-
-func (m *DataOfflineRequest) Size() (n int) {
-	var l int
-	_ = l
-	if m.Header != nil {
-		l = m.Header.Size()
-		n += 1 + l + sovData(uint64(l))
-	}
-	l = len(m.ClientId)
-	if l > 0 {
-		n += 1 + l + sovData(uint64(l))
-	}
-	return n
-}
-
-func (m *DataOfflineResponse) Size() (n int) {
-	var l int
-	_ = l
-	if m.Header != nil {
-		l = m.Header.Size()
-		n += 1 + l + sovData(uint64(l))
-	}
-	return n
-}
-
 func sovData(x uint64) (n int) {
 	for {
 		n++
@@ -1608,6 +1634,986 @@ func sovData(x uint64) (n int) {
 }
 func sozData(x uint64) (n int) {
 	return sovData(uint64((x << 1) ^ uint64((int64(x) >> 63))))
+}
+func (m *DataOnlineRequest) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowData
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= (uint64(b) & 0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: DataOnlineRequest: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: DataOnlineRequest: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Header", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowData
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthData
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Header == nil {
+				m.Header = &RequestHeader{}
+			}
+			if err := m.Header.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field GateServerIP", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowData
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthData
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.GateServerIP = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field GateServerPort", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowData
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthData
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.GateServerPort = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 4:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field AppId", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowData
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthData
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.AppId = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 5:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ClientId", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowData
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthData
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.ClientId = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 6:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Platform", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowData
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthData
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Platform = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 7:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field CreatedAt", wireType)
+			}
+			m.CreatedAt = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowData
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.CreatedAt |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		default:
+			iNdEx = preIndex
+			skippy, err := skipData(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthData
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *DataOnlineResponse) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowData
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= (uint64(b) & 0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: DataOnlineResponse: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: DataOnlineResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Header", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowData
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthData
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Header == nil {
+				m.Header = &ResponseHeader{}
+			}
+			if err := m.Header.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipData(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthData
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *DataOfflineRequest) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowData
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= (uint64(b) & 0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: DataOfflineRequest: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: DataOfflineRequest: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Header", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowData
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthData
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Header == nil {
+				m.Header = &RequestHeader{}
+			}
+			if err := m.Header.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field AppId", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowData
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthData
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.AppId = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ClientId", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowData
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthData
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.ClientId = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipData(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthData
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *DataOfflineResponse) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowData
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= (uint64(b) & 0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: DataOfflineResponse: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: DataOfflineResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Header", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowData
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthData
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Header == nil {
+				m.Header = &ResponseHeader{}
+			}
+			if err := m.Header.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipData(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthData
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *GetClientInfoRequest) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowData
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= (uint64(b) & 0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: GetClientInfoRequest: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: GetClientInfoRequest: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Header", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowData
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthData
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Header == nil {
+				m.Header = &RequestHeader{}
+			}
+			if err := m.Header.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field AppId", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowData
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthData
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.AppId = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ClientId", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowData
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthData
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.ClientId = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipData(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthData
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *GetClientInfoResponse) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowData
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= (uint64(b) & 0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: GetClientInfoResponse: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: GetClientInfoResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Header", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowData
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthData
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Header == nil {
+				m.Header = &ResponseHeader{}
+			}
+			if err := m.Header.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field GateServerIP", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowData
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthData
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.GateServerIP = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field GateServerPort", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowData
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthData
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.GateServerPort = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 4:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field AppId", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowData
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthData
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.AppId = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 5:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ClientId", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowData
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthData
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.ClientId = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 6:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Platform", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowData
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthData
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Platform = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 7:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Status", wireType)
+			}
+			m.Status = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowData
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.Status |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 8:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field CreatedAt", wireType)
+			}
+			m.CreatedAt = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowData
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.CreatedAt |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 9:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field UpdatedAt", wireType)
+			}
+			m.UpdatedAt = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowData
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.UpdatedAt |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		default:
+			iNdEx = preIndex
+			skippy, err := skipData(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthData
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
 }
 func (m *UpdateClientInfoRequest) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
@@ -1673,6 +2679,93 @@ func (m *UpdateClientInfoRequest) Unmarshal(dAtA []byte) error {
 			iNdEx = postIndex
 		case 2:
 			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field GateServerIP", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowData
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthData
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.GateServerIP = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field GateServerPort", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowData
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthData
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.GateServerPort = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 4:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field AppId", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowData
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthData
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.AppId = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 5:
+			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field ClientId", wireType)
 			}
 			var stringLen uint64
@@ -1699,93 +2792,6 @@ func (m *UpdateClientInfoRequest) Unmarshal(dAtA []byte) error {
 				return io.ErrUnexpectedEOF
 			}
 			m.ClientId = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		case 3:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field GateIp", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowData
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthData
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.GateIp = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		case 4:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field GatePort", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowData
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthData
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.GatePort = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		case 5:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field UserId", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowData
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthData
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.UserId = string(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
 		case 6:
 			if wireType != 2 {
@@ -1816,6 +2822,25 @@ func (m *UpdateClientInfoRequest) Unmarshal(dAtA []byte) error {
 			}
 			m.Platform = string(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
+		case 7:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field UpdatedAt", wireType)
+			}
+			m.UpdatedAt = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowData
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.UpdatedAt |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
 		default:
 			iNdEx = preIndex
 			skippy, err := skipData(dAtA[iNdEx:])
@@ -1920,7 +2945,7 @@ func (m *UpdateClientInfoResponse) Unmarshal(dAtA []byte) error {
 	}
 	return nil
 }
-func (m *GetClientInfoRequest) Unmarshal(dAtA []byte) error {
+func (m *SaveOfflineMsgRequest) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
 	for iNdEx < l {
@@ -1943,10 +2968,10 @@ func (m *GetClientInfoRequest) Unmarshal(dAtA []byte) error {
 		fieldNum := int32(wire >> 3)
 		wireType := int(wire & 0x7)
 		if wireType == 4 {
-			return fmt.Errorf("proto: GetClientInfoRequest: wiretype end group for non-group")
+			return fmt.Errorf("proto: SaveOfflineMsgRequest: wiretype end group for non-group")
 		}
 		if fieldNum <= 0 {
-			return fmt.Errorf("proto: GetClientInfoRequest: illegal tag %d (wire type %d)", fieldNum, wire)
+			return fmt.Errorf("proto: SaveOfflineMsgRequest: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
 		case 1:
@@ -1983,85 +3008,6 @@ func (m *GetClientInfoRequest) Unmarshal(dAtA []byte) error {
 			}
 			iNdEx = postIndex
 		case 2:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field UserId", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowData
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthData
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.UserId = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipData(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if skippy < 0 {
-				return ErrInvalidLengthData
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func (m *GetClientInfoRes) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowData
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: GetClientInfoRes: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: GetClientInfoRes: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field ClientId", wireType)
 			}
@@ -2090,38 +3036,9 @@ func (m *GetClientInfoRes) Unmarshal(dAtA []byte) error {
 			}
 			m.ClientId = string(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
-		case 2:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field UserId", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowData
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthData
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.UserId = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
 		case 3:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field GateIp", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field AppId", wireType)
 			}
 			var stringLen uint64
 			for shift := uint(0); ; shift += 7 {
@@ -2146,71 +3063,13 @@ func (m *GetClientInfoRes) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.GateIp = string(dAtA[iNdEx:postIndex])
+			m.AppId = string(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
 		case 4:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field GatePort", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowData
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthData
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.GatePort = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		case 5:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Platform", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowData
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthData
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Platform = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		case 6:
 			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Status", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field PacketId", wireType)
 			}
-			m.Status = 0
+			m.PacketId = 0
 			for shift := uint(0); ; shift += 7 {
 				if shift >= 64 {
 					return ErrIntOverflowData
@@ -2220,12 +3079,89 @@ func (m *GetClientInfoRes) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.Status |= (uint32(b) & 0x7F) << shift
+				m.PacketId |= (uint32(b) & 0x7F) << shift
 				if b < 0x80 {
 					break
 				}
 			}
+		case 5:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Kind", wireType)
+			}
+			m.Kind = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowData
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.Kind |= (uint32(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 6:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Content", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowData
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthData
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Content = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
 		case 7:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Extra", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowData
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthData
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Extra = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 8:
 			if wireType != 0 {
 				return fmt.Errorf("proto: wrong wireType = %d for field CreatedAt", wireType)
 			}
@@ -2240,25 +3176,6 @@ func (m *GetClientInfoRes) Unmarshal(dAtA []byte) error {
 				b := dAtA[iNdEx]
 				iNdEx++
 				m.CreatedAt |= (uint64(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		case 8:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field UpdatedAt", wireType)
-			}
-			m.UpdatedAt = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowData
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.UpdatedAt |= (uint64(b) & 0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -2284,7 +3201,7 @@ func (m *GetClientInfoRes) Unmarshal(dAtA []byte) error {
 	}
 	return nil
 }
-func (m *GetClientInfoResponse) Unmarshal(dAtA []byte) error {
+func (m *SaveOfflineMsgResponse) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
 	for iNdEx < l {
@@ -2307,10 +3224,93 @@ func (m *GetClientInfoResponse) Unmarshal(dAtA []byte) error {
 		fieldNum := int32(wire >> 3)
 		wireType := int(wire & 0x7)
 		if wireType == 4 {
-			return fmt.Errorf("proto: GetClientInfoResponse: wiretype end group for non-group")
+			return fmt.Errorf("proto: SaveOfflineMsgResponse: wiretype end group for non-group")
 		}
 		if fieldNum <= 0 {
-			return fmt.Errorf("proto: GetClientInfoResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+			return fmt.Errorf("proto: SaveOfflineMsgResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Header", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowData
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthData
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Header == nil {
+				m.Header = &ResponseHeader{}
+			}
+			if err := m.Header.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipData(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthData
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *GetOfflineMsgsRequest) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowData
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= (uint64(b) & 0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: GetOfflineMsgsRequest: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: GetOfflineMsgsRequest: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
 		case 1:
@@ -2348,7 +3348,7 @@ func (m *GetClientInfoResponse) Unmarshal(dAtA []byte) error {
 			iNdEx = postIndex
 		case 2:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field UserId", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field ClientId", wireType)
 			}
 			var stringLen uint64
 			for shift := uint(0); ; shift += 7 {
@@ -2373,9 +3373,431 @@ func (m *GetClientInfoResponse) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.UserId = string(dAtA[iNdEx:postIndex])
+			m.ClientId = string(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
 		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field AppId", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowData
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthData
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.AppId = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipData(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthData
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *GetOfflineMsgsRes) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowData
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= (uint64(b) & 0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: GetOfflineMsgsRes: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: GetOfflineMsgsRes: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field MsgId", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowData
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthData
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.MsgId = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ClientId", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowData
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthData
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.ClientId = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field AppId", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowData
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthData
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.AppId = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 4:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field PacketId", wireType)
+			}
+			m.PacketId = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowData
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.PacketId |= (uint32(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 5:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Kind", wireType)
+			}
+			m.Kind = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowData
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.Kind |= (uint32(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 6:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Content", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowData
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthData
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Content = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 7:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Extra", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowData
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthData
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Extra = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 8:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field CreatedAt", wireType)
+			}
+			m.CreatedAt = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowData
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.CreatedAt |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		default:
+			iNdEx = preIndex
+			skippy, err := skipData(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthData
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *GetOfflineMsgsResponse) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowData
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= (uint64(b) & 0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: GetOfflineMsgsResponse: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: GetOfflineMsgsResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Header", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowData
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthData
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Header == nil {
+				m.Header = &ResponseHeader{}
+			}
+			if err := m.Header.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ClientId", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowData
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthData
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.ClientId = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field AppId", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowData
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthData
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.AppId = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 4:
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field Items", wireType)
 			}
@@ -2401,7 +3823,7 @@ func (m *GetClientInfoResponse) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.Items = append(m.Items, &GetClientInfoRes{})
+			m.Items = append(m.Items, &GetOfflineMsgsRes{})
 			if err := m.Items[len(m.Items)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -2622,1272 +4044,6 @@ func (m *DelOfflineMsgsResponse) Unmarshal(dAtA []byte) error {
 	}
 	return nil
 }
-func (m *GetOfflineMsgsRequest) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowData
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: GetOfflineMsgsRequest: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: GetOfflineMsgsRequest: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Header", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowData
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthData
-			}
-			postIndex := iNdEx + msglen
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.Header == nil {
-				m.Header = &RequestHeader{}
-			}
-			if err := m.Header.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		case 2:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field UserId", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowData
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthData
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.UserId = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipData(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if skippy < 0 {
-				return ErrInvalidLengthData
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func (m *GetOfflineMsgsRes) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowData
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: GetOfflineMsgsRes: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: GetOfflineMsgsRes: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field MsgId", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowData
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthData
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.MsgId = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		case 2:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field ClientId", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowData
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthData
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.ClientId = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		case 3:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field PacketId", wireType)
-			}
-			m.PacketId = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowData
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.PacketId |= (uint32(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		case 4:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Kind", wireType)
-			}
-			m.Kind = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowData
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.Kind |= (uint32(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		case 5:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Content", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowData
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthData
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Content = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		case 6:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Extra", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowData
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthData
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Extra = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipData(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if skippy < 0 {
-				return ErrInvalidLengthData
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func (m *GetOfflineMsgsResponse) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowData
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: GetOfflineMsgsResponse: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: GetOfflineMsgsResponse: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Header", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowData
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthData
-			}
-			postIndex := iNdEx + msglen
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.Header == nil {
-				m.Header = &ResponseHeader{}
-			}
-			if err := m.Header.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		case 2:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field UserId", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowData
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthData
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.UserId = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		case 3:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Items", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowData
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthData
-			}
-			postIndex := iNdEx + msglen
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Items = append(m.Items, &GetOfflineMsgsRes{})
-			if err := m.Items[len(m.Items)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipData(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if skippy < 0 {
-				return ErrInvalidLengthData
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func (m *SaveOfflineMsgRequest) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowData
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: SaveOfflineMsgRequest: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: SaveOfflineMsgRequest: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Header", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowData
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthData
-			}
-			postIndex := iNdEx + msglen
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.Header == nil {
-				m.Header = &RequestHeader{}
-			}
-			if err := m.Header.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		case 2:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field ClientId", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowData
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthData
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.ClientId = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		case 3:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field UserId", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowData
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthData
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.UserId = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		case 4:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Kind", wireType)
-			}
-			m.Kind = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowData
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.Kind |= (uint32(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		case 5:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Content", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowData
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthData
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Content = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		case 6:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Extra", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowData
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthData
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Extra = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipData(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if skippy < 0 {
-				return ErrInvalidLengthData
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func (m *SaveOfflineMsgResponse) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowData
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: SaveOfflineMsgResponse: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: SaveOfflineMsgResponse: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Header", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowData
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthData
-			}
-			postIndex := iNdEx + msglen
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.Header == nil {
-				m.Header = &ResponseHeader{}
-			}
-			if err := m.Header.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipData(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if skippy < 0 {
-				return ErrInvalidLengthData
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func (m *DataOnlineRequest) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowData
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: DataOnlineRequest: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: DataOnlineRequest: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Header", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowData
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthData
-			}
-			postIndex := iNdEx + msglen
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.Header == nil {
-				m.Header = &RequestHeader{}
-			}
-			if err := m.Header.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		case 2:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field ClientId", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowData
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthData
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.ClientId = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		case 3:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field GateIp", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowData
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthData
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.GateIp = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		case 4:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field GatePort", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowData
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthData
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.GatePort = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		case 5:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field UserId", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowData
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthData
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.UserId = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		case 6:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Platform", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowData
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthData
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Platform = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipData(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if skippy < 0 {
-				return ErrInvalidLengthData
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func (m *DataOnlineResponse) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowData
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: DataOnlineResponse: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: DataOnlineResponse: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Header", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowData
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthData
-			}
-			postIndex := iNdEx + msglen
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.Header == nil {
-				m.Header = &ResponseHeader{}
-			}
-			if err := m.Header.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipData(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if skippy < 0 {
-				return ErrInvalidLengthData
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func (m *DataOfflineRequest) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowData
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: DataOfflineRequest: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: DataOfflineRequest: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Header", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowData
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthData
-			}
-			postIndex := iNdEx + msglen
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.Header == nil {
-				m.Header = &RequestHeader{}
-			}
-			if err := m.Header.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		case 2:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field ClientId", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowData
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthData
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.ClientId = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipData(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if skippy < 0 {
-				return ErrInvalidLengthData
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func (m *DataOfflineResponse) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowData
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: DataOfflineResponse: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: DataOfflineResponse: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Header", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowData
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthData
-			}
-			postIndex := iNdEx + msglen
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.Header == nil {
-				m.Header = &ResponseHeader{}
-			}
-			if err := m.Header.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipData(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if skippy < 0 {
-				return ErrInvalidLengthData
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
 func skipData(dAtA []byte) (n int, err error) {
 	l := len(dAtA)
 	iNdEx := 0
@@ -3996,48 +4152,48 @@ var (
 func init() { proto.RegisterFile("data.proto", fileDescriptorData) }
 
 var fileDescriptorData = []byte{
-	// 680 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xd4, 0x56, 0xc1, 0x6e, 0xd3, 0x4c,
-	0x10, 0xfe, 0xb7, 0x76, 0xd2, 0x66, 0xfa, 0xb7, 0x6a, 0x97, 0x36, 0x18, 0x53, 0x82, 0x31, 0x97,
-	0x9c, 0x22, 0x1a, 0x9e, 0x00, 0xda, 0xaa, 0x89, 0x42, 0xd5, 0xca, 0x55, 0x2e, 0x70, 0x80, 0x6d,
-	0xbd, 0x69, 0x23, 0x12, 0x3b, 0x78, 0x37, 0x88, 0xc7, 0xe0, 0x80, 0xc4, 0x13, 0xf0, 0x20, 0xdc,
-	0xe0, 0x80, 0xe0, 0x11, 0x50, 0xb8, 0xf1, 0x14, 0x68, 0xbd, 0x9b, 0xc4, 0xeb, 0xc4, 0x91, 0xb0,
-	0xd2, 0x03, 0x37, 0x8f, 0x67, 0xe6, 0x9b, 0x99, 0xcf, 0xdf, 0x7a, 0x16, 0xc0, 0x27, 0x9c, 0xd4,
-	0x06, 0x51, 0xc8, 0x43, 0x5c, 0x1a, 0x0c, 0xd9, 0x75, 0xad, 0x4f, 0x39, 0xb1, 0xff, 0xbf, 0x0c,
-	0xfb, 0xfd, 0x30, 0x90, 0x0e, 0xf7, 0x3b, 0x82, 0xdb, 0xed, 0x81, 0x4f, 0x38, 0x3d, 0xe8, 0x75,
-	0x69, 0xc0, 0x9b, 0x41, 0x27, 0xf4, 0xe8, 0x9b, 0x21, 0x65, 0x1c, 0x3f, 0x82, 0xe2, 0x35, 0x25,
-	0x3e, 0x8d, 0x2c, 0xe4, 0xa0, 0xea, 0x7a, 0xdd, 0xaa, 0x4d, 0x50, 0x6a, 0x2a, 0xa6, 0x11, 0xfb,
-	0x3d, 0x15, 0x87, 0x6d, 0x58, 0x53, 0x30, 0xbe, 0xb5, 0xe2, 0xa0, 0x6a, 0xc9, 0x9b, 0xd8, 0xb8,
-	0x0c, 0xc5, 0x63, 0xc2, 0x69, 0x73, 0x60, 0x19, 0xb1, 0x47, 0x59, 0x22, 0x47, 0x3c, 0x9d, 0x85,
-	0x11, 0xb7, 0x4c, 0x99, 0x33, 0xb6, 0x45, 0x4e, 0x9b, 0xd1, 0xa8, 0xe9, 0x5b, 0x05, 0x99, 0x23,
-	0x2d, 0x91, 0x73, 0xd6, 0x23, 0xbc, 0x13, 0x46, 0x7d, 0xab, 0x28, 0x73, 0xc6, 0xb6, 0xfb, 0x0c,
-	0xac, 0xd9, 0x81, 0xd8, 0x20, 0x0c, 0x18, 0xfd, 0xfb, 0x89, 0xdc, 0x57, 0xb0, 0x73, 0x4c, 0xf9,
-	0x32, 0xb8, 0x99, 0xce, 0xb2, 0x92, 0x9c, 0xc5, 0xfd, 0x8d, 0x60, 0x2b, 0x55, 0x82, 0x69, 0x44,
-	0xa2, 0x59, 0x22, 0xe7, 0x01, 0xe5, 0x22, 0x38, 0x49, 0x64, 0x41, 0x27, 0x52, 0xe0, 0x9d, 0x73,
-	0xc2, 0x87, 0x2c, 0xa6, 0x78, 0xc3, 0x53, 0x16, 0xde, 0x83, 0xd2, 0x41, 0x44, 0x09, 0xa7, 0xfe,
-	0x13, 0x6e, 0xad, 0x3a, 0xa8, 0x6a, 0x7a, 0xd3, 0x17, 0xc2, 0x2b, 0xe9, 0x17, 0xde, 0x35, 0xe9,
-	0x9d, 0xbc, 0x70, 0x3f, 0x20, 0xd8, 0x4d, 0x0f, 0x9b, 0xf3, 0xd3, 0x64, 0xf2, 0xb0, 0x0f, 0x85,
-	0x26, 0xa7, 0x7d, 0x66, 0x19, 0x8e, 0x51, 0x5d, 0xaf, 0xdf, 0x4d, 0x00, 0xa5, 0x4b, 0x7b, 0x32,
-	0xd2, 0x7d, 0x09, 0xbb, 0x87, 0xb4, 0x77, 0xda, 0xe9, 0xf4, 0xba, 0x01, 0x3d, 0x61, 0x57, 0x2c,
-	0xff, 0x67, 0xde, 0x81, 0xc2, 0x09, 0xbb, 0x8a, 0x9b, 0x32, 0xaa, 0x25, 0x4f, 0x1a, 0x6e, 0x0b,
-	0xca, 0xe9, 0x02, 0x6a, 0xee, 0xfd, 0x54, 0x85, 0x3b, 0x5a, 0x05, 0x19, 0x94, 0xd2, 0x24, 0x89,
-	0x39, 0x5c, 0x4a, 0xb7, 0x59, 0xa2, 0xfc, 0x84, 0x60, 0x3b, 0x5d, 0x83, 0x4d, 0x67, 0x93, 0x92,
-	0x94, 0xc6, 0xc2, 0x43, 0x2f, 0xf4, 0x45, 0x2e, 0x5f, 0x53, 0xe1, 0x33, 0x62, 0x15, 0x4d, 0x6c,
-	0x8c, 0xc1, 0x6c, 0x75, 0x03, 0x3f, 0xd6, 0xe4, 0x86, 0x17, 0x3f, 0x63, 0x0b, 0x56, 0x0f, 0xc2,
-	0x80, 0xd3, 0x80, 0x2b, 0x39, 0x8e, 0x4d, 0x51, 0xfb, 0xe8, 0x1d, 0x8f, 0x88, 0x3a, 0xef, 0xd2,
-	0x70, 0x3f, 0x22, 0x28, 0xcf, 0xf4, 0x99, 0x97, 0xd8, 0x4c, 0x45, 0xd5, 0x75, 0x45, 0xed, 0xe9,
-	0x8a, 0xd2, 0x8b, 0x8f, 0x25, 0xf5, 0x19, 0xc1, 0xee, 0x39, 0x79, 0x4b, 0xa7, 0xde, 0x1b, 0xfb,
-	0xad, 0xaa, 0x9e, 0x0d, 0xad, 0xe7, 0x65, 0xb0, 0xdb, 0x82, 0x72, 0x7a, 0x84, 0xfc, 0xaa, 0xfd,
-	0x8a, 0x60, 0xfb, 0x90, 0x70, 0x72, 0x1a, 0x08, 0xb0, 0x7f, 0x7b, 0xc7, 0x1c, 0x03, 0x4e, 0x8e,
-	0x92, 0x9f, 0x94, 0x0b, 0x05, 0x24, 0x19, 0xbe, 0x11, 0x52, 0xdc, 0x06, 0xdc, 0xd2, 0x6a, 0xe4,
-	0xee, 0xb6, 0xfe, 0xcd, 0x04, 0x53, 0x40, 0xe1, 0x23, 0x28, 0xca, 0xd9, 0x71, 0xf2, 0x2c, 0xcc,
-	0x7c, 0x5d, 0xfb, 0x5e, 0x86, 0x57, 0xb5, 0xd0, 0x80, 0x55, 0xd5, 0x15, 0x9e, 0x89, 0xd4, 0x18,
-	0xb1, 0x2b, 0x59, 0x6e, 0x85, 0xd4, 0x86, 0x4d, 0x5d, 0xa9, 0xd8, 0x49, 0x64, 0xcc, 0x3d, 0x87,
-	0xf6, 0x83, 0x05, 0x11, 0x53, 0x58, 0xfd, 0x80, 0x6b, 0xb0, 0x73, 0x7f, 0xc2, 0x1a, 0x6c, 0xc6,
-	0xaf, 0xa9, 0x0d, 0x9b, 0xfa, 0x36, 0xd0, 0x60, 0xe7, 0x6e, 0x22, 0x0d, 0x36, 0x63, 0x95, 0x78,
-	0xb0, 0xa1, 0x2d, 0x38, 0x7c, 0x3f, 0x7b, 0xf5, 0x49, 0x50, 0x67, 0xc1, 0x6e, 0x94, 0x98, 0x2f,
-	0x60, 0x2b, 0x7d, 0x9b, 0xc2, 0x6e, 0x22, 0x2b, 0xe3, 0xee, 0x68, 0x3f, 0x5c, 0x18, 0x23, 0xc1,
-	0x9f, 0x96, 0xbf, 0x8c, 0x2a, 0xe8, 0xc7, 0xa8, 0x82, 0x7e, 0x8e, 0x2a, 0xe8, 0xfd, 0xaf, 0xca,
-	0x7f, 0xcf, 0x4d, 0x91, 0x70, 0x51, 0x8c, 0xef, 0xa6, 0x8f, 0xff, 0x04, 0x00, 0x00, 0xff, 0xff,
-	0xf1, 0x55, 0x2e, 0xe8, 0xc2, 0x0a, 0x00, 0x00,
+	// 674 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xd4, 0x56, 0xcd, 0x6e, 0xd3, 0x4c,
+	0x14, 0xfd, 0xec, 0x38, 0x49, 0x7d, 0xdb, 0x44, 0x5f, 0x87, 0x26, 0x18, 0xab, 0x04, 0x63, 0x24,
+	0x94, 0x55, 0x04, 0xe1, 0x09, 0x4a, 0x5a, 0x25, 0x51, 0xa9, 0x88, 0x1c, 0x65, 0x03, 0x0b, 0x34,
+	0xd4, 0x93, 0x36, 0x22, 0xb1, 0x8d, 0x3d, 0xa9, 0x2a, 0x58, 0xf2, 0x02, 0xbc, 0x0a, 0x3b, 0x1e,
+	0x81, 0x0d, 0x12, 0x5b, 0x76, 0x28, 0x3c, 0x05, 0x0b, 0x24, 0x64, 0x7b, 0xea, 0x78, 0xec, 0x38,
+	0x52, 0x4d, 0x55, 0x95, 0x9d, 0xef, 0xdc, 0xeb, 0x73, 0xe7, 0x9c, 0x39, 0xf3, 0x03, 0x60, 0x62,
+	0x8a, 0x5b, 0x8e, 0x6b, 0x53, 0x1b, 0xc9, 0xce, 0xdc, 0x3b, 0x6d, 0xcd, 0x08, 0xc5, 0xea, 0xd6,
+	0xb1, 0x3d, 0x9b, 0xd9, 0x56, 0x98, 0xd0, 0x7f, 0x0b, 0xb0, 0xbd, 0x8f, 0x29, 0x7e, 0x6e, 0x4d,
+	0x27, 0x16, 0x31, 0xc8, 0xdb, 0x39, 0xf1, 0x28, 0x7a, 0x04, 0xa5, 0x53, 0x82, 0x4d, 0xe2, 0x2a,
+	0x82, 0x26, 0x34, 0x37, 0xdb, 0x4a, 0x2b, 0xfa, 0xbf, 0xc5, 0x6a, 0x7a, 0x41, 0xde, 0x60, 0x75,
+	0x48, 0x87, 0xad, 0x2e, 0xa6, 0x64, 0x48, 0xdc, 0x33, 0xe2, 0xf6, 0x07, 0x8a, 0xa8, 0x09, 0x4d,
+	0xd9, 0xe0, 0xc6, 0xd0, 0x43, 0xa8, 0x2e, 0xe3, 0x81, 0xed, 0x52, 0xa5, 0x10, 0x54, 0x25, 0x46,
+	0xd1, 0x0e, 0x14, 0xf7, 0x1c, 0xa7, 0x6f, 0x2a, 0x52, 0x90, 0x0e, 0x03, 0xa4, 0xc2, 0x46, 0x67,
+	0x3a, 0x21, 0x16, 0xed, 0x9b, 0x4a, 0x31, 0x48, 0x44, 0xb1, 0x9f, 0x1b, 0x4c, 0x31, 0x1d, 0xdb,
+	0xee, 0x4c, 0x29, 0x85, 0xb9, 0x8b, 0x18, 0xed, 0x82, 0xdc, 0x71, 0x09, 0xa6, 0xc4, 0xdc, 0xa3,
+	0x4a, 0x59, 0x13, 0x9a, 0x92, 0xb1, 0x1c, 0xd0, 0xbb, 0x80, 0xe2, 0xf4, 0x3d, 0xc7, 0xb6, 0x3c,
+	0x82, 0x1e, 0x27, 0xf8, 0xdf, 0xe1, 0xf8, 0x87, 0x45, 0xbc, 0x00, 0xfa, 0x39, 0x03, 0x1a, 0x8f,
+	0xff, 0x4e, 0xc8, 0x88, 0xbc, 0x98, 0x45, 0xbe, 0xc0, 0x93, 0xd7, 0x7b, 0x70, 0x8b, 0xeb, 0x9c,
+	0x9f, 0xc3, 0x3b, 0xd8, 0xe9, 0x12, 0xca, 0x80, 0xad, 0xb1, 0x7d, 0x9d, 0x2c, 0x3e, 0x8b, 0x50,
+	0x4b, 0x34, 0xcf, 0x4d, 0xe4, 0x06, 0xbb, 0xb1, 0x0e, 0xa5, 0x21, 0xc5, 0x74, 0xee, 0x31, 0x2b,
+	0xb2, 0x88, 0x77, 0xe9, 0x46, 0xc2, 0xa5, 0x7e, 0x76, 0xe4, 0x98, 0x2c, 0x2b, 0x87, 0xd9, 0x68,
+	0x40, 0xff, 0x20, 0xc2, 0xed, 0x30, 0xba, 0x8a, 0xa5, 0xbb, 0xd1, 0x3b, 0x79, 0xa9, 0x42, 0x39,
+	0xa9, 0xc2, 0x33, 0x50, 0xd2, 0x22, 0x30, 0x0b, 0x5d, 0x5a, 0x05, 0xfd, 0x97, 0x00, 0xb5, 0x21,
+	0x3e, 0x23, 0x6c, 0x57, 0x1d, 0x79, 0x27, 0xf9, 0x15, 0x8d, 0xf3, 0x15, 0x13, 0x7c, 0x23, 0x85,
+	0x0a, 0x09, 0x85, 0x06, 0xf8, 0xf8, 0x0d, 0xa1, 0x4c, 0xba, 0x8a, 0x11, 0xc5, 0x08, 0x81, 0x74,
+	0x38, 0xb1, 0x42, 0xe5, 0x2a, 0x46, 0xf0, 0x8d, 0x14, 0x28, 0x77, 0x6c, 0x8b, 0x12, 0x8b, 0x32,
+	0xd1, 0x2e, 0x42, 0x1f, 0xff, 0xe0, 0x9c, 0xba, 0x38, 0xd0, 0x4b, 0x36, 0xc2, 0x60, 0xbd, 0xdb,
+	0xf4, 0x43, 0xa8, 0x27, 0xa9, 0xe7, 0x3f, 0x53, 0xde, 0x07, 0xdb, 0x7a, 0x89, 0xe5, 0x5d, 0xa3,
+	0x8e, 0xfa, 0x77, 0x01, 0xb6, 0x93, 0xdd, 0x3d, 0xbf, 0xf6, 0xc8, 0x3b, 0xe9, 0x9b, 0x41, 0x63,
+	0xd9, 0x08, 0x83, 0x7f, 0x6e, 0x95, 0x3e, 0x09, 0x50, 0x4f, 0x71, 0xcb, 0x7d, 0x62, 0x5e, 0x9e,
+	0x7d, 0x1b, 0x8a, 0x7d, 0x4a, 0x66, 0x9e, 0x22, 0x69, 0x85, 0xe6, 0x66, 0x7b, 0x37, 0xd6, 0x23,
+	0x35, 0x2d, 0x23, 0x2c, 0xd5, 0x5f, 0x41, 0x6d, 0x9f, 0x4c, 0xaf, 0xc4, 0x0c, 0xd1, 0x22, 0x8a,
+	0x5a, 0x21, 0x5a, 0x44, 0xdf, 0xba, 0xc9, 0x06, 0xb9, 0x35, 0x69, 0x7f, 0x95, 0x40, 0xf2, 0x6f,
+	0x56, 0x74, 0x00, 0xa5, 0xf0, 0x81, 0x80, 0xe2, 0x2c, 0x53, 0xcf, 0x26, 0xf5, 0x6e, 0x46, 0x96,
+	0x4d, 0xa1, 0x07, 0x65, 0x36, 0x33, 0x94, 0xaa, 0xe4, 0x9e, 0x0d, 0x6a, 0x23, 0x2b, 0xcd, 0x90,
+	0x0c, 0xa8, 0x70, 0x77, 0x25, 0xba, 0xc7, 0xab, 0x9f, 0xba, 0x07, 0x54, 0x2d, 0xbb, 0x80, 0x61,
+	0xbe, 0x84, 0xff, 0x93, 0xe7, 0x27, 0xd2, 0x63, 0x7f, 0x65, 0xdc, 0x30, 0xea, 0x83, 0xb5, 0x35,
+	0x0c, 0x7c, 0x04, 0x55, 0xfe, 0x48, 0x41, 0xf1, 0x09, 0xad, 0x3c, 0x68, 0xd5, 0xfb, 0x6b, 0x2a,
+	0x96, 0xb0, 0xbc, 0xd7, 0x90, 0xb6, 0xc6, 0x86, 0x69, 0xd8, 0x8c, 0xfd, 0x33, 0x82, 0x2a, 0xef,
+	0x22, 0x0e, 0x76, 0xa5, 0x83, 0x39, 0xd8, 0xd5, 0x16, 0x7c, 0x5a, 0xff, 0xb2, 0x68, 0x08, 0xdf,
+	0x16, 0x0d, 0xe1, 0xc7, 0xa2, 0x21, 0x7c, 0xfc, 0xd9, 0xf8, 0xef, 0x85, 0xe4, 0x97, 0xbf, 0x2e,
+	0x05, 0x4f, 0xf1, 0x27, 0x7f, 0x02, 0x00, 0x00, 0xff, 0xff, 0xb4, 0x21, 0x92, 0x37, 0xb1, 0x0b,
+	0x00, 0x00,
 }

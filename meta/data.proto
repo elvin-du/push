@@ -7,114 +7,109 @@ option go_package= "meta";
 import "common.proto";
 
 service Data{
-	//上线
 	rpc Online(DataOnlineRequest)returns (DataOnlineResponse);
-	//下线
 	rpc Offline(DataOfflineRequest)returns (DataOfflineResponse);
+
+	rpc GetClientInfo(GetClientInfoRequest)returns(GetClientInfoResponse);
+	rpc UpdateClientInfo(UpdateClientInfoRequest)returns(UpdateClientInfoResponse);
 
 	rpc SaveOfflineMsg(SaveOfflineMsgRequest)returns(SaveOfflineMsgResponse);
 	rpc GetOfflineMsgs(GetOfflineMsgsRequest)returns(GetOfflineMsgsResponse);
 	rpc DelOfflineMsgs(DelOfflineMsgsRequest)returns(DelOfflineMsgsResponse);
-
-	rpc GetClientInfo(GetClientInfoRequest)returns(GetClientInfoResponse);
-	rpc UpdateClientInfo(UpdateClientInfoRequest)returns(UpdateClientInfoResponse);
-}
-
-message UpdateClientInfoRequest{
-	RequestHeader header = 1;
-	string ClientId = 2;
-	string GateIp = 3;//用户上线连接的Gate服务器ip
-	string GatePort = 4;//用户上线连接的Gate服务器port
-	string UserId = 5;
-	string Platform = 6;
-}
-
-message UpdateClientInfoResponse{
-	RequestHeader header = 1;
-}
-
-message GetClientInfoRequest{
-	RequestHeader header = 1;
-	string UserId = 2;
-}
-
-message GetClientInfoRes{
-	string ClientId = 1;
-	string UserId = 2;
-	string GateIp = 3;//用户上线连接的Gate服务器ip
-	string GatePort = 4;//用户上线连接的Gate服务器port
-	string Platform = 5;
-	uint32 Status = 6;
-	uint64 CreatedAt = 7;
-	uint64 UpdatedAt= 8;
-}
-
-message GetClientInfoResponse{
-	RequestHeader header = 1;
-	string UserId = 2;
-	repeated GetClientInfoRes Items = 3;
-}
-
-message DelOfflineMsgsRequest{
-	RequestHeader header = 1;
-	repeated string MsgId = 2;
-}
-
-message DelOfflineMsgsResponse{
-	ResponseHeader header = 1;
-}
-
-message GetOfflineMsgsRequest{
-	RequestHeader header = 1;
-	string UserId = 2;
-}
-
-message GetOfflineMsgsRes{
-	string MsgId = 1;
-	string ClientId = 2;
-	uint32 PacketId = 3;
-	uint32 Kind = 4;
-	string Content = 5;
-	string Extra = 6;
-}
-
-message GetOfflineMsgsResponse{
-	ResponseHeader header = 1;
-	string UserId = 2;
-	repeated GetOfflineMsgsRes Items = 3;
-}
-
-message SaveOfflineMsgRequest{
-	RequestHeader header = 1;
-	string ClientId = 2;
-	string UserId = 3;
-	uint32 Kind = 4;
-	string Content = 5;
-	string Extra = 6;
-}
-
-message SaveOfflineMsgResponse{
-	ResponseHeader header = 1;
 }
 
 message DataOnlineRequest{
 	RequestHeader header = 1;
-	string ClientId = 2;
-	string GateIp = 3;//用户上线连接的Gate服务器ip
-	string GatePort = 4;//用户上线连接的Gate服务器port
-	string UserId = 5;
+	string GateServerIP = 2;
+	string GateServerPort = 3;
+	string AppId = 4;
+	string ClientId = 5;
 	string Platform = 6;
+	uint64 CreatedAt = 7;
 }
-
 message DataOnlineResponse{
 	ResponseHeader header = 1;
 }
 
 message DataOfflineRequest{
 	RequestHeader header = 1;
-	string ClientId = 2;
+	string AppId = 2;
+	string ClientId = 3;
+}
+message DataOfflineResponse{
+	ResponseHeader header = 1;
 }
 
-message DataOfflineResponse{
+message GetClientInfoRequest{
+	RequestHeader header = 1;
+	string AppId = 2;
+	string ClientId = 3;
+}
+message GetClientInfoResponse{
+	ResponseHeader header = 1;
+	string GateServerIP = 2;
+	string GateServerPort = 3;
+	string AppId = 4;
+	string ClientId = 5;
+	string Platform = 6;
+	uint64 Status = 7;
+	uint64 CreatedAt = 8;
+	uint64 UpdatedAt=9;
+}
+
+message UpdateClientInfoRequest{
+	RequestHeader header = 1;
+	string GateServerIP = 2;
+	string GateServerPort = 3;
+	string AppId = 4;
+	string ClientId = 5;
+	string Platform = 6;
+	uint64 UpdatedAt = 7;
+}
+message UpdateClientInfoResponse{
+	RequestHeader header = 1;
+}
+
+message SaveOfflineMsgRequest{
+	RequestHeader header = 1;
+	string ClientId = 2;
+	string AppId = 3;
+	uint32 PacketId = 4;
+	uint32 Kind = 5;
+	string Content = 6;
+	string Extra = 7;
+	uint64 CreatedAt = 8;
+}
+message SaveOfflineMsgResponse{
+	ResponseHeader header = 1;
+}
+
+message GetOfflineMsgsRequest{
+	RequestHeader header = 1;
+	string ClientId = 2;
+	string AppId = 3;
+}
+message GetOfflineMsgsRes{
+	string MsgId = 1;
+	string ClientId = 2;
+	string AppId = 3;
+	uint32 PacketId = 4;
+	uint32 Kind = 5;
+	string Content = 6;
+	string Extra = 7;
+	uint64 CreatedAt = 8;
+}
+message GetOfflineMsgsResponse{
+	ResponseHeader header = 1;
+	string ClientId = 2;
+	string AppId = 3;
+	repeated GetOfflineMsgsRes Items = 4;
+}
+
+message DelOfflineMsgsRequest{
+	RequestHeader header = 1;
+	repeated string MsgId = 2;
+}
+message DelOfflineMsgsResponse{
 	ResponseHeader header = 1;
 }

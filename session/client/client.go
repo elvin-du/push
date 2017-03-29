@@ -1,5 +1,5 @@
 /*
-SESSION Server对外提供的客户端接口,本接口内部调用RPC服务
+SESSION
 */
 
 package client
@@ -43,4 +43,15 @@ func Info(req *meta.SessionInfoRequest) (*meta.SessionInfoResponse, error) {
 	defer service.SessionPut(cli)
 
 	return cli.SessionClient.Info(context.TODO(), req)
+}
+
+func Update(req *meta.SessionUpdateRequest) (*meta.SessionUpdateResponse, error) {
+	cli, err := service.SessionClient()
+	if nil != err {
+		log.Errorln(err)
+		return nil, err
+	}
+	defer service.SessionPut(cli)
+
+	return cli.SessionClient.Update(context.TODO(), req)
 }

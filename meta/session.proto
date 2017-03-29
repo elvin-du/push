@@ -17,11 +17,21 @@ message SessionOnlineRequest{
 	RequestHeader header = 1;
 	string GateServerIP = 2;
 	string GateServerPort = 3;
-	string UserId = 4;
+	string AppId = 4;
 	string ClientId = 5;
-	uint64 CreatedAt = 6;
+	string Platform = 6;
+	uint64 CreatedAt = 7;
 }
 message SessionOnlineResponse{
+	ResponseHeader header = 1;
+}
+
+message SessionOfflineRequest{
+	RequestHeader header = 1;
+	string AppId = 2;
+	string ClientId = 3;
+}
+message SessionOfflineResponse{
 	ResponseHeader header = 1;
 }
 
@@ -29,34 +39,28 @@ message SessionUpdateRequest{
 	RequestHeader header = 1;
 	string GateServerIP = 2;
 	string GateServerPort = 3;
-	string UserId = 4;
+	string AppId = 4;
 	string ClientId = 5;
-	uint64 CreatedAt = 6;
+	string Platform = 6;
+	uint64 UpdatedAt = 7;
 }
 message SessionUpdateResponse{
 	ResponseHeader header = 1;
 }
 
-message SessionOfflineRequest{
-	RequestHeader header = 1;
-	string UserId = 2;
-	string ClientId = 3;
-}
-message SessionOfflineResponse{
-	ResponseHeader header = 1;
-}
-
 message SessionInfoRequest{
 	RequestHeader header = 1;
-	string UserId = 2;
+	string AppId = 2;
 	string ClientId = 3;
 }
 message SessionInfoResponse{
 	ResponseHeader header = 1;
 	string GateServerIP = 2;
 	string GateServerPort = 3;
-	string UserId = 4;
+	string AppId = 4;
 	string ClientId = 5;
-	uint64 CreatedAt = 6;
+	string Platform = 6;
 	uint64 Status = 7;
+	uint64 CreatedAt = 8;
+	uint64 UpdatedAt=9;
 }

@@ -3,6 +3,7 @@ package dal
 import (
 	"database/sql"
 	"fmt"
+	"hscore/config"
 	"hscore/log"
 	"push/meta"
 	"time"
@@ -19,17 +20,45 @@ type Mysql struct {
 	DB *sql.DB
 }
 
-func NewMysql() *Mysql {
-	db, err := sql.Open("mysql", "root:@tcp(localhost:4000)/htz_classic")
+var (
+	MYSQL_DSN  = ""
+	MYSQL_POOL uint32
+)
+
+func init() {
+	err := config.Get("db:mysql:dns", &MYSQL_DSN)
 	if nil != err {
 		log.Fatalln(err)
+	}
+
+	err = config.Get("db:mysql:pool", &MYSQL_POOL)
+	if nil != err {
+		log.Fatalln(err)
+	}
+}
+
+func openMysql() (*sql.DB, error) {
+	db, err := sql.Open("mysql", MYSQL_DSN)
+	if nil != err {
+		log.Errorln(err)
+		return nil, err
+	}
+	db.SetMaxOpenConns(int(MYSQL_POOL))
+
+	return db, nil
+}
+
+func NewMysql() *Mysql {
+	db, err := openMysql()
+	if nil != err {
+		log.Errorln(err)
 	}
 
 	return &Mysql{DB: db}
 }
 
 func (m *Mysql) ReGetDBConn() error {
-	db, err := sql.Open("mysql", "root:@tcp(localhost:4000)/htz_classic")
+	db, err := openMysql()
 	if nil != err {
 		log.Errorln(err)
 		return err
@@ -58,8 +87,9 @@ var (
 //上线
 func (m *Mysql) Online(req *meta.DataOnlineRequest) (*meta.DataOnlineResponse, error) {
 	utc := time.Now().Unix()
-	sqlStr := fmt.Sprintf("INSERT INTO %s SET id='%s',gate_server_ip='%s',gate_server_port='%s',user_id='%s',platform='%s',status=1,created_at=%d,updated_at=%d", TBL_CLIENTS, req.ClientId, req.GateIp, req.GatePort, req.UserId, req.Platform, utc, utc)
+	sqlStr := fmt.Sprintf("INSERT INTO %s SET id='%s',gate_server_ip='%s',gate_server_port='%s',platform='%s',status=1,created_at=%d,updated_at=%d,app_id='%s'", TBL_CLIENTS, req.ClientId, req.GateServerIP, req.GateServerPort, req.Platform, utc, utc, req.AppId)
 	log.Debugln(sqlStr)
+
 	_, err := m.Query(sqlStr)
 	if nil != err {
 		log.Errorln(err)
@@ -72,7 +102,7 @@ func (m *Mysql) Online(req *meta.DataOnlineRequest) (*meta.DataOnlineResponse, e
 //下线
 func (m *Mysql) Offline(req *meta.DataOfflineRequest) (*meta.DataOfflineResponse, error) {
 	utc := time.Now().Unix()
-	sqlStr := fmt.Sprintf("UPDATE %s SET status=0,updated_at=%d WHERE client_id='%s'", TBL_CLIENTS, utc, req.ClientId)
+	sqlStr := fmt.Sprintf("UPDATE %s SET status=0,updated_at=%d WHERE app_id='%s' AND id='%s'", TBL_CLIENTS, utc, req.AppId, req.ClientId)
 	log.Debugln(sqlStr)
 
 	_, err := m.Query(sqlStr)
@@ -96,7 +126,7 @@ func (m *Mysql) DelOfflineMsgs(req *meta.DelOfflineMsgsRequest) (*meta.DelOfflin
 }
 
 func (m *Mysql) GetClientInfo(req *meta.GetClientInfoRequest) (*meta.GetClientInfoResponse, error) {
-	sqlStr := fmt.Sprintf("SELECT id,gate_server_ip,gate_server_port,user_id,platform,status,created_at,updated_at FROM %s WHERE user_id='%s'", TBL_CLIENTS, req.UserId)
+	sqlStr := fmt.Sprintf("SELECT id,gate_server_ip,gate_server_port,app_id,platform,status,created_at,updated_at FROM %s WHERE app_id='%s' AND id='%s'", TBL_CLIENTS, req.AppId, req.ClientId)
 	log.Debugln(sqlStr)
 	rows, err := m.Query(sqlStr)
 	if nil != err {
@@ -106,19 +136,16 @@ func (m *Mysql) GetClientInfo(req *meta.GetClientInfoRequest) (*meta.GetClientIn
 
 	ret := &meta.GetClientInfoResponse{}
 	for rows.Next() {
-		item := &meta.GetClientInfoRes{}
 		rows.Scan(
-			&item.ClientId,
-			&item.GateIp,
-			&item.GatePort,
-			&item.UserId,
-			&item.Platform,
-			&item.Status,
-			&item.CreatedAt,
-			&item.UpdatedAt,
+			&ret.ClientId,
+			&ret.GateServerIP,
+			&ret.GateServerPort,
+			&ret.AppId,
+			&ret.Platform,
+			&ret.Status,
+			&ret.CreatedAt,
+			&ret.UpdatedAt,
 		)
-		ret.UserId = item.UserId
-		ret.Items = append(ret.Items, item)
 		break //TODO
 	}
 
@@ -140,7 +167,7 @@ func (m *Mysql) GetClientInfo(req *meta.GetClientInfoRequest) (*meta.GetClientIn
 
 func (m *Mysql) UpdateClientInfo(req *meta.UpdateClientInfoRequest) (*meta.UpdateClientInfoResponse, error) {
 	utc := time.Now().Unix()
-	sqlStr := fmt.Sprintf("UPDATE %s SET id='%s',gate_server_ip='%s',gate_server_port='%s',user_id='%s',platform='%s',status=1,updated_at=%d WHERE user_id='%s'", TBL_CLIENTS, req.ClientId, req.GateIp, req.GatePort, req.UserId, req.Platform, utc, req.UserId)
+	sqlStr := fmt.Sprintf("UPDATE %s SET gate_server_ip='%s',gate_server_port='%s',platform='%s',status=1,updated_at=%d WHERE app_id='%s' AND id='%s'", TBL_CLIENTS, req.GateServerIP, req.GateServerPort, req.Platform, utc, req.AppId, req.ClientId)
 	log.Debugln(sqlStr)
 	_, err := m.Query(sqlStr)
 	if nil != err {

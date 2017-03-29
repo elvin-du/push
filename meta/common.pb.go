@@ -14,32 +14,31 @@
 	It has these top-level messages:
 		RequestHeader
 		ResponseHeader
-		UpdateClientInfoRequest
-		UpdateClientInfoResponse
-		GetClientInfoRequest
-		GetClientInfoRes
-		GetClientInfoResponse
-		DelOfflineMsgsRequest
-		DelOfflineMsgsResponse
-		GetOfflineMsgsRequest
-		GetOfflineMsgsRes
-		GetOfflineMsgsResponse
-		SaveOfflineMsgRequest
-		SaveOfflineMsgResponse
 		DataOnlineRequest
 		DataOnlineResponse
 		DataOfflineRequest
 		DataOfflineResponse
+		GetClientInfoRequest
+		GetClientInfoResponse
+		UpdateClientInfoRequest
+		UpdateClientInfoResponse
+		SaveOfflineMsgRequest
+		SaveOfflineMsgResponse
+		GetOfflineMsgsRequest
+		GetOfflineMsgsRes
+		GetOfflineMsgsResponse
+		DelOfflineMsgsRequest
+		DelOfflineMsgsResponse
 		GatePushRequest
 		GatePushResponse
 		GatePushAllRequest
 		GatePushAllResponse
 		SessionOnlineRequest
 		SessionOnlineResponse
-		SessionUpdateRequest
-		SessionUpdateResponse
 		SessionOfflineRequest
 		SessionOfflineResponse
+		SessionUpdateRequest
+		SessionUpdateResponse
 		SessionInfoRequest
 		SessionInfoResponse
 */

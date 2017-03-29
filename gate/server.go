@@ -10,6 +10,7 @@ import (
 	"push/gate/mqtt"
 	"push/gate/service/config"
 	"push/meta"
+	sessionCli "push/session/client"
 	"strings"
 	"time"
 
@@ -25,7 +26,7 @@ var (
 )
 
 type Server struct {
-	Services  map[string]*mqtt.Service //key:userid，一个用户不可以同时在多台设备上登录
+	Services  map[string]*mqtt.Service //key:appId+clientId
 	Keepalive int64                    //单位：秒
 }
 
@@ -101,11 +102,11 @@ func (s *Server) checkConnection(svc *mqtt.Service) (err error) {
 	}
 	log.Infoln("come to connect,clientid:", string(connMsg.ClientId()))
 
-	svc.UserId = string(connMsg.Username())
+	svc.AppId = string(connMsg.Username())
 	svc.ClientId = string(connMsg.ClientId())
 
 	//合法性检验
-	err = s.Auth(svc.UserId, string(connMsg.Password()))
+	err = s.Auth(svc.AppId, string(connMsg.Password()))
 	if nil != err {
 		log.Error(err)
 		return err
@@ -148,86 +149,133 @@ func (s *Server) handleConnection(conn net.Conn) {
 	//每一个新用户链接抽象为一个service，并把其保存到相应的server实例中
 	s.SetService(svc)
 
-	//一个账号同时只能有一个在线
-	s.TryKickOff(svc.ClientId, svc.UserId)
+	err = s.Online(svc)
+	if nil != err {
+		log.Errorln(err)
+		return
+	}
 
 	//发送离线消息
-	s.CheckOfflineMsg(svc.UserId)
+	s.CheckOfflineMsg(svc.AppId, svc.ClientId)
+}
+
+func (s *Server) Online(svc *mqtt.Service) error {
+	infoReq := &meta.SessionInfoRequest{}
+	infoReq.ClientId = svc.ClientId
+	infoReq.AppId = svc.AppId
+	infoRes, err := sessionCli.Info(infoReq)
+	//TODO
+	if nil != err && int32(404) != infoRes.Header.Code {
+		log.Errorln(err)
+		return err
+	}
 
 	gateIp, err := util.LocalIP()
 	if nil != err {
 		log.Error(err)
 		//TODO 关闭链接？还是重试？
 		s.DelService(svc)
-		return
+		return err
 	}
 
-	onlineReq := &meta.DataOnlineRequest{}
-	onlineReq.ClientId = svc.ClientId
-	onlineReq.UserId = svc.UserId
-	onlineReq.GateIp = gateIp
-	onlineReq.GatePort = config.RpcServicePort
-	onlineReq.Platform = svc.Platform
+	if int32(404) == infoRes.Header.Code ||
+		0 == infoRes.Status {
+		onlineReq := &meta.SessionOnlineRequest{}
+		onlineReq.ClientId = svc.ClientId
+		onlineReq.AppId = svc.AppId
+		onlineReq.GateServerIP = gateIp
+		onlineReq.GateServerPort = config.RpcServicePort
+		onlineReq.Platform = svc.Platform
+		onlineReq.CreatedAt = uint64(time.Now().Unix())
 
-	//
-	_, err = dataCli.Online(onlineReq)
+		_, err = sessionCli.Online(onlineReq)
+		if nil != err {
+			log.Error(err)
+			s.DelService(svc)
+			return err
+		}
+
+		return nil
+	}
+
+	updateReq := &meta.SessionUpdateRequest{}
+	updateReq.ClientId = svc.ClientId
+	updateReq.AppId = svc.AppId
+	updateReq.GateServerIP = gateIp
+	updateReq.GateServerPort = config.RpcServicePort
+	updateReq.Platform = svc.Platform
+	updateReq.UpdatedAt = uint64(time.Now().Unix())
+
+	_, err = sessionCli.Update(updateReq)
 	if nil != err {
 		log.Error(err)
 		s.DelService(svc)
-		return
+		return err
 	}
+
+	return nil
 }
 
-func (s *Server) CheckOfflineMsg(userId string) {
+func (s *Server) CheckOfflineMsg(appId, clientId string) {
 	req := &meta.GetOfflineMsgsRequest{}
-	req.UserId = userId
+	req.AppId = appId
+	req.ClientId = clientId
 	resp, err := dataCli.GetOfflineMsgs(req)
 	if nil != err {
 		log.Error(err)
 		return
 	}
 
-	log.Debugf("found %d offline msg for %s", len(resp.Items), userId)
-	svc := s.Services[userId]
+	log.Debugf("found %d offline msg for appId:%s,clientId:%s", len(resp.Items), appId, clientId)
+	svc := s.Services[appId+clientId]
 	for _, v2 := range resp.Items {
 		go svc.Push(uint16(v2.PacketId), []byte(v2.Content))
 	}
 }
 
-/*
-如果此用户已经在别的设备上登录，断开其链接
-*/
-func (s *Server) TryKickOff(clientId, userId string) {
-	//TODO
-}
-
 func (s *Server) SetService(svc *mqtt.Service) {
-	s.Services[svc.UserId] = svc
+	s.Services[svc.AppId+svc.ClientId] = svc
 }
 
 func (s *Server) DelService(svc *mqtt.Service) {
-	if nil != svc && nil != s.Services {
-		log.Debugln("delete service ", svc)
-		delete(s.Services, svc.UserId)
+	if nil == svc {
+		return
 	}
+
+	delete(s.Services, svc.AppId+svc.ClientId)
+
+	//	services := make([]*mqtt.Service, 0, 0)
+
+	//	svcs := s.Services[svc.UserId]
+	//	for _, service := range svcs {
+	//		if service.UserId == svc.UserId &&
+	//			service.ClientId == svc.ClientId &&
+	//			service.Platform == svc.Platform {
+	//			log.Debugln("delete service ", svc)
+	//			continue
+	//		}
+	//		services = append(services, service)
+	//	}
+
+	//	s.Services[svc.UserId] = services
 }
 
 /*
 因为需要辨别每次的链接是否是同一个手机，所以需要手机根据硬件生成一个唯一标识来当作clientId,
-clientId格式：OS系统手机硬件唯一对应标识．例如：ios123abb
+clientId格式：OS系统手机硬件唯一对应标识．例如：IOS123abb
 */
 func (s *Server) ParseClientId(clientId string) (string, error) {
-	if strings.HasPrefix(clientId, "ios") {
-		return "ios", nil
+	if strings.HasPrefix(clientId, "IOS") {
+		return "IOS", nil
 	}
 
-	return "android", nil
+	return "ANDROID", nil
 	//	log.Errorln("invalid clientId:", clientId)
 	//	return "", errors.New("clientId invalid")
 }
 
 //TODO
-func (s *Server) Auth(userId, token string) error {
+func (s *Server) Auth(appId, appSecret string) error {
 	return nil
 }
 
@@ -235,18 +283,19 @@ func (s *Server) CronEvery() {
 	for {
 		time.Sleep(time.Second * time.Duration(s.Keepalive))
 		log.Infoln("it seems", len(s.Services), "clients coneccting,begin to scaning alive")
+
 		for _, user := range s.Services {
-			log.Debugf("check clientId:%s,userId:%s is alive?", user.ClientId, user.UserId)
+			log.Debugf("check clientId:%s,appId:%s is alive?", user.ClientId, user.AppId)
 			if !user.IsAlive(s.Keepalive) {
-				log.Debugf("clientId:%s,userId:%s is not alive", user.ClientId, user.UserId)
+				log.Debugf("clientId:%s,appId:%s is not alive", user.ClientId, user.AppId)
 				s.DelService(user)
 
 				if nil != user.Conn {
 					err := user.Conn.Close()
 					if nil != err {
-						log.Errorf("close conn for:%+v,clientId:%s,userId:%s,err:%s", *user, user.ClientId, user.UserId, err.Error())
+						log.Errorf("close conn for:%+v,clientId:%s,appId:%s,err:%s", *user, user.ClientId, user.AppId, err.Error())
 					} else {
-						log.Infof("close conn for:%+v,clientId:%s,userId:%s,err:%s", *user, user.ClientId, user.UserId, err.Error())
+						log.Infof("close conn for:%+v,clientId:%s,appId:%s,err:%s", *user, user.ClientId, user.AppId, err.Error())
 					}
 				}
 

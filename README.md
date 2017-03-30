@@ -6,9 +6,10 @@
 	3. session:50003
 
 ### TCP默认端口：
+	1. gate tcp: 51001
 
-	1. gate tcp: 60001
-	2. rest_api http: 60002
+### HTTP默认端口：
+	1. rest_api http: 52001
 
 ### 协议
 

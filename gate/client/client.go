@@ -7,12 +7,30 @@ package client
 import (
 	"hscore/log"
 	"push/common/client/service"
+	dataCli "push/data/client"
 	"push/meta"
 
 	"golang.org/x/net/context"
 )
 
-func Push(ip, port string, req *meta.GatePushRequest) (*meta.GatePushResponse, error) {
+func Push(req *meta.GatePushRequest) (*meta.GatePushResponse, error) {
+	resp, err := dataCli.GetClientInfo(&meta.GetClientInfoRequest{ClientId: req.ClientId, AppId: req.AppId})
+	if nil != err {
+		log.Errorln(err)
+		return nil, err
+	}
+	log.Debugf("gate info:%+v", resp)
+
+	if "IOS" == resp.Platform {
+		//TODO
+		return nil, nil
+	}
+	//TODO req.PacketId需要填写
+
+	return doPush(resp.GateServerIP, resp.GateServerPort, req)
+}
+
+func doPush(ip, port string, req *meta.GatePushRequest) (*meta.GatePushResponse, error) {
 	cli, err := service.GateClient(ip, port)
 	if nil != err {
 		log.Error(err)

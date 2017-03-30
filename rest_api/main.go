@@ -1,13 +1,10 @@
 package main
 
 import (
-	"hscore/log"
+	"push/rest_api/service"
 )
 
-func init() {
-	log.SetFlags(log.Lshortfile)
-}
-
 func main() {
+	service.Start()
 	StartHTTP()
 }

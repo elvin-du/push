@@ -13,11 +13,12 @@ service Gate{
 
 message GatePushRequest{
 	RequestHeader header = 1;
-	string UserId = 2;
-	uint32 PacketId = 3;
-	string Content = 4;
-	int32 Kind = 5;
-	string extra = 6;
+	string AppId = 2;
+	string ClientId = 3;
+	uint32 PacketId = 4;
+	string Content = 5;
+	int32 Kind = 6;
+	string Extra = 7;
 }
 
 message GatePushResponse{
@@ -26,10 +27,11 @@ message GatePushResponse{
 
 message GatePushAllRequest{
 	RequestHeader header = 1;
-	string Content = 2;
-	int32 Kind = 3;
-	string extra = 4;
-
+	string AppId = 2;
+	uint32 PacketId = 3;
+	string Content = 4;
+	int32 Kind = 5;
+	string Extra = 6;
 }
 
 message GatePushAllResponse{

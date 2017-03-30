@@ -1,0 +1,15 @@
+NSQLOOUPD_ADDRS
+
+#log setup
+log:
+  #can set output to file, others will be outputed to std
+  output: std
+  name: log.txt
+  #level can be: all, debug, info,, warn, error, fatal
+  level: all
+  enable_line: true
+
+nsq:
+  lookupd:
+    addrs:
+      - 127.0.0.1:4161

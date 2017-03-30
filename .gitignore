@@ -1,5 +1,11 @@
 rest_api/rest_api
+rest_api/log.txt
 session/session
+session/log.txt
 data/data
+data/log.txt
 gate/gate
+gate/log.txt
+notifer/notifer
+notifer/log.txt
 test/test

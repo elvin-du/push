@@ -2,14 +2,11 @@ package main
 
 import (
 	"hscore/log"
-	"push/notifer/nsq/consumer"
+	"push/notifer/service/nsq/consumer"
 )
 
-func init() {
-	log.SetFlags(log.Lshortfile)
-}
-
 func main() {
+	log.Infoln("Notifer Runing!")
 	consumer.NewNsqConsumer(
 		&SingleMsgHandler{},
 		&BroadcastMsgHandler{},

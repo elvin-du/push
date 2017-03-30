@@ -18,7 +18,7 @@ func (*Gate) Push(ctx context.Context, req *meta.GatePushRequest) (*meta.GatePus
 	log.Debugln(*req)
 	resp := &meta.GatePushResponse{}
 
-	svc := defaultServer.Services[req.UserId]
+	svc := defaultServer.Services[req.AppId+req.ClientId]
 	err := svc.Push(uint16(req.PacketId), []byte(req.Content))
 	if nil != err {
 		return resp, err

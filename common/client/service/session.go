@@ -7,9 +7,9 @@ import (
 )
 
 const (
-	SESSION_MAX_POOL_SIZE  = 10
+	SESSION_MAX_POOL_SIZE = 10
 	SESSION_SERVER_NAME    = "SESSION"
-	SESSION_SERVER_VERSION = "1.0"
+	SESSION_SERVER_VERSION = "1.0.0"
 )
 
 type SessionServiceClientManager struct {
@@ -17,7 +17,7 @@ type SessionServiceClientManager struct {
 }
 
 type SessionServiceClient struct {
-	SessionClient    meta.SessionClient
+	SessionClient meta.SessionClient
 	ServiceClient *ServiceClient
 }
 
@@ -36,9 +36,11 @@ func SessionPut(cli *SessionServiceClient) error {
 func (e *SessionServiceClientManager) GetClient() (*SessionServiceClient, error) {
 	select {
 	case cli := <-e.Pool:
+		log.Infoln("got one sessioin client from pool")
 		return cli, nil
 	default:
-		srvCli, err := GetServieClient(util.APP_NAME, SESSION_SERVER_NAME, SESSION_SERVER_VERSION)
+		log.Infoln("pool is empty,new one session client")
+		srvCli, err := GetServiceClient(util.APP_NAME, SESSION_SERVER_NAME, SESSION_SERVER_VERSION)
 		if nil != err {
 			log.Errorln(err)
 			return nil, err
@@ -47,7 +49,7 @@ func (e *SessionServiceClientManager) GetClient() (*SessionServiceClient, error)
 		sessionCli := meta.NewSessionClient(srvCli.Client)
 
 		return &SessionServiceClient{
-			SessionClient:    sessionCli,
+			SessionClient: sessionCli,
 			ServiceClient: srvCli,
 		}, nil
 	}

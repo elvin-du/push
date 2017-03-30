@@ -15,7 +15,7 @@ type ServiceClient struct {
 	ServerVersion string
 }
 
-func GetServieClient(appName, srvName, srvVer string) (*ServiceClient, error) {
+func GetServiceClient(appName, srvName, srvVer string) (*ServiceClient, error) {
 	etcdCli, err := etcd.GetClient()
 	if nil != err {
 		log.Errorln(err)
@@ -28,10 +28,10 @@ func GetServieClient(appName, srvName, srvVer string) (*ServiceClient, error) {
 		return nil, err
 	}
 
-	return NewServieClient(ip, port, appName, srvName, srvName)
+	return NewServiceClient(ip, port, appName, srvName, srvName)
 }
 
-func NewServieClient(ip, port, appName, srvName, srvVer string) (*ServiceClient, error) {
+func NewServiceClient(ip, port, appName, srvName, srvVer string) (*ServiceClient, error) {
 	target := ip + port
 	cliConn, err := grpc.Dial(target, grpc.WithInsecure())
 	if nil != err {

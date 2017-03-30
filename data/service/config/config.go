@@ -7,8 +7,6 @@ import (
 )
 
 var (
-	RpcServiceName    string
-	RpcServiceVersion string
 	RpcServicePort    string
 
 	MYSQL_DSN  string
@@ -28,17 +26,7 @@ func loadConfig() {
 }
 
 func ParseConfig() {
-	err := config.Get("service:rpc:name", &RpcServiceName)
-	if nil != err {
-		log.Fatal(err)
-	}
-
-	err = config.Get("service:rpc:version", &RpcServiceVersion)
-	if nil != err {
-		log.Fatal(err)
-	}
-
-	err = config.Get("service:rpc:port", &RpcServicePort)
+	err := config.Get("service:rpc:port", &RpcServicePort)
 	if nil != err {
 		log.Fatal(err)
 	}

@@ -9,7 +9,6 @@ log:
 
 service:
   rpc:
-    name: "DATA"
     version: "1.0"
     port: ":50001"
 

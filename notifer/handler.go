@@ -56,7 +56,7 @@ func (b *SingleMsgHandler) Process(i interface{}) error {
 
 	_, err = gateCli.Push(
 		&meta.GatePushRequest{
-			AppId:    data.AppId,
+			Header:   &meta.RequestHeader{AppId: data.AppId},
 			ClientId: data.ClientId,
 			Content:  data.Content,
 			Kind:     data.Kind,

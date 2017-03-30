@@ -18,6 +18,11 @@ import (
 	"google.golang.org/grpc"
 )
 
+const (
+	RPC_SERVICE_NAME = "GATE"
+	RPC_SERVICE_VERSION = "1.0.0"
+)
+
 var (
 	defaultServer = &Server{
 		Services:  make(map[string]*mqtt.Service),
@@ -39,8 +44,8 @@ func (s *Server) StartRPCServer() {
 
 	server.NewRPCServer(
 		util.APP_NAME,
-		config.RpcServiceName,
-		config.RpcServiceVersion,
+		RPC_SERVICE_NAME,
+		RPC_SERVICE_VERSION,
 		config.RpcServicePort,
 		nil,
 		util.HEARTBEAT_INTERNAL,
@@ -162,8 +167,9 @@ func (s *Server) handleConnection(conn net.Conn) {
 func (s *Server) Online(svc *mqtt.Service) error {
 	infoReq := &meta.SessionInfoRequest{}
 	infoReq.ClientId = svc.ClientId
-	infoReq.AppId = svc.AppId
+	infoReq.Header.AppId = svc.AppId
 	infoRes, err := sessionCli.Info(infoReq)
+	log.Debugf("infoRes:%+v", *infoRes)
 	//TODO
 	if nil != err && int32(404) != infoRes.Header.Code {
 		log.Errorln(err)
@@ -182,7 +188,7 @@ func (s *Server) Online(svc *mqtt.Service) error {
 		0 == infoRes.Status {
 		onlineReq := &meta.SessionOnlineRequest{}
 		onlineReq.ClientId = svc.ClientId
-		onlineReq.AppId = svc.AppId
+		onlineReq.Header.AppId = svc.AppId
 		onlineReq.GateServerIP = gateIp
 		onlineReq.GateServerPort = config.RpcServicePort
 		onlineReq.Platform = svc.Platform
@@ -200,7 +206,7 @@ func (s *Server) Online(svc *mqtt.Service) error {
 
 	updateReq := &meta.SessionUpdateRequest{}
 	updateReq.ClientId = svc.ClientId
-	updateReq.AppId = svc.AppId
+	updateReq.Header.AppId = svc.AppId
 	updateReq.GateServerIP = gateIp
 	updateReq.GateServerPort = config.RpcServicePort
 	updateReq.Platform = svc.Platform
@@ -218,7 +224,7 @@ func (s *Server) Online(svc *mqtt.Service) error {
 
 func (s *Server) CheckOfflineMsg(appId, clientId string) {
 	req := &meta.GetOfflineMsgsRequest{}
-	req.AppId = appId
+	req.Header.AppId = appId
 	req.ClientId = clientId
 	resp, err := dataCli.GetOfflineMsgs(req)
 	if nil != err {

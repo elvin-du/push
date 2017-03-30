@@ -19,34 +19,31 @@ service Data{
 }
 
 message DataOnlineRequest{
-	RequestHeader header = 1;
+	RequestHeader Header = 1;
 	string GateServerIP = 2;
 	string GateServerPort = 3;
-	string AppId = 4;
-	string ClientId = 5;
-	string Platform = 6;
-	uint64 CreatedAt = 7;
+	string ClientId = 4;
+	string Platform = 5;
+	uint64 CreatedAt = 6;
 }
 message DataOnlineResponse{
-	ResponseHeader header = 1;
+	ResponseHeader Header = 1;
 }
 
 message DataOfflineRequest{
-	RequestHeader header = 1;
-	string AppId = 2;
-	string ClientId = 3;
+	RequestHeader Header = 1;
+	string ClientId = 2;
 }
 message DataOfflineResponse{
-	ResponseHeader header = 1;
+	ResponseHeader Header = 1;
 }
 
 message GetClientInfoRequest{
-	RequestHeader header = 1;
-	string AppId = 2;
-	string ClientId = 3;
+	RequestHeader Header = 1;
+	string ClientId = 2;
 }
 message GetClientInfoResponse{
-	ResponseHeader header = 1;
+	ResponseHeader Header = 1;
 	string GateServerIP = 2;
 	string GateServerPort = 3;
 	string AppId = 4;
@@ -58,36 +55,33 @@ message GetClientInfoResponse{
 }
 
 message UpdateClientInfoRequest{
-	RequestHeader header = 1;
+	RequestHeader Header = 1;
 	string GateServerIP = 2;
 	string GateServerPort = 3;
-	string AppId = 4;
-	string ClientId = 5;
-	string Platform = 6;
-	uint64 UpdatedAt = 7;
+	string ClientId = 4;
+	string Platform = 5;
+	uint64 UpdatedAt = 6;
 }
 message UpdateClientInfoResponse{
-	RequestHeader header = 1;
+	ResponseHeader Header = 1;
 }
 
 message SaveOfflineMsgRequest{
-	RequestHeader header = 1;
+	RequestHeader Header = 1;
 	string ClientId = 2;
-	string AppId = 3;
-	uint32 PacketId = 4;
-	uint32 Kind = 5;
-	string Content = 6;
-	string Extra = 7;
-	uint64 CreatedAt = 8;
+	uint32 PacketId = 3;
+	uint32 Kind = 4;
+	string Content = 5;
+	string Extra = 6;
+	uint64 CreatedAt = 7;
 }
 message SaveOfflineMsgResponse{
-	ResponseHeader header = 1;
+	ResponseHeader Header = 1;
 }
 
 message GetOfflineMsgsRequest{
-	RequestHeader header = 1;
+	RequestHeader Header = 1;
 	string ClientId = 2;
-	string AppId = 3;
 }
 message GetOfflineMsgsRes{
 	string MsgId = 1;
@@ -100,16 +94,16 @@ message GetOfflineMsgsRes{
 	uint64 CreatedAt = 8;
 }
 message GetOfflineMsgsResponse{
-	ResponseHeader header = 1;
+	ResponseHeader Header = 1;
 	string ClientId = 2;
 	string AppId = 3;
 	repeated GetOfflineMsgsRes Items = 4;
 }
 
 message DelOfflineMsgsRequest{
-	RequestHeader header = 1;
+	RequestHeader Header = 1;
 	repeated string MsgId = 2;
 }
 message DelOfflineMsgsResponse{
-	ResponseHeader header = 1;
+	ResponseHeader Header = 1;
 }

@@ -9,7 +9,7 @@ import (
 const (
 	GATE_MAX_POOL_SIZE  = 10
 	GATE_SERVER_NAME    = "GATE"
-	GATE_SERVER_VERSION = "1.0"
+	GATE_SERVER_VERSION = "1.0.0"
 )
 
 type GateServiceClientManager struct {
@@ -38,7 +38,7 @@ func (e *GateServiceClientManager) Client(ip, port string) (*GateServiceClient, 
 	case cli := <-e.Pool:
 		return cli, nil
 	default:
-		srvCli, err := NewServieClient(ip, port, util.APP_NAME, GATE_SERVER_NAME, GATE_SERVER_VERSION)
+		srvCli, err := NewServiceClient(ip, port, util.APP_NAME, GATE_SERVER_NAME, GATE_SERVER_VERSION)
 		if nil != err {
 			log.Errorln(err)
 			return nil, err

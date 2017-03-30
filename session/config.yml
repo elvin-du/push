@@ -9,6 +9,4 @@ log:
 
 service:
   rpc:
-    name: "SESSION"
-    version: "1.0"
     port: ":50003"

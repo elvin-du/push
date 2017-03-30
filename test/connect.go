@@ -13,7 +13,7 @@ var (
 
 func Connect() error {
 	var err error = nil
-	conn, err = net.Dial("tcp", ":60001")
+	conn, err = net.Dial("tcp", ":51001")
 	if nil != err {
 		log.Println(err)
 		return err
@@ -26,13 +26,15 @@ func Connect() error {
 		return err
 	}
 
-	err = connMsg.SetClientId([]byte("ios123456789123456789123456789123456789123456789"))
+	err = connMsg.SetClientId([]byte("IOS123"))
 	if nil != err {
 		log.Println(err)
 		return err
 	}
 
 	connMsg.SetCleanSession(false)
+	connMsg.SetUsername([]byte("appid123"))
+	connMsg.SetPassword([]byte("app_secret123"))
 	err = Send(connMsg)
 	if nil != err {
 		log.Println(err)

@@ -14,47 +14,43 @@ service Session{
 }
 
 message SessionOnlineRequest{
-	RequestHeader header = 1;
+	RequestHeader Header = 1;
 	string GateServerIP = 2;
 	string GateServerPort = 3;
-	string AppId = 4;
-	string ClientId = 5;
-	string Platform = 6;
-	uint64 CreatedAt = 7;
+	string ClientId = 4;
+	string Platform = 5;
+	uint64 CreatedAt = 6;
 }
 message SessionOnlineResponse{
-	ResponseHeader header = 1;
+	ResponseHeader Header = 1;
 }
 
 message SessionOfflineRequest{
-	RequestHeader header = 1;
-	string AppId = 2;
-	string ClientId = 3;
+	RequestHeader Header = 1;
+	string ClientId = 2;
 }
 message SessionOfflineResponse{
-	ResponseHeader header = 1;
+	ResponseHeader Header = 1;
 }
 
 message SessionUpdateRequest{
-	RequestHeader header = 1;
+	RequestHeader Header = 1;
 	string GateServerIP = 2;
 	string GateServerPort = 3;
-	string AppId = 4;
-	string ClientId = 5;
-	string Platform = 6;
-	uint64 UpdatedAt = 7;
+	string ClientId = 4;
+	string Platform = 5;
+	uint64 UpdatedAt = 6;
 }
 message SessionUpdateResponse{
-	ResponseHeader header = 1;
+	ResponseHeader Header = 1;
 }
 
 message SessionInfoRequest{
-	RequestHeader header = 1;
-	string AppId = 2;
-	string ClientId = 3;
+	RequestHeader Header = 1;
+	string ClientId = 2;
 }
 message SessionInfoResponse{
-	ResponseHeader header = 1;
+	ResponseHeader Header = 1;
 	string GateServerIP = 2;
 	string GateServerPort = 3;
 	string AppId = 4;

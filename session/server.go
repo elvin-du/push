@@ -3,7 +3,7 @@ package main
 import (
 	"push/common/server"
 	"push/common/util"
-	"push/gate/service/config"
+	"push/session/service/config"
 
 	"push/meta"
 

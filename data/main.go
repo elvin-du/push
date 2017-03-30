@@ -5,7 +5,7 @@ DATA Server提供一切对数据持久化的方法
 package main
 
 import (
-	"push/gate/service"
+	"push/data/service"
 )
 
 func main() {

@@ -3,7 +3,7 @@ package main
 import (
 	"push/common/server"
 	"push/common/util"
-	"push/gate/service/config"
+	"push/data/service/config"
 	"push/meta"
 
 	"google.golang.org/grpc"

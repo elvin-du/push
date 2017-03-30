@@ -3,8 +3,8 @@ package dal
 import (
 	"database/sql"
 	"fmt"
-	"hscore/config"
 	"hscore/log"
+	"push/data/service/config"
 	"push/meta"
 	"time"
 
@@ -20,30 +20,13 @@ type Mysql struct {
 	DB *sql.DB
 }
 
-var (
-	MYSQL_DSN  = ""
-	MYSQL_POOL uint32
-)
-
-func init() {
-	err := config.Get("db:mysql:dns", &MYSQL_DSN)
-	if nil != err {
-		log.Fatalln(err)
-	}
-
-	err = config.Get("db:mysql:pool", &MYSQL_POOL)
-	if nil != err {
-		log.Fatalln(err)
-	}
-}
-
 func openMysql() (*sql.DB, error) {
-	db, err := sql.Open("mysql", MYSQL_DSN)
+	db, err := sql.Open("mysql", config.MYSQL_DSN)
 	if nil != err {
 		log.Errorln(err)
 		return nil, err
 	}
-	db.SetMaxOpenConns(int(MYSQL_POOL))
+	db.SetMaxOpenConns(int(config.MYSQL_POOL))
 
 	return db, nil
 }

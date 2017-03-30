@@ -2,7 +2,7 @@ package service
 
 import (
 	"push/common/log"
-	"push/gate/service/config"
+	"push/session/service/config"
 )
 
 func Start() {

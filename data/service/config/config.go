@@ -10,6 +10,9 @@ var (
 	RpcServiceName    string
 	RpcServiceVersion string
 	RpcServicePort    string
+
+	MYSQL_DSN  string
+	MYSQL_POOL int
 )
 
 func Init() {
@@ -38,5 +41,15 @@ func ParseConfig() {
 	err = config.Get("service:rpc:port", &RpcServicePort)
 	if nil != err {
 		log.Fatal(err)
+	}
+
+	err = config.Get("db:mysql:dsn", &MYSQL_DSN)
+	if nil != err {
+		log.Fatalln(err)
+	}
+
+	err = config.Get("db:mysql:pool", &MYSQL_POOL)
+	if nil != err {
+		log.Fatalln(err)
 	}
 }

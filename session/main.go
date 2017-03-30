@@ -1,7 +1,7 @@
 package main
 
 import (
-	"push/gate/service"
+	"push/session/service"
 )
 
 func main() {

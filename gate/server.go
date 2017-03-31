@@ -19,7 +19,7 @@ import (
 )
 
 const (
-	RPC_SERVICE_NAME = "GATE"
+	RPC_SERVICE_NAME    = "GATE"
 	RPC_SERVICE_VERSION = "1.0.0"
 )
 
@@ -46,7 +46,8 @@ func (s *Server) StartRPCServer() {
 		util.APP_NAME,
 		RPC_SERVICE_NAME,
 		RPC_SERVICE_VERSION,
-		config.RpcServicePort,
+		config.SERVER_IP,
+		config.RPC_SERVICE_PORT,
 		nil,
 		util.HEARTBEAT_INTERNAL,
 		srv,
@@ -55,13 +56,13 @@ func (s *Server) StartRPCServer() {
 
 //开始监听客户端的连接
 func (s *Server) StartTcpServer() {
-	l, err := net.Listen("tcp", config.TcpPort)
+	l, err := net.Listen("tcp", config.TCP_PORT)
 	if err != nil {
 		log.Fatalf("failed to listen: %v", err)
 	}
 	defer l.Close()
 
-	log.Infoln("gate tcp listening at:", config.TcpPort)
+	log.Infoln("gate tcp listening at:", config.TCP_PORT)
 
 	//开始监测所有连接本server的客户端的连接状况
 	go s.CronEvery()
@@ -176,21 +177,13 @@ func (s *Server) Online(svc *mqtt.Service) error {
 		return err
 	}
 
-	gateIp, err := util.LocalIP()
-	if nil != err {
-		log.Error(err)
-		//TODO 关闭链接？还是重试？
-		s.DelService(svc)
-		return err
-	}
-
 	if int32(404) == infoRes.Header.Code ||
 		0 == infoRes.Status {
 		onlineReq := &meta.SessionOnlineRequest{}
 		onlineReq.ClientId = svc.ClientId
 		onlineReq.Header.AppId = svc.AppId
-		onlineReq.GateServerIP = gateIp
-		onlineReq.GateServerPort = config.RpcServicePort
+		onlineReq.GateServerIP = config.SERVER_IP
+		onlineReq.GateServerPort = config.RPC_SERVICE_PORT
 		onlineReq.Platform = svc.Platform
 		onlineReq.CreatedAt = uint64(time.Now().Unix())
 
@@ -207,8 +200,8 @@ func (s *Server) Online(svc *mqtt.Service) error {
 	updateReq := &meta.SessionUpdateRequest{}
 	updateReq.ClientId = svc.ClientId
 	updateReq.Header.AppId = svc.AppId
-	updateReq.GateServerIP = gateIp
-	updateReq.GateServerPort = config.RpcServicePort
+	updateReq.GateServerIP = config.SERVER_IP
+	updateReq.GateServerPort = config.RPC_SERVICE_PORT
 	updateReq.Platform = svc.Platform
 	updateReq.UpdatedAt = uint64(time.Now().Unix())
 

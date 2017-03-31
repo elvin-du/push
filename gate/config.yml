@@ -8,6 +8,7 @@ log:
   enable_line: true
 
 service:
+  externalip: true
   rpc:
     port: ":50002"
   tcp:

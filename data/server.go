@@ -10,7 +10,7 @@ import (
 )
 
 const (
-	RPC_SERVICE_NAME = "DATA"
+	RPC_SERVICE_NAME    = "DATA"
 	RPC_SERVICE_VERSION = "1.0.0"
 )
 
@@ -22,7 +22,8 @@ func StartRPCServer() {
 		util.APP_NAME,
 		RPC_SERVICE_NAME,
 		RPC_SERVICE_VERSION,
-		config.RpcServicePort,
+		config.SERVER_IP,
+		config.RPC_SERVICE_PORT,
 		nil,
 		util.HEARTBEAT_INTERNAL,
 		srv,

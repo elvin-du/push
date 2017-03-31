@@ -4,11 +4,15 @@ import (
 	"hscore/config"
 	"hscore/log"
 	"hscore/util"
+	pushUtil "push/common/util"
 )
 
 var (
-	RpcServicePort    string
-	TcpPort           string
+	RPC_SERVICE_PORT string
+
+	SERVER_IP string
+
+	TCP_PORT string
 )
 
 func Init() {
@@ -24,12 +28,23 @@ func loadConfig() {
 }
 
 func ParseConfig() {
-	err := config.Get("service:rpc:port", &RpcServicePort)
+	err := config.Get("service:rpc:port", &RPC_SERVICE_PORT)
 	if nil != err {
 		log.Fatal(err)
 	}
 
-	err = config.Get("service:tcp:port", &TcpPort)
+	externalIp := false
+	err = config.Get("service:externalip", &externalIp)
+	if nil != err {
+		log.Fatal(err)
+	}
+	if externalIp {
+		SERVER_IP = pushUtil.ExternalIP
+	} else {
+		SERVER_IP = pushUtil.InternalIP
+	}
+
+	err = config.Get("service:tcp:port", &TCP_PORT)
 	if nil != err {
 		log.Fatal(err)
 	}

@@ -4,7 +4,6 @@ import (
 	"hscore/log"
 	"net"
 	"push/common/client/etcd"
-	"push/common/util"
 	"time"
 
 	"google.golang.org/grpc"
@@ -21,13 +20,7 @@ type RPCServer struct {
 	Server            *grpc.Server
 }
 
-func NewRPCServer(app, serviceName, serviceVer, port string, meta map[string]string, heartbeat time.Duration, server *grpc.Server) *RPCServer {
-	ip, err := util.LocalIP()
-	if nil != err {
-		log.Fatal(err)
-		//TODO
-	}
-
+func NewRPCServer(app, serviceName, serviceVer, ip, port string, meta map[string]string, heartbeat time.Duration, server *grpc.Server) *RPCServer {
 	return &RPCServer{
 		APPName:           app,
 		ServiceName:       serviceName,

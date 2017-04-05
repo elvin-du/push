@@ -1,13 +1,33 @@
 package dal
 
 import (
+	"push/data/service/config"
 	"push/meta"
 )
 
 var (
-	DefaultMysqlClient = &Client{dal: NewMysql(), provider: "mysql"}
 	DefaultRedisClient = &Client{dal: &Redis{}, provider: "redis"}
 )
+
+var (
+	DefaultClientManager ClientManager
+)
+
+type ClientManager map[string]*Client
+
+func (*ClientManager) GetMysql(name string) *Client {
+	cli := DefaultClientManager[name]
+	if nil != cli {
+		return cli
+	}
+
+	cli = &Client{dal: NewMysql(config.MysqlSource[name]), provider: "mysql"}
+	return cli
+}
+
+func (*ClientManager) GetRedis(name string) *Client {
+	return DefaultRedisClient
+}
 
 //只是一个包装器，可以选择不同的持久化工具，例如：mysql,redis
 type Client struct {

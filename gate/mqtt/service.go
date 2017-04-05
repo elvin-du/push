@@ -12,7 +12,7 @@ var (
 type Service struct {
 	Conn         net.Conn
 	ClientId     string
-	AppId        string
+	AppName      string
 	Platform     string
 	readTimeout  time.Duration
 	writeTimeout time.Duration

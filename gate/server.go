@@ -1,12 +1,12 @@
 package main
 
 import (
-	//	"errors"
 	"hscore/log"
 	"net"
 	"push/common/server"
 	"push/common/util"
 	dataCli "push/data/client"
+	. "push/errors"
 	"push/gate/mqtt"
 	"push/gate/service/config"
 	"push/meta"
@@ -31,7 +31,7 @@ var (
 )
 
 type Server struct {
-	Services  map[string]*mqtt.Service //key:appId+clientId
+	Services  map[string]*mqtt.Service //key:AppName+clientId
 	Keepalive int64                    //单位：秒
 }
 
@@ -61,8 +61,6 @@ func (s *Server) StartTcpServer() {
 		log.Fatalf("failed to listen: %v", err)
 	}
 	defer l.Close()
-
-	log.Infoln("gate tcp listening at:", config.TCP_PORT)
 
 	//开始监测所有连接本server的客户端的连接状况
 	go s.CronEvery()
@@ -106,13 +104,13 @@ func (s *Server) checkConnection(svc *mqtt.Service) (err error) {
 		log.Error(err)
 		return err
 	}
-	log.Infoln("come to connect,clientid:", string(connMsg.ClientId()))
+	log.Debugf("come to connect,clientid:", string(connMsg.ClientId()))
 
-	svc.AppId = string(connMsg.Username())
+	svc.AppName = string(connMsg.Username())
 	svc.ClientId = string(connMsg.ClientId())
 
 	//合法性检验
-	err = s.Auth(svc.AppId, string(connMsg.Password()))
+	err = s.Auth(svc.AppName, string(connMsg.Password()))
 	if nil != err {
 		log.Error(err)
 		return err
@@ -162,26 +160,27 @@ func (s *Server) handleConnection(conn net.Conn) {
 	}
 
 	//发送离线消息
-	s.CheckOfflineMsg(svc.AppId, svc.ClientId)
+	s.CheckOfflineMsg(svc.AppName, svc.ClientId)
 }
 
 func (s *Server) Online(svc *mqtt.Service) error {
 	infoReq := &meta.SessionInfoRequest{}
 	infoReq.ClientId = svc.ClientId
-	infoReq.Header.AppId = svc.AppId
+	infoReq.Header = &meta.RequestHeader{
+		AppName: svc.AppName,
+	}
 	infoRes, err := sessionCli.Info(infoReq)
-	log.Debugf("infoRes:%+v", *infoRes)
-	//TODO
-	if nil != err && int32(404) != infoRes.Header.Code {
+	log.Debugf("infoRes:%+v", infoRes)
+	if nil != err && CLIENT_NOT_FOUND != err {
 		log.Errorln(err)
 		return err
 	}
 
-	if int32(404) == infoRes.Header.Code ||
-		0 == infoRes.Status {
+	//从没有登录过
+	if CLIENT_NOT_FOUND == err {
 		onlineReq := &meta.SessionOnlineRequest{}
 		onlineReq.ClientId = svc.ClientId
-		onlineReq.Header.AppId = svc.AppId
+		onlineReq.Header.AppName = svc.AppName
 		onlineReq.GateServerIP = config.SERVER_IP
 		onlineReq.GateServerPort = config.RPC_SERVICE_PORT
 		onlineReq.Platform = svc.Platform
@@ -199,7 +198,7 @@ func (s *Server) Online(svc *mqtt.Service) error {
 
 	updateReq := &meta.SessionUpdateRequest{}
 	updateReq.ClientId = svc.ClientId
-	updateReq.Header.AppId = svc.AppId
+	updateReq.Header.AppName = svc.AppName
 	updateReq.GateServerIP = config.SERVER_IP
 	updateReq.GateServerPort = config.RPC_SERVICE_PORT
 	updateReq.Platform = svc.Platform
@@ -215,9 +214,9 @@ func (s *Server) Online(svc *mqtt.Service) error {
 	return nil
 }
 
-func (s *Server) CheckOfflineMsg(appId, clientId string) {
+func (s *Server) CheckOfflineMsg(AppName, clientId string) {
 	req := &meta.GetOfflineMsgsRequest{}
-	req.Header.AppId = appId
+	req.Header.AppName = AppName
 	req.ClientId = clientId
 	resp, err := dataCli.GetOfflineMsgs(req)
 	if nil != err {
@@ -225,15 +224,15 @@ func (s *Server) CheckOfflineMsg(appId, clientId string) {
 		return
 	}
 
-	log.Debugf("found %d offline msg for appId:%s,clientId:%s", len(resp.Items), appId, clientId)
-	svc := s.Services[appId+clientId]
+	log.Debugf("found %d offline msg for AppName:%s,clientId:%s", len(resp.Items), AppName, clientId)
+	svc := s.Services[AppName+clientId]
 	for _, v2 := range resp.Items {
 		go svc.Push(uint16(v2.PacketId), []byte(v2.Content))
 	}
 }
 
 func (s *Server) SetService(svc *mqtt.Service) {
-	s.Services[svc.AppId+svc.ClientId] = svc
+	s.Services[svc.AppName+svc.ClientId] = svc
 }
 
 func (s *Server) DelService(svc *mqtt.Service) {
@@ -241,7 +240,7 @@ func (s *Server) DelService(svc *mqtt.Service) {
 		return
 	}
 
-	delete(s.Services, svc.AppId+svc.ClientId)
+	delete(s.Services, svc.AppName+svc.ClientId)
 
 	//	services := make([]*mqtt.Service, 0, 0)
 
@@ -274,7 +273,7 @@ func (s *Server) ParseClientId(clientId string) (string, error) {
 }
 
 //TODO
-func (s *Server) Auth(appId, appSecret string) error {
+func (s *Server) Auth(AppName, appSecret string) error {
 	return nil
 }
 
@@ -284,17 +283,17 @@ func (s *Server) CronEvery() {
 		log.Infoln("it seems", len(s.Services), "clients coneccting,begin to scaning alive")
 
 		for _, user := range s.Services {
-			log.Debugf("check clientId:%s,appId:%s is alive?", user.ClientId, user.AppId)
+			log.Debugf("check clientId:%s,AppName:%s is alive?", user.ClientId, user.AppName)
 			if !user.IsAlive(s.Keepalive) {
-				log.Debugf("clientId:%s,appId:%s is not alive", user.ClientId, user.AppId)
+				log.Debugf("clientId:%s,AppName:%s is not alive", user.ClientId, user.AppName)
 				s.DelService(user)
 
 				if nil != user.Conn {
 					err := user.Conn.Close()
 					if nil != err {
-						log.Errorf("close conn for:%+v,clientId:%s,appId:%s,err:%s", *user, user.ClientId, user.AppId, err.Error())
+						log.Errorf("close conn for:%+v,clientId:%s,AppName:%s,err:%s", *user, user.ClientId, user.AppName, err.Error())
 					} else {
-						log.Infof("close conn for:%+v,clientId:%s,appId:%s,err:%s", *user, user.ClientId, user.AppId, err.Error())
+						log.Infof("close conn for:%+v,clientId:%s,AppName:%s,err:%s", *user, user.ClientId, user.AppName, err.Error())
 					}
 				}
 

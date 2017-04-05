@@ -46,12 +46,11 @@ message GetClientInfoResponse{
 	ResponseHeader Header = 1;
 	string GateServerIP = 2;
 	string GateServerPort = 3;
-	string AppId = 4;
-	string ClientId = 5;
-	string Platform = 6;
-	uint64 Status = 7;
-	uint64 CreatedAt = 8;
-	uint64 UpdatedAt=9;
+	string ClientId = 4;
+	string Platform = 5;
+	uint64 Status = 6;
+	uint64 CreatedAt = 7;
+	uint64 UpdatedAt=8;
 }
 
 message UpdateClientInfoRequest{
@@ -86,18 +85,16 @@ message GetOfflineMsgsRequest{
 message GetOfflineMsgsRes{
 	string MsgId = 1;
 	string ClientId = 2;
-	string AppId = 3;
-	uint32 PacketId = 4;
-	uint32 Kind = 5;
-	string Content = 6;
-	string Extra = 7;
-	uint64 CreatedAt = 8;
+	uint32 PacketId = 3;
+	uint32 Kind = 4;
+	string Content = 5;
+	string Extra = 6;
+	uint64 CreatedAt = 7;
 }
 message GetOfflineMsgsResponse{
 	ResponseHeader Header = 1;
 	string ClientId = 2;
-	string AppId = 3;
-	repeated GetOfflineMsgsRes Items = 4;
+	repeated GetOfflineMsgsRes Items = 3;
 }
 
 message DelOfflineMsgsRequest{

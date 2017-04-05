@@ -80,12 +80,13 @@ func (*Session) Info(ctx context.Context, req *meta.SessionInfoRequest) (*meta.S
 	resp, err := dataCli.GetClientInfo(infoReq)
 	if nil != err {
 		log.Errorln(err)
-		return nil, err
+		return &meta.SessionInfoResponse{
+			Header: resp.Header,
+		}, err
 	}
 
 	return &meta.SessionInfoResponse{
 		Header:         resp.Header,
-		AppId:          resp.AppId,
 		ClientId:       resp.ClientId,
 		CreatedAt:      resp.CreatedAt,
 		GateServerIP:   resp.GateServerIP,

@@ -71,12 +71,11 @@ func (s *Service) Send(data []byte) error {
 		s.Conn.SetWriteDeadline(time.Time{})
 	}
 
-	n, err := s.Conn.Write(data)
+	_, err := s.Conn.Write(data)
 	if nil != err {
 		log.Error(err)
 		return err
 	}
 
-	log.Debugln("wrote number:", n)
 	return nil
 }

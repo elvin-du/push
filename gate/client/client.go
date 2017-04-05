@@ -17,7 +17,7 @@ func Push(req *meta.GatePushRequest) (*meta.GatePushResponse, error) {
 	resp, err := dataCli.GetClientInfo(
 		&meta.GetClientInfoRequest{
 			ClientId: req.ClientId,
-			Header:   &meta.RequestHeader{AppId: req.Header.AppId}},
+			Header:   &meta.RequestHeader{AppName: req.Header.AppName}},
 	)
 	if nil != err {
 		log.Errorln(err)

@@ -3,44 +3,44 @@
 // DO NOT EDIT!
 
 /*
-	Package meta is a generated protocol buffer package.
+Package meta is a generated protocol buffer package.
 
-	It is generated from these files:
-		common.proto
-		data.proto
-		gate.proto
-		session.proto
+It is generated from these files:
+	common.proto
+	data.proto
+	gate.proto
+	session.proto
 
-	It has these top-level messages:
-		RequestHeader
-		ResponseHeader
-		DataOnlineRequest
-		DataOnlineResponse
-		DataOfflineRequest
-		DataOfflineResponse
-		GetClientInfoRequest
-		GetClientInfoResponse
-		UpdateClientInfoRequest
-		UpdateClientInfoResponse
-		SaveOfflineMsgRequest
-		SaveOfflineMsgResponse
-		GetOfflineMsgsRequest
-		GetOfflineMsgsRes
-		GetOfflineMsgsResponse
-		DelOfflineMsgsRequest
-		DelOfflineMsgsResponse
-		GatePushRequest
-		GatePushResponse
-		GatePushAllRequest
-		GatePushAllResponse
-		SessionOnlineRequest
-		SessionOnlineResponse
-		SessionOfflineRequest
-		SessionOfflineResponse
-		SessionUpdateRequest
-		SessionUpdateResponse
-		SessionInfoRequest
-		SessionInfoResponse
+It has these top-level messages:
+	RequestHeader
+	ResponseHeader
+	DataOnlineRequest
+	DataOnlineResponse
+	DataOfflineRequest
+	DataOfflineResponse
+	GetClientInfoRequest
+	GetClientInfoResponse
+	UpdateClientInfoRequest
+	UpdateClientInfoResponse
+	SaveOfflineMsgRequest
+	SaveOfflineMsgResponse
+	GetOfflineMsgsRequest
+	GetOfflineMsgsRes
+	GetOfflineMsgsResponse
+	DelOfflineMsgsRequest
+	DelOfflineMsgsResponse
+	GatePushRequest
+	GatePushResponse
+	GatePushAllRequest
+	GatePushAllResponse
+	SessionOnlineRequest
+	SessionOnlineResponse
+	SessionOfflineRequest
+	SessionOfflineResponse
+	SessionUpdateRequest
+	SessionUpdateResponse
+	SessionInfoRequest
+	SessionInfoResponse
 */
 package meta
 
@@ -62,7 +62,7 @@ var _ = math.Inf
 const _ = proto.GoGoProtoPackageIsVersion2 // please upgrade the proto package
 
 type RequestHeader struct {
-	AppId string `protobuf:"bytes,1,opt,name=AppId,proto3" json:"AppId,omitempty"`
+	AppName string `protobuf:"bytes,1,opt,name=AppName,proto3" json:"AppName,omitempty"`
 }
 
 func (m *RequestHeader) Reset()                    { *m = RequestHeader{} }
@@ -71,8 +71,6 @@ func (*RequestHeader) ProtoMessage()               {}
 func (*RequestHeader) Descriptor() ([]byte, []int) { return fileDescriptorCommon, []int{0} }
 
 type ResponseHeader struct {
-	Code int32  `protobuf:"varint,1,opt,name=Code,proto3" json:"Code,omitempty"`
-	Msg  string `protobuf:"bytes,2,opt,name=Msg,proto3" json:"Msg,omitempty"`
 }
 
 func (m *ResponseHeader) Reset()                    { *m = ResponseHeader{} }
@@ -99,11 +97,11 @@ func (m *RequestHeader) MarshalTo(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
-	if len(m.AppId) > 0 {
+	if len(m.AppName) > 0 {
 		dAtA[i] = 0xa
 		i++
-		i = encodeVarintCommon(dAtA, i, uint64(len(m.AppId)))
-		i += copy(dAtA[i:], m.AppId)
+		i = encodeVarintCommon(dAtA, i, uint64(len(m.AppName)))
+		i += copy(dAtA[i:], m.AppName)
 	}
 	return i, nil
 }
@@ -123,17 +121,6 @@ func (m *ResponseHeader) MarshalTo(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
-	if m.Code != 0 {
-		dAtA[i] = 0x8
-		i++
-		i = encodeVarintCommon(dAtA, i, uint64(m.Code))
-	}
-	if len(m.Msg) > 0 {
-		dAtA[i] = 0x12
-		i++
-		i = encodeVarintCommon(dAtA, i, uint64(len(m.Msg)))
-		i += copy(dAtA[i:], m.Msg)
-	}
 	return i, nil
 }
 
@@ -167,7 +154,7 @@ func encodeVarintCommon(dAtA []byte, offset int, v uint64) int {
 func (m *RequestHeader) Size() (n int) {
 	var l int
 	_ = l
-	l = len(m.AppId)
+	l = len(m.AppName)
 	if l > 0 {
 		n += 1 + l + sovCommon(uint64(l))
 	}
@@ -177,13 +164,6 @@ func (m *RequestHeader) Size() (n int) {
 func (m *ResponseHeader) Size() (n int) {
 	var l int
 	_ = l
-	if m.Code != 0 {
-		n += 1 + sovCommon(uint64(m.Code))
-	}
-	l = len(m.Msg)
-	if l > 0 {
-		n += 1 + l + sovCommon(uint64(l))
-	}
 	return n
 }
 
@@ -231,7 +211,7 @@ func (m *RequestHeader) Unmarshal(dAtA []byte) error {
 		switch fieldNum {
 		case 1:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field AppId", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field AppName", wireType)
 			}
 			var stringLen uint64
 			for shift := uint(0); ; shift += 7 {
@@ -256,7 +236,7 @@ func (m *RequestHeader) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.AppId = string(dAtA[iNdEx:postIndex])
+			m.AppName = string(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
@@ -308,54 +288,6 @@ func (m *ResponseHeader) Unmarshal(dAtA []byte) error {
 			return fmt.Errorf("proto: ResponseHeader: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
-		case 1:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Code", wireType)
-			}
-			m.Code = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowCommon
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.Code |= (int32(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		case 2:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Msg", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowCommon
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthCommon
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Msg = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
 			skippy, err := skipCommon(dAtA[iNdEx:])
@@ -485,15 +417,13 @@ var (
 func init() { proto.RegisterFile("common.proto", fileDescriptorCommon) }
 
 var fileDescriptorCommon = []byte{
-	// 152 bytes of a gzipped FileDescriptorProto
+	// 128 bytes of a gzipped FileDescriptorProto
 	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xe2, 0xe2, 0x49, 0xce, 0xcf, 0xcd,
 	0xcd, 0xcf, 0xd3, 0x2b, 0x28, 0xca, 0x2f, 0xc9, 0x17, 0xe2, 0x2c, 0x28, 0x2d, 0xce, 0xd0, 0xcb,
-	0x4d, 0x2d, 0x49, 0x54, 0x52, 0xe5, 0xe2, 0x0d, 0x4a, 0x2d, 0x2c, 0x4d, 0x2d, 0x2e, 0xf1, 0x48,
-	0x4d, 0x4c, 0x49, 0x2d, 0x12, 0x12, 0xe1, 0x62, 0x75, 0x2c, 0x28, 0xf0, 0x4c, 0x91, 0x60, 0x54,
-	0x60, 0xd4, 0xe0, 0x0c, 0x82, 0x70, 0x94, 0xcc, 0xb8, 0xf8, 0x82, 0x52, 0x8b, 0x0b, 0xf2, 0xf3,
-	0x8a, 0x53, 0xa1, 0xea, 0x84, 0xb8, 0x58, 0x9c, 0xf3, 0x53, 0x52, 0xc1, 0xca, 0x58, 0x83, 0xc0,
-	0x6c, 0x21, 0x01, 0x2e, 0x66, 0xdf, 0xe2, 0x74, 0x09, 0x26, 0xb0, 0x4e, 0x10, 0xd3, 0x49, 0xec,
-	0xc4, 0x23, 0x39, 0xc6, 0x0b, 0x8f, 0xe4, 0x18, 0x1f, 0x3c, 0x92, 0x63, 0x9c, 0xf0, 0x58, 0x8e,
-	0x21, 0x8a, 0x05, 0x64, 0x6d, 0x12, 0x1b, 0xd8, 0x21, 0xc6, 0x80, 0x00, 0x00, 0x00, 0xff, 0xff,
-	0xd9, 0x5f, 0x11, 0xf7, 0x98, 0x00, 0x00, 0x00,
+	0x4d, 0x2d, 0x49, 0x54, 0xd2, 0xe4, 0xe2, 0x0d, 0x4a, 0x2d, 0x2c, 0x4d, 0x2d, 0x2e, 0xf1, 0x48,
+	0x4d, 0x4c, 0x49, 0x2d, 0x12, 0x92, 0xe0, 0x62, 0x77, 0x2c, 0x28, 0xf0, 0x4b, 0xcc, 0x4d, 0x95,
+	0x60, 0x54, 0x60, 0xd4, 0xe0, 0x0c, 0x82, 0x71, 0x95, 0x04, 0xb8, 0xf8, 0x82, 0x52, 0x8b, 0x0b,
+	0xf2, 0xf3, 0x8a, 0x53, 0x21, 0x6a, 0x9d, 0xc4, 0x4e, 0x3c, 0x92, 0x63, 0xbc, 0xf0, 0x48, 0x8e,
+	0xf1, 0xc1, 0x23, 0x39, 0xc6, 0x09, 0x8f, 0xe5, 0x18, 0xa2, 0x58, 0x40, 0x86, 0x26, 0xb1, 0x81,
+	0xad, 0x31, 0x06, 0x04, 0x00, 0x00, 0xff, 0xff, 0xf5, 0x7f, 0x66, 0x77, 0x76, 0x00, 0x00, 0x00,
 }

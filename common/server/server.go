@@ -38,7 +38,7 @@ func (s *RPCServer) Run() {
 	if err != nil {
 		log.Fatalf("failed to listen: %v", err)
 	}
-	log.Infoln("gate rpc listening at:", s.Port)
+	log.Infoln(s.ServiceName+"-"+s.ServiceVersion, "rpc listening on:", s.Port)
 
 	go func() {
 		for {

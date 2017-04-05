@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"hscore/log"
 	"push/data/service/config"
+	. "push/errors"
 	"push/meta"
 	"time"
 
@@ -18,30 +19,31 @@ var (
 
 type Mysql struct {
 	DB *sql.DB
+	*config.MysqlSpec
 }
 
-func openMysql() (*sql.DB, error) {
-	db, err := sql.Open("mysql", config.MYSQL_DSN)
+func openMysql(spec *config.MysqlSpec) (*sql.DB, error) {
+	db, err := sql.Open("mysql", spec.DSN())
 	if nil != err {
 		log.Errorln(err)
 		return nil, err
 	}
-	db.SetMaxOpenConns(int(config.MYSQL_POOL))
+	db.SetMaxOpenConns(spec.Pool)
 
 	return db, nil
 }
 
-func NewMysql() *Mysql {
-	db, err := openMysql()
+func NewMysql(spec *config.MysqlSpec) *Mysql {
+	db, err := openMysql(spec)
 	if nil != err {
 		log.Errorln(err)
 	}
 
-	return &Mysql{DB: db}
+	return &Mysql{DB: db, MysqlSpec: spec}
 }
 
 func (m *Mysql) ReGetDBConn() error {
-	db, err := openMysql()
+	db, err := openMysql(m.MysqlSpec)
 	if nil != err {
 		log.Errorln(err)
 		return err
@@ -70,7 +72,7 @@ var (
 //上线
 func (m *Mysql) Online(req *meta.DataOnlineRequest) (*meta.DataOnlineResponse, error) {
 	utc := time.Now().Unix()
-	sqlStr := fmt.Sprintf("INSERT INTO %s SET id='%s',gate_server_ip='%s',gate_server_port='%s',platform='%s',status=1,created_at=%d,updated_at=%d,app_id='%s'", TBL_CLIENTS, req.ClientId, req.GateServerIP, req.GateServerPort, req.Platform, utc, utc, req.Header.AppId)
+	sqlStr := fmt.Sprintf("INSERT INTO %s SET id='%s',gate_server_ip='%s',gate_server_port='%s',platform='%s',status=1,created_at=%d,updated_at=%d", TBL_CLIENTS, req.ClientId, req.GateServerIP, req.GateServerPort, req.Platform, utc, utc,)
 	log.Debugln(sqlStr)
 
 	_, err := m.Query(sqlStr)
@@ -85,7 +87,7 @@ func (m *Mysql) Online(req *meta.DataOnlineRequest) (*meta.DataOnlineResponse, e
 //下线
 func (m *Mysql) Offline(req *meta.DataOfflineRequest) (*meta.DataOfflineResponse, error) {
 	utc := time.Now().Unix()
-	sqlStr := fmt.Sprintf("UPDATE %s SET status=0,updated_at=%d WHERE app_id='%s' AND id='%s'", TBL_CLIENTS, utc, req.Header.AppId, req.ClientId)
+	sqlStr := fmt.Sprintf("UPDATE %s SET status=0,updated_at=%d WHERE id='%s'", TBL_CLIENTS, utc, req.ClientId)
 	log.Debugln(sqlStr)
 
 	_, err := m.Query(sqlStr)
@@ -93,6 +95,7 @@ func (m *Mysql) Offline(req *meta.DataOfflineRequest) (*meta.DataOfflineResponse
 		log.Errorln(err)
 		return nil, err
 	}
+
 	return &meta.DataOfflineResponse{}, nil
 }
 
@@ -109,7 +112,7 @@ func (m *Mysql) DelOfflineMsgs(req *meta.DelOfflineMsgsRequest) (*meta.DelOfflin
 }
 
 func (m *Mysql) GetClientInfo(req *meta.GetClientInfoRequest) (*meta.GetClientInfoResponse, error) {
-	sqlStr := fmt.Sprintf("SELECT id,gate_server_ip,gate_server_port,app_id,platform,status,created_at,updated_at FROM %s WHERE app_id='%s' AND id='%s'", TBL_CLIENTS, req.Header.AppId, req.ClientId)
+	sqlStr := fmt.Sprintf("SELECT id,gate_server_ip,gate_server_port,platform,status,created_at,updated_at FROM %s WHERE id='%s'", TBL_CLIENTS, req.ClientId)
 	log.Debugln(sqlStr)
 	rows, err := m.Query(sqlStr)
 	if nil != err {
@@ -123,16 +126,16 @@ func (m *Mysql) GetClientInfo(req *meta.GetClientInfoRequest) (*meta.GetClientIn
 			&ret.ClientId,
 			&ret.GateServerIP,
 			&ret.GateServerPort,
-			&ret.AppId,
 			&ret.Platform,
 			&ret.Status,
 			&ret.CreatedAt,
 			&ret.UpdatedAt,
 		)
-		break //TODO
+		//以防万一，只取一个
+		return ret, nil
 	}
 
-	return ret, nil
+	return nil, CLIENT_NOT_FOUND
 }
 
 //TODO SQL注入
@@ -150,7 +153,7 @@ func (m *Mysql) GetClientInfo(req *meta.GetClientInfoRequest) (*meta.GetClientIn
 
 func (m *Mysql) UpdateClientInfo(req *meta.UpdateClientInfoRequest) (*meta.UpdateClientInfoResponse, error) {
 	utc := time.Now().Unix()
-	sqlStr := fmt.Sprintf("UPDATE %s SET gate_server_ip='%s',gate_server_port='%s',platform='%s',status=1,updated_at=%d WHERE app_id='%s' AND id='%s'", TBL_CLIENTS, req.GateServerIP, req.GateServerPort, req.Platform, utc, req.Header.AppId, req.ClientId)
+	sqlStr := fmt.Sprintf("UPDATE %s SET gate_server_ip='%s',gate_server_port='%s',platform='%s',status=1,updated_at=%d WHERE id='%s'", TBL_CLIENTS, req.GateServerIP, req.GateServerPort, req.Platform, utc, req.ClientId)
 	log.Debugln(sqlStr)
 	_, err := m.Query(sqlStr)
 	if nil != err {

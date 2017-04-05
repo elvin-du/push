@@ -12,8 +12,30 @@ service:
   rpc:
     port: ":50001"
 
-db:
-  mysql:
-    dsn: root:@tcp(localhost:4000)/push_core
+mysql:
+  main:
+    addr: localhost:3306
+    user: root
+    passwd:
+    dbname: push_core
     pool: 10
+  yourdoctor:
+    addr: localhost:3306
+    user: root
+    passwd:
+    dbname: your_doctor_push
+    pool: 10
+  heartsquare:
+    addr: localhost:3306
+    user: root
+    passwd:
+    dbname: heartsquare_push
+    pool: 10
+  hsforsales:
+    addr: localhost:3306
+    user: root
+    passwd:
+    dbname: hs_for_sales_push
+    pool: 10
+
 

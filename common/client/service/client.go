@@ -1,7 +1,6 @@
 package service
 
 import (
-	//	"golang.org/x/net/context"
 	"hscore/log"
 	"push/common/client/etcd"
 

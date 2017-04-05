@@ -5,10 +5,8 @@ package push.meta;
 option go_package = "meta";
 
 message RequestHeader{
-	string AppId = 1;
+	string AppName = 1;
 }
 
 message ResponseHeader{
-	int32 Code = 1;
-	string Msg = 2;
 }

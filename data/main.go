@@ -1,3 +1,5 @@
+//+build +data
+
 /*
 DATA Server提供一切对数据持久化的方法
 */

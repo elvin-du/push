@@ -6,6 +6,7 @@ import (
 	"io/ioutil"
 	"net"
 	"net/http"
+	"strings"
 )
 
 var (
@@ -82,5 +83,5 @@ func doExternalIP(addr string) (string, error) {
 	}
 
 	log.Infoln("external IP:", string(bin))
-	return string(bin), nil
+	return strings.TrimRight(string(bin), "\n"), nil
 }

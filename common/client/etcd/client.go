@@ -39,19 +39,20 @@ func NewETCDClient(endpoints []string, dialTimeout, requestTimeout time.Duration
 
 /*
 ETCD存储格式
-key格式：/app/srvName/version/ip/port
+key格式：/srvName/version/ip/port
 value参数：
     weigth：权重．值：1~10,数字越大，权重越重 TODO
     load：现在负载大小．还没有想好怎么做　TODO
 value参数格式：weigth=2&load=
 */
-func (e *ETCDClient) Register(app, srvName, version, ip, port string, meta map[string]string) error {
-	key := fmt.Sprintf("/%s/%s/%s/%s/%s", app, srvName, version, ip, port)
+func (e *ETCDClient) Register(srvName, version, ip, port string, meta map[string]string) error {
+	key := fmt.Sprintf("/%s/%s/%s/%s", srvName, version, ip, port)
 	value := ""
 	for k, v := range meta {
 		value += k + "=" + v + "&"
 	}
 	value = strings.TrimSuffix(value, "&")
+	log.Debugln("register key:", key, "value:", value)
 
 	ctx, cancel := context.WithTimeout(context.Background(), e.RequestTimeout)
 	//租赁１２０秒过期
@@ -73,15 +74,15 @@ func (e *ETCDClient) Register(app, srvName, version, ip, port string, meta map[s
 	return nil
 }
 
-func (e *ETCDClient) Heartbeat(app, srvName, version, ip, port string, meta map[string]string) error {
-	return e.Register(app, srvName, version, ip, port, meta)
+func (e *ETCDClient) Heartbeat(srvName, version, ip, port string, meta map[string]string) error {
+	return e.Register(srvName, version, ip, port, meta)
 }
 
 /*
 获取经过均衡负载的服务的ip和port
 */
-func (e *ETCDClient) Get(app, srvName, version string) (ip string, port string, err error) {
-	key := fmt.Sprintf("/%s/%s/%s", app, srvName, version)
+func (e *ETCDClient) Get(srvName, version string) (ip string, port string, err error) {
+	key := fmt.Sprintf("/%s/%s", srvName, version)
 	ctx, cancel := context.WithTimeout(context.Background(), e.RequestTimeout)
 	resp, err := e.Client.Get(ctx, key, clientv3.WithPrefix())
 	cancel()
@@ -97,8 +98,8 @@ func (e *ETCDClient) Get(app, srvName, version string) (ip string, port string, 
 		log.Debugln("resp", string(key))
 		keys := strings.Split(string(key), "/")
 		log.Debugln(keys)
-		ip = keys[4]
-		port = keys[5]
+		ip = keys[3]
+		port = keys[4]
 	}
 
 	return

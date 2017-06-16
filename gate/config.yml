@@ -8,8 +8,8 @@ log:
   enable_line: true
 
 service:
-  externalip: true
+  externalip: false
   rpc:
-    port: ":50002"
+    port: "50002"
   tcp:
-    port: ":51001"
+    port: "51001"

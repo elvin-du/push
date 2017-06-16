@@ -2,7 +2,6 @@ package service
 
 import (
 	"hscore/log"
-	"push/common/util"
 	"push/meta"
 )
 
@@ -38,7 +37,7 @@ func (e *DataServiceClientManager) GetClient() (*DataServiceClient, error) {
 	case cli := <-e.Pool:
 		return cli, nil
 	default:
-		srvCli, err := GetServiceClient(util.APP_NAME, DATA_SERVER_NAME, DATA_SERVER_VERSION)
+		srvCli, err := GetServiceClient(DATA_SERVER_NAME, DATA_SERVER_VERSION)
 		if nil != err {
 			log.Errorln(err)
 			return nil, err

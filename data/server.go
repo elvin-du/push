@@ -19,7 +19,6 @@ func StartRPCServer() {
 	meta.RegisterDataServer(srv, &Data{})
 
 	server.NewRPCServer(
-		util.APP_NAME,
 		RPC_SERVICE_NAME,
 		RPC_SERVICE_VERSION,
 		config.SERVER_IP,

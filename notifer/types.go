@@ -1,7 +1,7 @@
 package main
 
 type Message struct {
-	AppId    string `json:"app_id"`
+	AppName  string `json:"app_name"`
 	ClientId string `json:"client_id"`
 	Content  string `json:"content"`
 	Kind     int32  `json:"kind"`

@@ -2,12 +2,11 @@ package service
 
 import (
 	"hscore/log"
-	"push/common/util"
 	"push/meta"
 )
 
 const (
-	SESSION_MAX_POOL_SIZE = 10
+	SESSION_MAX_POOL_SIZE  = 10
 	SESSION_SERVER_NAME    = "SESSION"
 	SESSION_SERVER_VERSION = "1.0.0"
 )
@@ -40,7 +39,7 @@ func (e *SessionServiceClientManager) GetClient() (*SessionServiceClient, error)
 		return cli, nil
 	default:
 		log.Infoln("pool is empty,new one session client")
-		srvCli, err := GetServiceClient(util.APP_NAME, SESSION_SERVER_NAME, SESSION_SERVER_VERSION)
+		srvCli, err := GetServiceClient(SESSION_SERVER_NAME, SESSION_SERVER_VERSION)
 		if nil != err {
 			log.Errorln(err)
 			return nil, err

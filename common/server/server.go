@@ -10,7 +10,6 @@ import (
 )
 
 type RPCServer struct {
-	APPName           string
 	ServiceName       string
 	ServiceVersion    string
 	IP                string
@@ -20,9 +19,8 @@ type RPCServer struct {
 	Server            *grpc.Server
 }
 
-func NewRPCServer(app, serviceName, serviceVer, ip, port string, meta map[string]string, heartbeat time.Duration, server *grpc.Server) *RPCServer {
+func NewRPCServer(serviceName, serviceVer, ip, port string, meta map[string]string, heartbeat time.Duration, server *grpc.Server) *RPCServer {
 	return &RPCServer{
-		APPName:           app,
 		ServiceName:       serviceName,
 		ServiceVersion:    serviceVer,
 		IP:                ip,
@@ -34,7 +32,7 @@ func NewRPCServer(app, serviceName, serviceVer, ip, port string, meta map[string
 }
 
 func (s *RPCServer) Run() {
-	l, err := net.Listen("tcp", s.Port)
+	l, err := net.Listen("tcp", ":"+s.Port)
 	if err != nil {
 		log.Fatalf("failed to listen: %v", err)
 	}
@@ -70,7 +68,7 @@ func (s *RPCServer) doRegister(meta map[string]string) error {
 		return err
 	}
 
-	err = client.Register(s.APPName, s.ServiceName, s.ServiceVersion, s.IP, s.Port, meta)
+	err = client.Register(s.ServiceName, s.ServiceVersion, s.IP, s.Port, meta)
 	if nil != err {
 		log.Errorln(err)
 		return err
@@ -95,5 +93,5 @@ func (s *RPCServer) Get() (ip string, port string, err error) {
 		return "", "", err
 	}
 
-	return client.Get(s.APPName, s.ServiceName, s.ServiceVersion)
+	return client.Get(s.ServiceName, s.ServiceVersion)
 }

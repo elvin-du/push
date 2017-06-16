@@ -10,6 +10,7 @@ import (
 	"push/gate/mqtt"
 	"push/gate/service/config"
 	"push/meta"
+	"push/gate/service/db"
 	sessionCli "push/session/client"
 	"strings"
 	"time"
@@ -43,7 +44,6 @@ func (s *Server) StartRPCServer() {
 	meta.RegisterGateServer(srv, &Gate{})
 
 	server.NewRPCServer(
-		util.APP_NAME,
 		RPC_SERVICE_NAME,
 		RPC_SERVICE_VERSION,
 		config.SERVER_IP,
@@ -56,7 +56,7 @@ func (s *Server) StartRPCServer() {
 
 //开始监听客户端的连接
 func (s *Server) StartTcpServer() {
-	l, err := net.Listen("tcp", config.TCP_PORT)
+	l, err := net.Listen("tcp", ":"+config.TCP_PORT)
 	if err != nil {
 		log.Fatalf("failed to listen: %v", err)
 	}
@@ -74,6 +74,30 @@ func (s *Server) StartTcpServer() {
 
 		go s.handleConnection(conn)
 	}
+}
+
+func (s *Server) handleConnection(conn net.Conn) {
+	svc := mqtt.NewService(conn)
+	svc.SetWriteTimeout(time.Second * 30)
+	svc.SetReadTimeout(time.Minute * 10)
+
+	err := s.checkConnection(svc)
+	if nil != err {
+		log.Errorln(err)
+		return
+	}
+
+	//每一个新用户链接抽象为一个service，并把其保存到相应的server实例中
+	s.SetService(svc)
+
+	err = s.Online(svc)
+	if nil != err {
+		log.Errorln(err)
+		return
+	}
+
+	//发送离线消息
+	s.CheckOfflineMsg(svc.AppName, svc.ClientId)
 }
 
 func (s *Server) checkConnection(svc *mqtt.Service) (err error) {
@@ -104,7 +128,7 @@ func (s *Server) checkConnection(svc *mqtt.Service) (err error) {
 		log.Error(err)
 		return err
 	}
-	log.Debugf("come to connect,clientid:", string(connMsg.ClientId()))
+	log.Debugln("come to connect,clientid:", string(connMsg.ClientId()))
 
 	svc.AppName = string(connMsg.Username())
 	svc.ClientId = string(connMsg.ClientId())
@@ -139,78 +163,22 @@ func (s *Server) checkConnection(svc *mqtt.Service) (err error) {
 	return nil
 }
 
-func (s *Server) handleConnection(conn net.Conn) {
-	svc := mqtt.NewService(conn)
-	svc.SetWriteTimeout(time.Second * 30)
-	svc.SetReadTimeout(time.Minute * 10)
-
-	err := s.checkConnection(svc)
-	if nil != err {
-		log.Errorln(err)
-		return
-	}
-
-	//每一个新用户链接抽象为一个service，并把其保存到相应的server实例中
-	s.SetService(svc)
-
-	err = s.Online(svc)
-	if nil != err {
-		log.Errorln(err)
-		return
-	}
-
-	//发送离线消息
-	s.CheckOfflineMsg(svc.AppName, svc.ClientId)
-}
-
 func (s *Server) Online(svc *mqtt.Service) error {
-	infoReq := &meta.SessionInfoRequest{}
-	infoReq.ClientId = svc.ClientId
-	infoReq.Header = &meta.RequestHeader{
-		AppName: svc.AppName,
-	}
-	infoRes, err := sessionCli.Info(infoReq)
-	log.Debugf("infoRes:%+v", infoRes)
-	if nil != err && CLIENT_NOT_FOUND != err {
-		log.Errorln(err)
-		return err
-	}
 
-	//从没有登录过
-	if CLIENT_NOT_FOUND == err {
-		onlineReq := &meta.SessionOnlineRequest{}
-		onlineReq.ClientId = svc.ClientId
-		onlineReq.Header.AppName = svc.AppName
-		onlineReq.GateServerIP = config.SERVER_IP
-		onlineReq.GateServerPort = config.RPC_SERVICE_PORT
-		onlineReq.Platform = svc.Platform
-		onlineReq.CreatedAt = uint64(time.Now().Unix())
+	onlineReq := &meta.SessionOnlineRequest{}
+	onlineReq.ClientId = svc.ClientId
+	onlineReq.Header.AppName = svc.AppName
+	onlineReq.GateServerIP = config.SERVER_IP
+	onlineReq.GateServerPort = config.RPC_SERVICE_PORT
+	onlineReq.Platform = svc.Platform
+	onlineReq.CreatedAt = uint64(time.Now().Unix())
 
-		_, err = sessionCli.Online(onlineReq)
-		if nil != err {
-			log.Error(err)
-			s.DelService(svc)
-			return err
-		}
-
-		return nil
-	}
-
-	updateReq := &meta.SessionUpdateRequest{}
-	updateReq.ClientId = svc.ClientId
-	updateReq.Header.AppName = svc.AppName
-	updateReq.GateServerIP = config.SERVER_IP
-	updateReq.GateServerPort = config.RPC_SERVICE_PORT
-	updateReq.Platform = svc.Platform
-	updateReq.UpdatedAt = uint64(time.Now().Unix())
-
-	_, err = sessionCli.Update(updateReq)
+	_, err = sessionCli.Online(onlineReq)
 	if nil != err {
 		log.Error(err)
 		s.DelService(svc)
 		return err
 	}
-
 	return nil
 }
 

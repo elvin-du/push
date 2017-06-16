@@ -2,7 +2,6 @@ package service
 
 import (
 	"hscore/log"
-	"push/common/util"
 	"push/meta"
 )
 
@@ -38,7 +37,7 @@ func (e *GateServiceClientManager) Client(ip, port string) (*GateServiceClient, 
 	case cli := <-e.Pool:
 		return cli, nil
 	default:
-		srvCli, err := NewServiceClient(ip, port, util.APP_NAME, GATE_SERVER_NAME, GATE_SERVER_VERSION)
+		srvCli, err := NewServiceClient(ip, port, GATE_SERVER_NAME, GATE_SERVER_VERSION)
 		if nil != err {
 			log.Errorln(err)
 			return nil, err

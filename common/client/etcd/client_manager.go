@@ -35,8 +35,10 @@ func Put(cli *ETCDClient) error {
 func (e *ETCDClientManager) GetClient() (*ETCDClient, error) {
 	select {
 	case cli := <-e.Pool:
+		log.Infoln("got one etcd client from pool")
 		return cli, nil
 	default:
+		log.Infoln("pool is empty,new one etcd client")
 		cli, err := NewETCDClient(ECTD_ENDPOINTS, DIAL_TIMEOUT, REQUEST_TIMEOUT)
 		if nil != err {
 			log.Errorln(err)

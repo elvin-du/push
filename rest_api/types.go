@@ -6,14 +6,14 @@ import (
 )
 
 var (
-	APP_ID_INVALID    = errors.New("app_id invalid")
+	APP_NAME_INVALID  = errors.New("app_name invalid")
 	CLIENT_ID_INVALID = errors.New("client_id invalid")
 	COTENT_INVALID    = errors.New("content invalid")
 	KIND_INVALID      = errors.New("kind invalid")
 )
 
 type Message struct {
-	AppId    string `json:"app_id"`
+	AppName  string `json:"app_name"`
 	ClientId string `json:"client_id"`
 	Content  string `json:"content"`
 	Kind     int    `json:"kind"`
@@ -27,8 +27,8 @@ func ValidMessage(bin []byte) error {
 		return err
 	}
 
-	if "" == msg.AppId {
-		return APP_ID_INVALID
+	if "" == msg.AppName {
+		return APP_NAME_INVALID
 	}
 
 	if "" == msg.ClientId {

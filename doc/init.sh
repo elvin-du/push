@@ -41,7 +41,7 @@ TABLE_OFFLINE_MSG="
 DROP TABLE IF EXISTS offline_msgs;
 CREATE TABLE offline_msgs (
   id VARCHAR(36) NOT NULL,
-  client_id VARCHAR(36) NOT NULL,
+  user_id VARCHAR(36) NOT NULL,
   packet_id INT(2) UNSIGNED NOT NULL, -- MQTT协议规定消息ID是16bit的整型数据
   kind INT(4) UNSIGNED NOT NULL, -- 消息类型
   content VARCHAR(500) NOT NULL,

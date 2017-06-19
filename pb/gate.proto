@@ -1,8 +1,8 @@
 syntax="proto3";
 
-package push.meta;
+package push.pb;
 
-option go_package="meta";
+option go_package = "pb";
 
 import "common.proto";
 

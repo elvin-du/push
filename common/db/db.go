@@ -78,6 +78,26 @@ func (p *Pool) HMSET(key string, fields map[string]interface{}) error {
 	return nil
 }
 
+func (p *Pool) HMSETAndEXPIRE(key string, fields map[string]interface{}, TTL time.Duration) error {
+	args := []interface{}{key}
+	for k, v := range fields {
+		args = append(args, k)
+		args = append(args, v)
+	}
+
+	err := p.Get().Send("HMSET", args...)
+	if nil != err {
+		return err
+	}
+
+	_, err = p.Get().Do("EXPIRE", key, TTL)
+	if nil != err {
+		return err
+	}
+
+	return err
+}
+
 /*
 v:must be ptr of struct. and should use redis tag for struct field.
 for example:

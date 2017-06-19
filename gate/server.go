@@ -5,13 +5,11 @@ import (
 	"net"
 	"push/common/server"
 	"push/common/util"
-	dataCli "push/data/client"
-	. "push/errors"
+	//	. "push/errors"
 	"push/gate/mqtt"
 	"push/gate/service/config"
+	"push/gate/service/session"
 	"push/meta"
-	"push/gate/service/db"
-	sessionCli "push/session/client"
 	"strings"
 	"time"
 
@@ -164,21 +162,20 @@ func (s *Server) checkConnection(svc *mqtt.Service) (err error) {
 }
 
 func (s *Server) Online(svc *mqtt.Service) error {
+	var ses session.Session
+	ses.UserID = svc.ClientId//TODO
+	ses.ClientID = svc.ClientId
+	ses.Platform = svc.Platform
+	ses.GateServerIP = config.SERVER_IP
+	ses.GateServerPort = config.RPC_SERVICE_PORT
 
-	onlineReq := &meta.SessionOnlineRequest{}
-	onlineReq.ClientId = svc.ClientId
-	onlineReq.Header.AppName = svc.AppName
-	onlineReq.GateServerIP = config.SERVER_IP
-	onlineReq.GateServerPort = config.RPC_SERVICE_PORT
-	onlineReq.Platform = svc.Platform
-	onlineReq.CreatedAt = uint64(time.Now().Unix())
-
-	_, err = sessionCli.Online(onlineReq)
+	err := ses.Save()
 	if nil != err {
 		log.Error(err)
 		s.DelService(svc)
 		return err
 	}
+
 	return nil
 }
 

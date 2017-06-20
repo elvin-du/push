@@ -15,7 +15,6 @@ func Start() {
 }
 
 type Session struct {
-	UserID         string `json:"user_id"`
 	ClientID       string `json:"client_id"`
 	Platform       string `json:"platform"`
 	GateServerIP   string `json:"gate_server_ip"`
@@ -34,9 +33,9 @@ func (s *Session) ToMap() map[string]interface{} {
 
 //每次保存一次，会自动更新过期时间
 func (s *Session) Save() error {
-	return db.Redis().HMSETAndEXPIRE(s.UserID, s.ToMap(), TTL)
+	return db.Redis().HMSETAndEXPIRE(s.ClientID, s.ToMap(), TTL)
 }
 
 func (s *Session) Touch() error {
-	return db.Redis().EXPIRE(s.UserID, TTL)
+	return db.Redis().EXPIRE(s.ClientID, TTL)
 }

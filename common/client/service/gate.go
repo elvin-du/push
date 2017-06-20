@@ -2,7 +2,7 @@ package service
 
 import (
 	"hscore/log"
-	"push/meta"
+	"push/pb"
 )
 
 const (
@@ -16,7 +16,7 @@ type GateServiceClientManager struct {
 }
 
 type GateServiceClient struct {
-	GateClient    meta.GateClient
+	GateClient    pb.GateClient
 	ServiceClient *ServiceClient
 }
 
@@ -43,7 +43,7 @@ func (e *GateServiceClientManager) Client(ip, port string) (*GateServiceClient, 
 			return nil, err
 		}
 
-		cli := meta.NewGateClient(srvCli.Client)
+		cli := pb.NewGateClient(srvCli.Client)
 
 		return &GateServiceClient{
 			GateClient:    cli,

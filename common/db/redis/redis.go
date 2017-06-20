@@ -1,11 +1,13 @@
-package db
+package redis
 
 import (
 	"fmt"
 	"time"
 
-	"github.com/garyburd/redigo/redis"
+	libRedis "github.com/garyburd/redigo/redis"
 )
+
+var ErrNotFound = libRedis.ErrNil
 
 type Option struct {
 	MaxIdle        int
@@ -26,16 +28,16 @@ const (
 )
 
 type Pool struct {
-	*redis.Pool
+	*libRedis.Pool
 }
 
 func NewPool(addr string) *Pool {
-	pool := &redis.Pool{
+	pool := &libRedis.Pool{
 		MaxIdle:     MAX_IDLE,
 		MaxActive:   MAX_ACTIVE,
 		IdleTimeout: IDLE_TIMEOUT,
-		Dial: func() (redis.Conn, error) {
-			return redis.DialTimeout("tcp", addr, CONNECT_TIMEOUT, READ_TIMEOUT, WRITE_TIMEOUT)
+		Dial: func() (libRedis.Conn, error) {
+			return libRedis.DialTimeout("tcp", addr, CONNECT_TIMEOUT, READ_TIMEOUT, WRITE_TIMEOUT)
 		},
 	}
 
@@ -43,12 +45,12 @@ func NewPool(addr string) *Pool {
 }
 
 func NewPoolWithOpt(addr string, opt *Option) *Pool {
-	pool := &redis.Pool{
+	pool := &libRedis.Pool{
 		MaxIdle:     opt.MaxIdle,
 		MaxActive:   opt.MaxActive,
 		IdleTimeout: opt.IdleTimeout,
-		Dial: func() (redis.Conn, error) {
-			return redis.DialTimeout("tcp", addr, opt.ConnectTimeout, opt.ReadTimeout, opt.WriteTimeout)
+		Dial: func() (libRedis.Conn, error) {
+			return libRedis.DialTimeout("tcp", addr, opt.ConnectTimeout, opt.ReadTimeout, opt.WriteTimeout)
 		},
 	}
 
@@ -99,19 +101,19 @@ func (p *Pool) HMSETAndEXPIRE(key string, fields map[string]interface{}, TTL tim
 }
 
 /*
-v:must be ptr of struct. and should use redis tag for struct field.
+v:must be ptr of struct. and should use libRedis tag for struct field.
 for example:
 {
 	"name":"elvin" `"redis":"name"`
 }
 */
 func (p *Pool) HGETALL(key string, v interface{}) error {
-	valueInterfaces, err := redis.Values(p.Get().Do("HGETALL", key))
+	valueInterfaces, err := libRedis.Values(p.Get().Do("HGETALL", key))
 	if nil != err {
 		return err
 	}
 
-	return redis.ScanStruct(valueInterfaces, &v)
+	return libRedis.ScanStruct(valueInterfaces, &v)
 }
 
 /*
@@ -124,16 +126,16 @@ for example:
 func (p *Pool) HMGET(key string, fields []interface{}, v interface{}) error {
 	tmp := []interface{}{key}
 	tmp = append(tmp, fields...)
-	valueInterfaces, err := redis.Values(p.Get().Do("HMGET", tmp...))
+	valueInterfaces, err := libRedis.Values(p.Get().Do("HMGET", tmp...))
 	if nil != err {
 		return err
 	}
 
-	return redis.ScanStruct(valueInterfaces, &v)
+	return libRedis.ScanStruct(valueInterfaces, &v)
 }
 
 func (p *Pool) DEL(keys []interface{}) error {
-	number, err := redis.Int(p.Get().Do("DEL", keys...))
+	number, err := libRedis.Int(p.Get().Do("DEL", keys...))
 	if nil != err {
 		return err
 	}

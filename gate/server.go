@@ -6,10 +6,11 @@ import (
 	"push/common/server"
 	"push/common/util"
 	//	. "push/errors"
+	"push/gate/model"
 	"push/gate/mqtt"
 	"push/gate/service/config"
 	"push/gate/service/session"
-	"push/meta"
+	"push/pb"
 	"strings"
 	"time"
 
@@ -39,7 +40,7 @@ type Server struct {
 */
 func (s *Server) StartRPCServer() {
 	srv := grpc.NewServer()
-	meta.RegisterGateServer(srv, &Gate{})
+	pb.RegisterGateServer(srv, &Gate{})
 
 	server.NewRPCServer(
 		RPC_SERVICE_NAME,
@@ -95,7 +96,7 @@ func (s *Server) handleConnection(conn net.Conn) {
 	}
 
 	//发送离线消息
-	s.CheckOfflineMsg(svc.AppName, svc.ClientId)
+	s.CheckOfflineMsg(svc.ClientId)
 }
 
 func (s *Server) checkConnection(svc *mqtt.Service) (err error) {
@@ -163,7 +164,6 @@ func (s *Server) checkConnection(svc *mqtt.Service) (err error) {
 
 func (s *Server) Online(svc *mqtt.Service) error {
 	var ses session.Session
-	ses.UserID = svc.ClientId//TODO
 	ses.ClientID = svc.ClientId
 	ses.Platform = svc.Platform
 	ses.GateServerIP = config.SERVER_IP
@@ -179,20 +179,17 @@ func (s *Server) Online(svc *mqtt.Service) error {
 	return nil
 }
 
-func (s *Server) CheckOfflineMsg(AppName, clientId string) {
-	req := &meta.GetOfflineMsgsRequest{}
-	req.Header.AppName = AppName
-	req.ClientId = clientId
-	resp, err := dataCli.GetOfflineMsgs(req)
-	if nil != err {
-		log.Error(err)
+func (s *Server) CheckOfflineMsg( clientId string) {
+	msgs,err := model.OfflineMsgModel().Get(clientId)
+	if nil != err{
+		log.Errorln(err)
 		return
 	}
 
-	log.Debugf("found %d offline msg for AppName:%s,clientId:%s", len(resp.Items), AppName, clientId)
-	svc := s.Services[AppName+clientId]
-	for _, v2 := range resp.Items {
-		go svc.Push(uint16(v2.PacketId), []byte(v2.Content))
+	log.Debugf("found %d offline msg for clientId:%s", len(msgs), clientId)
+	svc := s.Services[clientId]
+	for _, v2 := range msgs {
+		go svc.Push(uint16(v2.PacketID), []byte(v2.Content))
 	}
 }
 

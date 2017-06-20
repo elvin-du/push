@@ -1,18 +1,32 @@
 package db
 
 import (
-	dbkit "push/common/db"
+	"hscore/log"
+	dbredis "push/common/db/redis"
+
+	_ "github.com/go-sql-driver/mysql"
+	"github.com/jinzhu/gorm"
 )
 
 var (
-	redis *dbkit.Pool
+	redis *dbredis.Pool
+	mysql *gorm.DB
 )
 
 //TODO
 func Init() {
-	redis = dbkit.NewPool("localhost:6379")
+	redis = dbredis.NewPool("localhost:6379")
+	var err error = nil
+	mysql, err = gorm.Open("mysql", "root:JTabc.123@/push_core?charset=utf8&parseTime=True&loc=Local")
+	if nil != err {
+		log.Fatalln(err)
+	}
 }
 
-func Redis() *dbkit.Pool {
+func Redis() *dbredis.Pool {
 	return redis
+}
+
+func Mysql() *gorm.DB {
+	return mysql
 }

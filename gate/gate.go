@@ -6,7 +6,7 @@ package main
 
 import (
 	"hscore/log"
-	"push/meta"
+	"push/pb"
 
 	"golang.org/x/net/context"
 )
@@ -14,9 +14,9 @@ import (
 type Gate struct {
 }
 
-func (*Gate) Push(ctx context.Context, req *meta.GatePushRequest) (*meta.GatePushResponse, error) {
+func (*Gate) Push(ctx context.Context, req *pb.GatePushRequest) (*pb.GatePushResponse, error) {
 	log.Debugln(*req)
-	resp := &meta.GatePushResponse{}
+	resp := &pb.GatePushResponse{}
 
 	svc := defaultServer.Services[req.Header.AppName+req.ClientId]
 	err := svc.Push(uint16(req.PacketId), []byte(req.Content))
@@ -27,7 +27,7 @@ func (*Gate) Push(ctx context.Context, req *meta.GatePushRequest) (*meta.GatePus
 	return resp, nil
 }
 
-func (*Gate) PushAll(ctx context.Context, req *meta.GatePushAllRequest) (*meta.GatePushAllResponse, error) {
+func (*Gate) PushAll(ctx context.Context, req *pb.GatePushAllRequest) (*pb.GatePushAllResponse, error) {
 	log.Debugln("content", req.Content)
-	return &meta.GatePushAllResponse{}, nil
+	return &pb.GatePushAllResponse{}, nil
 }

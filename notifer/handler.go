@@ -5,7 +5,7 @@ import (
 	"errors"
 	"hscore/log"
 	gateCli "push/gate/client"
-	"push/meta"
+	"push/pb"
 
 	"github.com/nsqio/go-nsq"
 )
@@ -55,8 +55,8 @@ func (b *SingleMsgHandler) Process(i interface{}) error {
 	}
 
 	_, err = gateCli.Push(
-		&meta.GatePushRequest{
-			Header:   &meta.RequestHeader{AppName: data.AppName},
+		&pb.GatePushRequest{
+			Header:   &pb.RequestHeader{AppName: data.AppName},
 			ClientId: data.ClientId,
 			Content:  data.Content,
 			Kind:     data.Kind,

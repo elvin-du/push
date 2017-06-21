@@ -1,7 +1,7 @@
 package model
 
 import (
-	"hscore/log"
+	"gokit/log"
 	"push/gate/service/db"
 )
 

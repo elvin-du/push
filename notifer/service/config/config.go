@@ -1,30 +1,21 @@
 package config
 
 import (
-	"hscore/config"
-	"hscore/log"
-	"hscore/util"
+	goconfig "gokit/config"
+	"gokit/log"
 )
 
 var (
 	NSQ_LOOKUPD_ADDRS = []string{}
 )
 
-func Init() {
-	loadConfig()
+func Start() {
 	ParseConfig()
-}
-
-func loadConfig() {
-	err := config.ReadConfig(util.GetFile("config.yml"))
-	if err != nil {
-		log.Fatal("Read configuration file failed", err)
-	}
 }
 
 func ParseConfig() {
 	var tmp []interface{}
-	err := config.Get("nsq:lookupd:addrs", &tmp)
+	err := goconfig.Get("nsq:lookupd:addrs", &tmp)
 	if nil != err {
 		log.Fatal(err)
 	}

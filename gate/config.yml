@@ -8,7 +8,6 @@ log:
   enable_line: true
 
 service:
-  externalip: false
   rpc:
     port: "50002"
   tcp:

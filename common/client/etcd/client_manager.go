@@ -1,7 +1,7 @@
 package etcd
 
 import (
-	"hscore/log"
+	"gokit/log"
 	"time"
 )
 

@@ -1,7 +1,7 @@
 package service
 
 import (
-	"hscore/log"
+	"gokit/log"
 	"push/common/client/etcd"
 
 	"google.golang.org/grpc"

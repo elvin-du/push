@@ -1,13 +1,16 @@
 package service
 
 import (
-	"push/common/log"
+	"gokit/service"
 	"push/rest_api/service/config"
 	"push/rest_api/service/nsq"
 )
 
 func Start() {
-	config.Init()
-	log.Init()
-	nsq.Init()
+	service.Register(func() {
+		config.Start()
+		nsq.Start()
+	})
+
+	service.Start()
 }

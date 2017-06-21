@@ -3,7 +3,7 @@ package main
 import (
 	"encoding/json"
 	"errors"
-	"hscore/log"
+	"gokit/log"
 	gateCli "push/gate/client"
 	"push/pb"
 

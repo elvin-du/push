@@ -1,7 +1,7 @@
 package util
 
 //import (
-//	"hscore/log"
+//	"gokit/log"
 
 //	"golang.org/x/net/context"
 //	"google.golang.org/grpc"

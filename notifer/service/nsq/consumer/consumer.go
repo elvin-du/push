@@ -1,7 +1,7 @@
 package consumer
 
 import (
-	"hscore/log"
+	"gokit/log"
 	"push/notifer/service/config"
 
 	"github.com/nsqio/go-nsq"

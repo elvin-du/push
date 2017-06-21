@@ -5,7 +5,7 @@ GATE Server对外提供的客户端接口,本接口内部调用RPC服务
 package client
 
 import (
-	"hscore/log"
+	"gokit/log"
 	"push/common/client/service"
 	"push/common/session"
 	"push/pb"

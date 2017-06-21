@@ -1,11 +1,14 @@
 package service
 
 import (
-	"push/common/log"
-	"push/gate/service/config"
+	"gokit/service"
+	"push/notifer/service/config"
 )
 
 func Start() {
-	config.Init()
-	log.Init()
+	service.Register(func() {
+		config.Start()
+	})
+
+	service.Start()
 }

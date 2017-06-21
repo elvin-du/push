@@ -2,11 +2,10 @@ package session
 
 import (
 	"push/gate/service/db"
-	"time"
 )
 
 var (
-	TTL time.Duration = time.Second * 300 //默认５分钟
+	TTL int = 300 //默认５分钟
 )
 
 func Start() {

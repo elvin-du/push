@@ -2,7 +2,7 @@ package producer
 
 import (
 	"container/list"
-	"hscore/log"
+	"gokit/log"
 
 	"github.com/nsqio/go-nsq"
 )
@@ -34,7 +34,7 @@ func NewNsqProducer(addr, topic string) *nsqProducer {
 	}
 }
 
-func (np *nsqProducer) Init() {
+func (np *nsqProducer) Start() {
 	go np.ReadLoop()
 	go np.WriteLoop()
 }

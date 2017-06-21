@@ -5,7 +5,7 @@ GATE对外提供RPC服务接口
 package main
 
 import (
-	"hscore/log"
+	"gokit/log"
 	"push/pb"
 
 	"golang.org/x/net/context"

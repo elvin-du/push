@@ -2,7 +2,7 @@ package mqtt
 
 import (
 	"errors"
-	"hscore/log"
+	"gokit/log"
 	"time"
 
 	"github.com/surgemq/message"

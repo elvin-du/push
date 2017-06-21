@@ -1,7 +1,7 @@
 package server
 
 import (
-	"hscore/log"
+	"gokit/log"
 	"net"
 	"push/common/client/etcd"
 	"time"

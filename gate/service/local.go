@@ -1,15 +1,18 @@
 package service
 
 import (
-	"push/common/log"
+	"gokit/service"
 	"push/gate/service/config"
 	"push/gate/service/db"
 	"push/gate/service/session"
 )
 
 func Start() {
-	config.Init()
-	log.Init()
-	db.Init()
-	session.Start()
+	service.Register(func() {
+		config.Start()
+		db.Start()
+		session.Start()
+	})
+
+	service.Start()
 }

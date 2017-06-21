@@ -15,7 +15,7 @@ var (
 	BroadcastProducer = producer.NewNsqProducer(config.NSQ_ADDR, NSQ_TOPIC_BROADCAST)
 )
 
-func Init() {
-	SingleProducer.Init()
-	BroadcastProducer.Init()
+func Start() {
+	SingleProducer.Start()
+	BroadcastProducer.Start()
 }

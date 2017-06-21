@@ -1,7 +1,7 @@
 package main
 
 import (
-	"hscore/log"
+	"gokit/log"
 	"net"
 	"push/common/server"
 	"push/common/util"

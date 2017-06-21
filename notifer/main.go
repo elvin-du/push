@@ -1,7 +1,7 @@
 package main
 
 import (
-	"hscore/log"
+	"gokit/log"
 	"push/notifer/service/nsq/consumer"
 )
 

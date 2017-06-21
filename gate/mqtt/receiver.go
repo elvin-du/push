@@ -4,7 +4,7 @@ import (
 	"encoding/binary"
 	"errors"
 	"fmt"
-	"hscore/log"
+	"gokit/log"
 	"time"
 
 	"github.com/surgemq/message"

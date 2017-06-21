@@ -57,8 +57,11 @@ func NewPoolWithOpt(addr string, opt *Option) *Pool {
 	return &Pool{pool}
 }
 
-func (p *Pool) EXPIRE(key string, TTL time.Duration) error {
-	_, err := p.Get().Do("EXPIRE", key, TTL)
+func (p *Pool) EXPIRE(key string, TTL int) error {
+	c := p.Get()
+	defer p.Close()
+
+	_, err := c.Do("EXPIRE", key, TTL)
 	if nil != err {
 		return err
 	}
@@ -67,12 +70,15 @@ func (p *Pool) EXPIRE(key string, TTL time.Duration) error {
 }
 
 func (p *Pool) HMSET(key string, fields map[string]interface{}) error {
+	c := p.Get()
+	defer p.Close()
+
 	args := []interface{}{key}
 	for k, v := range fields {
 		args = append(args, k)
 		args = append(args, v)
 	}
-	_, err := p.Get().Do("HMSET", args...)
+	_, err := c.Do("HMSET", args...)
 	if nil != err {
 		return err
 	}
@@ -80,24 +86,37 @@ func (p *Pool) HMSET(key string, fields map[string]interface{}) error {
 	return nil
 }
 
-func (p *Pool) HMSETAndEXPIRE(key string, fields map[string]interface{}, TTL time.Duration) error {
+func (p *Pool) HMSETAndEXPIRE(key string, fields map[string]interface{}, TTL int) error {
 	args := []interface{}{key}
 	for k, v := range fields {
 		args = append(args, k)
 		args = append(args, v)
 	}
 
-	err := p.Get().Send("HMSET", args...)
+	c := p.Get()
+	defer p.Close()
+
+	err := c.Send("MULTI")
 	if nil != err {
 		return err
 	}
 
-	_, err = p.Get().Do("EXPIRE", key, TTL)
+	err = c.Send("HMSET", args...)
 	if nil != err {
 		return err
 	}
 
-	return err
+	err = c.Send("EXPIRE", key, int(TTL))
+	if nil != err {
+		return err
+	}
+
+	_, err = c.Do("EXEC")
+	if nil != err {
+		return err
+	}
+
+	return nil
 }
 
 /*
@@ -108,7 +127,10 @@ for example:
 }
 */
 func (p *Pool) HGETALL(key string, v interface{}) error {
-	valueInterfaces, err := libRedis.Values(p.Get().Do("HGETALL", key))
+	c := p.Get()
+	defer p.Close()
+
+	valueInterfaces, err := libRedis.Values(c.Do("HGETALL", key))
 	if nil != err {
 		return err
 	}
@@ -124,9 +146,12 @@ for example:
 }
 */
 func (p *Pool) HMGET(key string, fields []interface{}, v interface{}) error {
+	c := p.Get()
+	defer p.Close()
+
 	tmp := []interface{}{key}
 	tmp = append(tmp, fields...)
-	valueInterfaces, err := libRedis.Values(p.Get().Do("HMGET", tmp...))
+	valueInterfaces, err := libRedis.Values(c.Do("HMGET", tmp...))
 	if nil != err {
 		return err
 	}
@@ -135,7 +160,10 @@ func (p *Pool) HMGET(key string, fields []interface{}, v interface{}) error {
 }
 
 func (p *Pool) DEL(keys []interface{}) error {
-	number, err := libRedis.Int(p.Get().Do("DEL", keys...))
+	c := p.Get()
+	defer p.Close()
+
+	number, err := libRedis.Int(c.Do("DEL", keys...))
 	if nil != err {
 		return err
 	}

@@ -3,7 +3,7 @@ package errors
 import (
 	"encoding/json"
 	"fmt"
-	"hscore/log"
+	"gokit/log"
 )
 
 type DataError struct {

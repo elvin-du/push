@@ -1,30 +1,19 @@
 package config
 
 import (
-	"hscore/config"
-	"hscore/log"
-	"hscore/util"
+	"gokit/config"
+	"gokit/log"
 	pushUtil "push/common/util"
 )
 
 var (
 	RPC_SERVICE_PORT string
-
-	SERVER_IP string
-
-	TCP_PORT string
+	SERVER_IP        string
+	TCP_PORT         string
 )
 
-func Init() {
-	loadConfig()
+func Start() {
 	ParseConfig()
-}
-
-func loadConfig() {
-	err := config.ReadConfig(util.GetFile("config.yml"))
-	if err != nil {
-		log.Fatal("Read configuration file failed", err)
-	}
 }
 
 func ParseConfig() {
@@ -33,16 +22,7 @@ func ParseConfig() {
 		log.Fatal(err)
 	}
 
-	externalIp := false
-	err = config.Get("service:externalip", &externalIp)
-	if nil != err {
-		log.Fatal(err)
-	}
-	if externalIp {
-		SERVER_IP = pushUtil.ExternalIP
-	} else {
-		SERVER_IP = pushUtil.InternalIP
-	}
+	SERVER_IP = pushUtil.InternalIP
 
 	err = config.Get("service:tcp:port", &TCP_PORT)
 	if nil != err {

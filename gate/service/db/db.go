@@ -1,7 +1,7 @@
 package db
 
 import (
-	"hscore/log"
+	"gokit/log"
 	dbredis "push/common/db/redis"
 
 	_ "github.com/go-sql-driver/mysql"
@@ -14,7 +14,7 @@ var (
 )
 
 //TODO
-func Init() {
+func Start() {
 	redis = dbredis.NewPool("localhost:6379")
 	var err error = nil
 	mysql, err = gorm.Open("mysql", "root:JTabc.123@/push_core?charset=utf8&parseTime=True&loc=Local")

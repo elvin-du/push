@@ -2,7 +2,7 @@ package util
 
 import (
 	"errors"
-	"hscore/log"
+	"gokit/log"
 	"io/ioutil"
 	"net"
 	"net/http"
@@ -11,17 +11,11 @@ import (
 
 var (
 	InternalIP string
-	ExternalIP string
 )
 
 func init() {
 	var err error = nil
 	InternalIP, err = internalIP()
-	if nil != err {
-		log.Fatalln(err)
-	}
-
-	ExternalIP, err = externalIP()
 	if nil != err {
 		log.Fatalln(err)
 	}

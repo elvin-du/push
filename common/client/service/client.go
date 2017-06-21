@@ -1,6 +1,7 @@
 package service
 
 import (
+	"errors"
 	"gokit/log"
 	"push/common/client/etcd"
 
@@ -30,6 +31,11 @@ func GetServiceClient(srvName, srvVer string) (*ServiceClient, error) {
 }
 
 func NewServiceClient(ip, port, srvName, srvVer string) (*ServiceClient, error) {
+	if "" == ip || "" == port {
+		err := errors.New("ip and port must not be empty")
+		log.Errorln(err)
+		return nil, err
+	}
 	target := ip + ":" + port
 	cliConn, err := grpc.Dial(target, grpc.WithInsecure())
 	if nil != err {

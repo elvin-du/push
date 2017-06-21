@@ -27,4 +27,5 @@ func ParseConfig() {
 		}
 		NSQ_LOOKUPD_ADDRS = append(NSQ_LOOKUPD_ADDRS, val2)
 	}
+	log.Debugln("nsq:lookupd:addrs", NSQ_LOOKUPD_ADDRS)
 }

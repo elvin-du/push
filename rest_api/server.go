@@ -19,7 +19,7 @@ func StartHTTP() {
 		SetProfile()
 	}
 
-	router.GET("/push", _push.Push)
+	router.POST("/push", _push.Push)
 
 	router.Run(config.HTTP_ADDR)
 }

@@ -5,6 +5,7 @@ import (
 	"errors"
 	"gokit/log"
 	gateCli "push/gate/client"
+	"push/notifer/service/db"
 	"push/pb"
 
 	"github.com/nsqio/go-nsq"
@@ -54,9 +55,17 @@ func (b *SingleMsgHandler) Process(i interface{}) error {
 		return err
 	}
 
+	var ses session
+	err = db.Redis().HMGET(data.ClientId, []interface{}{"client_id", "platform", "gate_server_ip", "gate_server_port"}, &ses)
+	if nil != err {
+		log.Errorln(err)
+		return err
+	}
+
 	_, err = gateCli.Push(
+		ses.GateServerIP,
+		ses.GateServerPort,
 		&pb.GatePushRequest{
-			Header:   &pb.RequestHeader{AppName: data.AppName},
 			ClientId: data.ClientId,
 			Content:  data.Content,
 			Kind:     data.Kind,

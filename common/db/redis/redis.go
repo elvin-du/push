@@ -7,7 +7,7 @@ import (
 	libRedis "github.com/garyburd/redigo/redis"
 )
 
-var ErrNotFound = libRedis.ErrNil
+var ErrNotFound = fmt.Errorf("Not Found\n")
 
 type Option struct {
 	MaxIdle        int
@@ -156,7 +156,14 @@ func (p *Pool) HMGET(key string, fields []interface{}, v interface{}) error {
 		return err
 	}
 
-	return libRedis.ScanStruct(valueInterfaces, &v)
+	//HMGET在找不到数据的时候，也不会返回err，而是数据返回nil
+	for _, v := range valueInterfaces {
+		if nil == v {
+			return ErrNotFound
+		}
+	}
+
+	return libRedis.ScanStruct(valueInterfaces, v)
 }
 
 func (p *Pool) DEL(keys []interface{}) error {

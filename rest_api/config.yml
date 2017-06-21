@@ -12,5 +12,5 @@ http:
   profile: true
   mode: debug
 
-nsq:
+nsqd:
   addr: 127.0.0.1:4150

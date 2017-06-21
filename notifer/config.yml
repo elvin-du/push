@@ -1,5 +1,3 @@
-NSQLOOUPD_ADDRS
-
 #log setup
 log:
   #can set output to file, others will be outputed to std

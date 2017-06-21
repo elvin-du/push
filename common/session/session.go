@@ -1,12 +1,22 @@
 package session
 
 import (
-	"push/gate/service/db"
+	redis "push/common/db/redis"
 )
 
-func Get(clientId string) (*Session, error) {
-	var ses Session
-	err := db.Redis().HMGET(clientId, []interface{}{"client_id", "platform", "gate_server_ip", "gate_server_port"}, &ses)
+type Session struct {
+	pool *redis.Pool
+}
+
+func New(pool *redis.Pool)*Session{
+	return &Session{
+		pool:pool,
+	}
+}
+
+func (s *Session) Get(clientId string) (*session, error) {
+	var ses session
+	err := s.pool.HMGET(clientId, []interface{}{"client_id", "platform", "gate_server_ip", "gate_server_port"}, &ses)
 	if nil != err {
 		return nil, err
 	}

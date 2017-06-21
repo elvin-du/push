@@ -7,27 +7,26 @@ package client
 import (
 	"gokit/log"
 	"push/common/client/service"
-	"push/common/session"
 	"push/pb"
 
 	"golang.org/x/net/context"
 )
 
-func Push(req *pb.GatePushRequest) (*pb.GatePushResponse, error) {
-	ses, err := session.Get(req.ClientId)
-	if nil != err {
-		//TODO save push msg to offline msg
-		log.Errorln(err)
-		return nil, err
-	}
+func Push(ip, port string, req *pb.GatePushRequest) (*pb.GatePushResponse, error) {
+	//	ses, err := s.Get(req.ClientId)
+	//	if nil != err {
+	//		//TODO save push msg to offline msg
+	//		log.Errorln(err)
+	//		return nil, err
+	//	}
 
-	if "IOS" == ses.Platform {
-		//TODO
-		return nil, nil
-	}
-	//TODO req.PacketId需要填写
+	//	if "IOS" == ses.Platform {
+	//		//TODO
+	//		return nil, nil
+	//	}
+	//	//TODO req.PacketId需要填写
 
-	return doPush(ses.GateServerIP, ses.GateServerPort, req)
+	return doPush(ip, port, req)
 }
 
 func doPush(ip, port string, req *pb.GatePushRequest) (*pb.GatePushResponse, error) {

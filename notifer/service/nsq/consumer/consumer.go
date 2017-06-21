@@ -51,18 +51,18 @@ func (n *nsqConsumer) Run() {
 	}
 
 	//广播
-	n.broadcastConsumer, err = nsq.NewConsumer(NSQ_TOPIC_BROADCAST, NSQ_CHANNEL_BROADCAST, cfg)
-	if nil != err {
-		log.Fatalln(err)
-	}
-	n.broadcastConsumer.AddHandler(nsq.HandlerFunc(func(msg *nsq.Message) error {
-		return n.broadcastMsgHandler.Process(msg)
-	}))
+//	n.broadcastConsumer, err = nsq.NewConsumer(NSQ_TOPIC_BROADCAST, NSQ_CHANNEL_BROADCAST, cfg)
+//	if nil != err {
+//		log.Fatalln(err)
+//	}
+//	n.broadcastConsumer.AddHandler(nsq.HandlerFunc(func(msg *nsq.Message) error {
+//		return n.broadcastMsgHandler.Process(msg)
+//	}))
 
-	n.broadcastConsumer.ConnectToNSQLookupds(config.NSQ_LOOKUPD_ADDRS)
-	if nil != err {
-		log.Fatalln(err)
-	}
+//	n.broadcastConsumer.ConnectToNSQLookupds(config.NSQ_LOOKUPD_ADDRS)
+//	if nil != err {
+//		log.Fatalln(err)
+//	}
 
 	<-n.stopCh
 }

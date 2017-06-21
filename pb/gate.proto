@@ -12,7 +12,6 @@ service Gate{
 }
 
 message GatePushRequest{
-	RequestHeader Header = 1;
 	string ClientId = 2;
 	uint32 PacketId = 3;
 	string Content = 4;
@@ -25,7 +24,6 @@ message GatePushResponse{
 }
 
 message GatePushAllRequest{
-	RequestHeader Header = 1;
 	uint32 PacketId = 2;
 	string Content = 3;
 	int32 Kind = 4;

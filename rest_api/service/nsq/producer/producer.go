@@ -11,7 +11,7 @@ var (
 	CACHE_SIZE = 32
 )
 
-type nsqProducer struct {
+type NsqProducer struct {
 	Queue      *list.List
 	cacheInCh  chan []byte
 	cacheOutCh chan []byte
@@ -19,13 +19,13 @@ type nsqProducer struct {
 	topic      string
 }
 
-func NewNsqProducer(addr, topic string) *nsqProducer {
+func NewNsqProducer(addr, topic string) *NsqProducer {
 	producer, err := nsq.NewProducer(addr, nsq.NewConfig())
 	if nil != err {
 		log.Fatal(err) //直接崩溃
 	}
 
-	return &nsqProducer{
+	return &NsqProducer{
 		Queue:      list.New(),
 		cacheInCh:  make(chan []byte, CACHE_SIZE),
 		cacheOutCh: make(chan []byte, CACHE_SIZE),
@@ -34,12 +34,12 @@ func NewNsqProducer(addr, topic string) *nsqProducer {
 	}
 }
 
-func (np *nsqProducer) Start() {
+func (np *NsqProducer) Start() {
 	go np.ReadLoop()
 	go np.WriteLoop()
 }
 
-func (np *nsqProducer) ReadLoop() {
+func (np *NsqProducer) ReadLoop() {
 	for {
 		if np.Queue.Len() > 0 {
 			select {
@@ -57,7 +57,7 @@ func (np *nsqProducer) ReadLoop() {
 	}
 }
 
-func (np *nsqProducer) WriteLoop() {
+func (np *NsqProducer) WriteLoop() {
 	for {
 		select {
 		case msg := <-np.cacheOutCh:
@@ -71,11 +71,11 @@ func (np *nsqProducer) WriteLoop() {
 	}
 }
 
-func (np *nsqProducer) publish(topic string, data []byte) error {
+func (np *NsqProducer) publish(topic string, data []byte) error {
 	return np.producer.Publish(topic, data)
 }
 
-func (np *nsqProducer) Publish(data []byte) error {
+func (np *NsqProducer) Publish(data []byte) error {
 	log.Infof("%s into out queue", string(data))
 	np.cacheInCh <- data
 	return nil

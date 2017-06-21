@@ -11,11 +11,13 @@ var (
 )
 
 var (
-	SingleProducer    = producer.NewNsqProducer(config.NSQ_ADDR, NSQ_TOPIC_SINGLE)
-	BroadcastProducer = producer.NewNsqProducer(config.NSQ_ADDR, NSQ_TOPIC_BROADCAST)
+	SingleProducer    *producer.NsqProducer
+	BroadcastProducer *producer.NsqProducer
 )
 
 func Start() {
+	SingleProducer = producer.NewNsqProducer(config.NSQD_ADDR, NSQ_TOPIC_SINGLE)
+	BroadcastProducer = producer.NewNsqProducer(config.NSQD_ADDR, NSQ_TOPIC_BROADCAST)
 	SingleProducer.Start()
 	BroadcastProducer.Start()
 }

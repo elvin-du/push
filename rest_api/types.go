@@ -13,7 +13,7 @@ var (
 )
 
 type Message struct {
-	AppName  string `json:"app_name"`
+//	AppName  string `json:"app_name"`
 	ClientId string `json:"client_id"`
 	Content  string `json:"content"`
 	Kind     int    `json:"kind"`
@@ -27,9 +27,9 @@ func ValidMessage(bin []byte) error {
 		return err
 	}
 
-	if "" == msg.AppName {
-		return APP_NAME_INVALID
-	}
+//	if "" == msg.AppName {
+//		return APP_NAME_INVALID
+//	}
 
 	if "" == msg.ClientId {
 		return CLIENT_ID_INVALID

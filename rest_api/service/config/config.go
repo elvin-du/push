@@ -12,7 +12,7 @@ var (
 )
 
 var (
-	NSQ_ADDR string
+	NSQD_ADDR string
 )
 
 func Start() {
@@ -35,7 +35,7 @@ func ParseConfig() {
 		log.Fatal(err)
 	}
 
-	err = goconfig.Get("nsq:addr", &NSQ_ADDR)
+	err = goconfig.Get("nsqd:addr", &NSQD_ADDR)
 	if nil != err {
 		log.Fatal(err)
 	}

@@ -7,7 +7,7 @@ import (
 )
 
 var (
-	RPC_SERVICE_PORT string
+	RPC_SERVICE_PORT int
 	SERVER_IP        string
 	TCP_PORT         string
 )

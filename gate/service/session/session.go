@@ -17,7 +17,7 @@ type Session struct {
 	ClientID       string `json:"client_id"`
 	Platform       string `json:"platform"`
 	GateServerIP   string `json:"gate_server_ip"`
-	GateServerPort string `json:"gate_server_port"`
+	GateServerPort int    `json:"gate_server_port"`
 }
 
 func (s *Session) ToMap() map[string]interface{} {

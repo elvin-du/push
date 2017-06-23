@@ -1,26 +1,35 @@
 package main
 
 import (
-	"gokit/log"
+	"flag"
+	"fmt"
 	"net"
-	"push/common/server"
-	"push/common/util"
+	//	"push/common/server"
+	//	"push/common/util"
 	//	. "push/errors"
+	"os"
+	"os/signal"
+	"push/common/grpclb"
 	"push/gate/model"
 	"push/gate/mqtt"
 	"push/gate/service/config"
+	mylog "push/gate/service/log"
 	"push/gate/service/session"
 	"push/pb"
 	"strings"
+	"syscall"
 	"time"
 
+	"github.com/grpc-ecosystem/go-grpc-middleware"
+	"github.com/grpc-ecosystem/go-grpc-middleware/logging/logrus"
+	"github.com/grpc-ecosystem/go-grpc-middleware/tags"
+	log "github.com/sirupsen/logrus"
 	"github.com/surgemq/message"
 	"google.golang.org/grpc"
 )
 
 const (
-	RPC_SERVICE_NAME    = "GATE"
-	RPC_SERVICE_VERSION = "1.0.0"
+	RPC_SERVICE_NAME = "gate"
 )
 
 var (
@@ -35,22 +44,49 @@ type Server struct {
 	Keepalive int64                    //单位：秒
 }
 
+var (
+	reg = flag.String("reg", "http://127.0.0.1:2379", "register etcd address")
+)
+
 /*
 开始监听RPC端口
 */
 func (s *Server) StartRPCServer() {
-	srv := grpc.NewServer()
-	pb.RegisterGateServer(srv, &Gate{})
+	flag.Parse()
 
-	server.NewRPCServer(
-		RPC_SERVICE_NAME,
-		RPC_SERVICE_VERSION,
-		config.SERVER_IP,
-		config.RPC_SERVICE_PORT,
-		nil,
-		util.HEARTBEAT_INTERNAL,
-		srv,
-	).Run()
+	lis, err := net.Listen("tcp", fmt.Sprintf("0.0.0.0:%d", config.RPC_SERVICE_PORT))
+	if err != nil {
+		panic(err)
+	}
+
+	//TODO
+	err = grpclb.Register(RPC_SERVICE_NAME, config.SERVER_IP, config.RPC_SERVICE_PORT, *reg, time.Second*10, 15)
+	if err != nil {
+		panic(err)
+	}
+
+	ch := make(chan os.Signal, 1)
+	signal.Notify(ch, syscall.SIGTERM, syscall.SIGINT, syscall.SIGKILL, syscall.SIGHUP, syscall.SIGQUIT)
+	go func() {
+		stop := <-ch
+		log.Printf("receive signal '%v'", stop)
+		grpclb.UnRegister()
+		os.Exit(1)
+	}()
+
+	log.Printf("starting hello service at %d", config.RPC_SERVICE_PORT)
+
+	grpc_logrus.ReplaceGrpcLogger(mylog.LogrusEntry)
+	srv := grpc.NewServer(
+		grpc_middleware.WithUnaryServerChain(
+			grpc_ctxtags.UnaryServerInterceptor(
+				grpc_ctxtags.WithFieldExtractor(grpc_ctxtags.CodeGenRequestFieldExtractor),
+			),
+			grpc_logrus.UnaryServerInterceptor(mylog.LogrusEntry),
+		))
+
+	pb.RegisterGateServer(srv, &Gate{})
+	srv.Serve(lis)
 }
 
 //开始监听客户端的连接
@@ -129,7 +165,6 @@ func (s *Server) checkConnection(svc *mqtt.Service) (err error) {
 	}
 	log.Debugln("come to connect,clientid:", string(connMsg.ClientId()))
 
-	svc.AppName = string(connMsg.Username())
 	svc.ClientId = string(connMsg.ClientId())
 
 	//合法性检验
@@ -179,9 +214,9 @@ func (s *Server) Online(svc *mqtt.Service) error {
 	return nil
 }
 
-func (s *Server) CheckOfflineMsg( clientId string) {
-	msgs,err := model.OfflineMsgModel().Get(clientId)
-	if nil != err{
+func (s *Server) CheckOfflineMsg(clientId string) {
+	msgs, err := model.OfflineMsgModel().Get(clientId)
+	if nil != err {
 		log.Errorln(err)
 		return
 	}

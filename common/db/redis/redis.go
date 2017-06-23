@@ -59,7 +59,7 @@ func NewPoolWithOpt(addr string, opt *Option) *Pool {
 
 func (p *Pool) EXPIRE(key string, TTL int) error {
 	c := p.Get()
-	defer p.Close()
+	defer c.Close()
 
 	_, err := c.Do("EXPIRE", key, TTL)
 	if nil != err {
@@ -71,7 +71,7 @@ func (p *Pool) EXPIRE(key string, TTL int) error {
 
 func (p *Pool) HMSET(key string, fields map[string]interface{}) error {
 	c := p.Get()
-	defer p.Close()
+	defer c.Close()
 
 	args := []interface{}{key}
 	for k, v := range fields {
@@ -94,7 +94,7 @@ func (p *Pool) HMSETAndEXPIRE(key string, fields map[string]interface{}, TTL int
 	}
 
 	c := p.Get()
-	defer p.Close()
+	defer c.Close()
 
 	err := c.Send("MULTI")
 	if nil != err {
@@ -128,39 +128,11 @@ for example:
 */
 func (p *Pool) HGETALL(key string, v interface{}) error {
 	c := p.Get()
-	defer p.Close()
+	defer c.Close()
 
 	valueInterfaces, err := libRedis.Values(c.Do("HGETALL", key))
 	if nil != err {
 		return err
-	}
-
-	return libRedis.ScanStruct(valueInterfaces, &v)
-}
-
-/*
-v:must be ptr of struct. and should use redis tag for struct field.
-for example:
-{
-	"name":"elvin" `"redis":"name"`
-}
-*/
-func (p *Pool) HMGET(key string, fields []interface{}, v interface{}) error {
-	c := p.Get()
-	defer p.Close()
-
-	tmp := []interface{}{key}
-	tmp = append(tmp, fields...)
-	valueInterfaces, err := libRedis.Values(c.Do("HMGET", tmp...))
-	if nil != err {
-		return err
-	}
-
-	//HMGET在找不到数据的时候，也不会返回err，而是数据返回nil
-	for _, v := range valueInterfaces {
-		if nil == v {
-			return ErrNotFound
-		}
 	}
 
 	return libRedis.ScanStruct(valueInterfaces, v)
@@ -168,7 +140,7 @@ func (p *Pool) HMGET(key string, fields []interface{}, v interface{}) error {
 
 func (p *Pool) DEL(keys []interface{}) error {
 	c := p.Get()
-	defer p.Close()
+	defer c.Close()
 
 	number, err := libRedis.Int(c.Do("DEL", keys...))
 	if nil != err {

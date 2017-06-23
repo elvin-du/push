@@ -6,7 +6,8 @@ package client
 
 import (
 	"gokit/log"
-	"push/common/client/service"
+	"push/common/client"
+//	"push/common/grpclb"
 	"push/pb"
 
 	"golang.org/x/net/context"
@@ -30,14 +31,15 @@ func Push(ip, port string, req *pb.GatePushRequest) (*pb.GatePushResponse, error
 }
 
 func doPush(ip, port string, req *pb.GatePushRequest) (*pb.GatePushResponse, error) {
-	cli, err := service.GateClient(ip, port)
+	cli, err := client.DefaultPool.Get(ip, port)
 	if nil != err {
 		log.Error(err)
 		return nil, err
 	}
-	defer service.GatePut(cli)
 
-	return cli.GateClient.Push(context.TODO(), req)
+	gateCli := pb.NewGateClient(cli)
+
+	return gateCli.Push(context.TODO(), req)
 }
 
 //TODO maybe remove later

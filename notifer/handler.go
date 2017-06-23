@@ -56,12 +56,12 @@ func (b *SingleMsgHandler) Process(i interface{}) error {
 	}
 
 	var ses session
-	err = db.Redis().HMGET(data.ClientId, []interface{}{"client_id", "platform", "gate_server_ip", "gate_server_port"}, &ses)
+	err = db.Redis().HGETALL(data.ClientId, &ses)
 	if nil != err {
 		log.Errorln(err)
 		return err
 	}
-
+	log.Debugln("session:", ses)
 	_, err = gateCli.Push(
 		ses.GateServerIP,
 		ses.GateServerPort,

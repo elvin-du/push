@@ -66,6 +66,7 @@ func (b *SingleMsgHandler) Process(i interface{}) error {
 		ses.GateServerIP,
 		ses.GateServerPort,
 		&pb.GatePushRequest{
+			AppID:    data.AppID,
 			ClientId: data.ClientId,
 			Content:  data.Content,
 			Kind:     data.Kind,

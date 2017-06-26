@@ -33,7 +33,7 @@ func Connect() error {
 	}
 
 	connMsg.SetCleanSession(false)
-	connMsg.SetUsername([]byte("yourdoctor")) //api_name
+	connMsg.SetUsername([]byte("5001")) //api_id
 	connMsg.SetPassword([]byte("123456789"))//api_secret
 	err = Send(connMsg)
 	if nil != err {

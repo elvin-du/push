@@ -18,8 +18,11 @@ func (*Gate) Push(ctx context.Context, req *pb.GatePushRequest) (*pb.GatePushRes
 	log.Debugln(*req)
 	resp := &pb.GatePushResponse{}
 
-//	svc := defaultServer.Services[req.Header.AppName+req.ClientId]
-	svc := defaultServer.Services[req.ClientId]
+//	svc := defaultServer.Services[req.Header.AppID+req.ClientId]
+	svc := defaultServer.Services[req.AppID+req.ClientId]
+	if nil ==svc{
+		log.Debugln("not found service by:appid:clientId:",req.AppID,req.ClientId)
+	}
 	err := svc.Push(uint16(req.PacketId), []byte(req.Content))
 	if nil != err {
 		return resp, err

@@ -40,7 +40,7 @@ var (
 )
 
 type Server struct {
-	Services  map[string]*mqtt.Service //key:AppName+clientId
+	Services  map[string]*mqtt.Service //key:AppID+clientId
 	Keepalive int64                    //单位：秒
 }
 
@@ -166,9 +166,10 @@ func (s *Server) checkConnection(svc *mqtt.Service) (err error) {
 	log.Debugln("come to connect,clientid:", string(connMsg.ClientId()))
 
 	svc.ClientId = string(connMsg.ClientId())
+	svc.AppID = string(connMsg.Username())
 
 	//合法性检验
-	err = s.Auth(svc.AppName, string(connMsg.Password()))
+	err = s.Auth(svc.AppID, string(connMsg.Password()))
 	if nil != err {
 		log.Error(err)
 		return err
@@ -229,7 +230,7 @@ func (s *Server) CheckOfflineMsg(clientId string) {
 }
 
 func (s *Server) SetService(svc *mqtt.Service) {
-	s.Services[svc.AppName+svc.ClientId] = svc
+	s.Services[svc.AppID+svc.ClientId] = svc
 }
 
 func (s *Server) DelService(svc *mqtt.Service) {
@@ -237,7 +238,7 @@ func (s *Server) DelService(svc *mqtt.Service) {
 		return
 	}
 
-	delete(s.Services, svc.AppName+svc.ClientId)
+	delete(s.Services, svc.AppID+svc.ClientId)
 
 	//	services := make([]*mqtt.Service, 0, 0)
 
@@ -270,7 +271,7 @@ func (s *Server) ParseClientId(clientId string) (string, error) {
 }
 
 //TODO
-func (s *Server) Auth(AppName, appSecret string) error {
+func (s *Server) Auth(AppID, appSecret string) error {
 	return nil
 }
 
@@ -280,17 +281,17 @@ func (s *Server) CronEvery() {
 		log.Infoln("it seems", len(s.Services), "clients coneccting,begin to scaning alive")
 
 		for _, user := range s.Services {
-			log.Debugf("check clientId:%s,AppName:%s is alive?", user.ClientId, user.AppName)
+			log.Debugf("check clientId:%s,AppID:%s is alive?", user.ClientId, user.AppID)
 			if !user.IsAlive(s.Keepalive) {
-				log.Debugf("clientId:%s,AppName:%s is not alive", user.ClientId, user.AppName)
+				log.Debugf("clientId:%s,AppID:%s is not alive", user.ClientId, user.AppID)
 				s.DelService(user)
 
 				if nil != user.Conn {
 					err := user.Conn.Close()
 					if nil != err {
-						log.Errorf("close conn for:%+v,clientId:%s,AppName:%s,err:%s", *user, user.ClientId, user.AppName, err.Error())
+						log.Errorf("close conn for:%+v,clientId:%s,AppID:%s,err:%s", *user, user.ClientId, user.AppID, err.Error())
 					} else {
-						log.Infof("close conn for:%+v,clientId:%s,AppName:%s,err:%s", *user, user.ClientId, user.AppName, err.Error())
+						log.Infof("close conn for:%+v,clientId:%s,AppID:%s,err:%s", *user, user.ClientId, user.AppID, err.Error())
 					}
 				}
 

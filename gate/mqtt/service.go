@@ -10,6 +10,7 @@ var (
 )
 
 type Service struct {
+	AppID        string
 	Conn         net.Conn
 	ClientId     string
 	Platform     string

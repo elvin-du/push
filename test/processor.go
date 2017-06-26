@@ -28,7 +28,7 @@ func processConnAck(msg *message.ConnackMessage) error {
 }
 
 func processPub(msg *message.PublishMessage) error {
-	log.Println("processPub", *msg)
+	log.Println("processPub", string(msg.Payload()))
 	return nil
 }
 

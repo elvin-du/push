@@ -46,6 +46,7 @@ func (s *Service) Write(msg message.Message) error {
 		log.Error(err)
 		return err
 	}
+	log.Debugln("n:", n, string(buf))
 
 	s.outCh <- buf[:n]
 

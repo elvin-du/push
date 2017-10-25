@@ -5,42 +5,43 @@ import (
 	"errors"
 	"fmt"
 	"gokit/log"
-	"time"
+	"runtime/debug"
 
 	"github.com/surgemq/message"
 )
 
 var (
-	E_WRITE_ERROR = errors.New("write error")
+	E_READ_ERROR = errors.New("read error")
 )
 
-func (s *Service) ReadLoop() error {
+func (s *Session) ReadLoop() {
+	var err error = nil
+
+	defer func() {
+		// handle panic
+		if r := recover(); r != nil {
+			log.Errorf("session ReadLoop recover: %v, DEBUG.STACK=%v", r, string(debug.Stack()))
+		}
+
+		s.closeWait.Done()
+		s.Close(err)
+	}()
+
 	for {
-		//TODO 读取信息失败后，直接断开连接?
-		msg, _, _, err := s.ReadMessage()
+		//读取信息失败后，直接断开连接
+		var msg message.Message
+		msg, _, _, err = s.ReadMessage()
 		if nil != err {
 			log.Error(err)
-			return err
+			return
 		}
 
-		err = s.Process(msg)
-		if nil != err {
-			log.Errorln(err)
-			continue
-		}
+		s.readPacketCallback(s, msg)
 	}
-
-	return E_READ_ERROR
 }
 
 // ReadPacket read one packet from conn
-func (s *Service) ReadMessage() (message.Message, []byte, int, error) {
-	if s.readTimeout > 0 {
-		s.Conn.SetReadDeadline(time.Now().Add(s.readTimeout))
-	} else {
-		s.Conn.SetReadDeadline(time.Time{})
-	}
-
+func (s *Session) ReadMessage() (message.Message, []byte, int, error) {
 	var (
 		// buf for head
 		b = make([]byte, 5)
@@ -99,13 +100,7 @@ func (s *Service) ReadMessage() (message.Message, []byte, int, error) {
 }
 
 // Read a raw message from conn
-func (s *Service) readRaw() ([]byte, error) {
-	if s.readTimeout > 0 {
-		s.Conn.SetReadDeadline(time.Now().Add(s.readTimeout))
-	} else {
-		s.Conn.SetReadDeadline(time.Time{})
-	}
-
+func (s *Session) readRaw() ([]byte, error) {
 	var (
 		// the message buffer
 		buf []byte
@@ -160,7 +155,7 @@ func (s *Service) readRaw() ([]byte, error) {
 	return buf, nil
 }
 
-func (s *Service) GetConnectMessage() (*message.ConnectMessage, error) {
+func (s *Session) GetConnectMessage() (*message.ConnectMessage, error) {
 	buf, err := s.readRaw()
 	if err != nil {
 		log.Error(err)

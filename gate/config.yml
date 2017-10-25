@@ -9,6 +9,6 @@ log:
 
 service:
   rpc:
-    port: 50002
+    port: 50001
   tcp:
     port: "51001"

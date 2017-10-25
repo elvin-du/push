@@ -13,9 +13,9 @@ func OfflineMsgModel() *offlineMsg {
 	return _offlineMsg
 }
 
-func (om *offlineMsg) Get(clientId string) ([]*OfflineMsg, error) {
+func (om *offlineMsg) Get(appID, clientID string) ([]*OfflineMsg, error) {
 	var omsgs = []*OfflineMsg{}
-	if err := db.Mysql().Where("client_id=?", clientId).Find(&omsgs).Error; nil != err {
+	if err := db.Mysql().Where("app_id=? AND client_id=?", appID, clientID).Find(&omsgs).Error; nil != err {
 		log.Errorln(err)
 		return nil, err
 	}

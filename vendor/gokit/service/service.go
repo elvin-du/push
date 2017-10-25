@@ -3,7 +3,7 @@ package service
 import (
 	"gokit/config"
 	"gokit/log"
-	"gokit/service/pub"
+	//	"gokit/service/pub"
 	"gokit/util"
 	"os"
 )
@@ -15,12 +15,12 @@ type Option struct {
 func Start(opts ...Option) {
 	loadConfig()
 	initLog()
-	//启动pulisher服务
-	for _, o := range opts {
-		for _, p := range o.PubNames {
-			pub.CreatePublisher(p)
-		}
-	}
+	//	//启动pulisher服务
+	//	for _, o := range opts {
+	//		for _, p := range o.PubNames {
+	//			pub.CreatePublisher(p)
+	//		}
+	//	}
 	startLocalServices()
 }
 

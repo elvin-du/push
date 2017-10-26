@@ -11,4 +11,4 @@ service:
   rpc:
     port: 50001
   tcp:
-    port: "51001"
+    port: 51001

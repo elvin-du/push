@@ -13,7 +13,8 @@
 	```
 	json格式，
 	{
-		"user_id":"11",
+		"app_id":"123",
+		"client_id":"ANDROID+123",
 		"content":"恭喜您获得",
 		"kind":1,
 		"extra":"",# json格式

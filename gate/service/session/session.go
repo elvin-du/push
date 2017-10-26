@@ -9,11 +9,6 @@ var (
 	TTL int = 300 //默认５分钟
 )
 
-func Start() {
-
-	//TODO load from config file
-}
-
 type Session struct {
 	AppID          string `json:"app_id"`
 	ClientID       string `json:"client_id"`
@@ -33,15 +28,19 @@ func (s *Session) ToMap() map[string]interface{} {
 	return m
 }
 
+func (s *Session) RedisKey() string {
+	return RedisKey(s.AppID, s.ClientID)
+}
+
+func RedisKey(appID, clientID string) string {
+	return fmt.Sprintf("%s+%s", appID, clientID)
+}
+
 //每次保存一次，会自动更新过期时间
-func (s *Session) Save() error {
+func Update(s *Session) error {
 	return db.Redis().HMSETAndEXPIRE(s.RedisKey(), s.ToMap(), TTL)
 }
 
-func (s *Session) RedisKey() string {
-	return fmt.Sprintf("%s+%s", s.AppID, s.ClientID)
-}
-
-func (s *Session) Touch() error {
-	return db.Redis().EXPIRE(s.ClientID, TTL)
+func Touch(appID, clientID string) error {
+	return db.Redis().EXPIRE(RedisKey(appID, clientID), TTL)
 }

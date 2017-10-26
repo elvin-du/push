@@ -6,10 +6,10 @@ import (
 )
 
 type User struct {
-	Session *mqtt.Session
+	*mqtt.Session
 }
 
-func (u *User) NewUser(ses *mqtt.Session) *User {
+func NewUser(ses *mqtt.Session) *User {
 	return &User{
 		Session: ses,
 	}
@@ -29,19 +29,19 @@ func (um *UserManager) Put(u *User) {
 	um.Lock.Lock()
 	defer um.Lock.Unlock()
 
-	um.Users[u.AppID][u.ClientId] = u
+	um.Users[u.Session.AppID][u.Session.ClientID] = u
 }
 
 func (um *UserManager) Get(appID, clientID string) *User {
 	um.Lock.RLock()
 	defer um.Lock.RUnlock()
 
-	return um.Users[u.AppID][u.ClientId]
+	return um.Users[appID][clientID]
 }
 
 func (um *UserManager) Remove(appID, clientID string) {
 	um.Lock.Lock()
 	defer um.Lock.Unlock()
 
-	delete(um.Users[u.AppID], clientID)
+	delete(um.Users[appID], clientID)
 }

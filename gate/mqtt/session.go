@@ -1,8 +1,8 @@
 package mqtt
 
 import (
-	//	"gokit/log"
 	"errors"
+	"fmt"
 	"net"
 	"sync"
 	"sync/atomic"
@@ -57,6 +57,10 @@ func NewSession(conn net.Conn) *Session {
 	ses.Conn.SetWriteDeadline(time.Now().Add(ses.writeTimeout * time.Second))
 
 	return ses
+}
+
+func (s *Session) Key() string {
+	return fmt.Sprintf("%s+%s", s.AppID, s.ClientID)
 }
 
 func (s *Session) Start() {

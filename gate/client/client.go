@@ -7,7 +7,7 @@ package client
 import (
 	"gokit/log"
 	"push/common/client"
-//	"push/common/grpclb"
+	//	"push/common/grpclb"
 	"push/pb"
 
 	"golang.org/x/net/context"
@@ -31,7 +31,7 @@ func Push(ip, port string, req *pb.GatePushRequest) (*pb.GatePushResponse, error
 }
 
 func doPush(ip, port string, req *pb.GatePushRequest) (*pb.GatePushResponse, error) {
-	cli, err := client.DefaultPool.Get(ip, port)
+	cli, err := client.Get(ip, port)
 	if nil != err {
 		log.Error(err)
 		return nil, err

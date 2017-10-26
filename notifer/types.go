@@ -1,11 +1,19 @@
 package main
 
+import (
+	"fmt"
+)
+
 type Message struct {
-	AppID  string `json:"app_id"`
-	ClientId string `json:"client_id"`
+	AppID    string `json:"app_id"`
+	ClientID string `json:"client_id"`
 	Content  string `json:"content"`
 	Kind     int32  `json:"kind"`
 	Extra    string `json:"extra"`
+}
+
+func (m *Message) Key() string {
+	return fmt.Sprintf("%s+%s", m.AppID, m.ClientID)
 }
 
 type session struct {

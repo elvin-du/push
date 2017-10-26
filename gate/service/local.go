@@ -5,7 +5,6 @@ import (
 	"push/gate/service/config"
 	"push/gate/service/db"
 	"push/gate/service/log"
-	"push/gate/service/session"
 )
 
 func Start() {
@@ -13,8 +12,6 @@ func Start() {
 		config.Start()
 		log.Start()
 		db.Start()
-		session.Start()
-
 	})
 
 	service.Start()

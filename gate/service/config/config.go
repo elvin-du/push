@@ -7,9 +7,9 @@ import (
 )
 
 var (
-	RPC_SERVICE_PORT int
 	SERVER_IP        string
-	TCP_PORT         string
+	TCP_PORT         int
+	RPC_SERVICE_PORT int
 )
 
 func Start() {

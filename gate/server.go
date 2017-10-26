@@ -16,9 +16,9 @@ import (
 	"syscall"
 	"time"
 
-	"github.com/grpc-ecosystem/go-grpc-middleware"
-	"github.com/grpc-ecosystem/go-grpc-middleware/logging/logrus"
-	"github.com/grpc-ecosystem/go-grpc-middleware/tags"
+	//	"github.com/grpc-ecosystem/go-grpc-middleware"
+	//	"github.com/grpc-ecosystem/go-grpc-middleware/logging/logrus"
+	//	"github.com/grpc-ecosystem/go-grpc-middleware/tags"
 	log "github.com/sirupsen/logrus"
 	"github.com/surgemq/message"
 	"google.golang.org/grpc"
@@ -32,8 +32,8 @@ var (
 )
 
 type Server struct {
-	UserManager *UserManager
-	Keepalive   int64 //单位：秒
+	*UserManager
+	Keepalive int64 //单位：秒
 }
 
 const (
@@ -59,7 +59,7 @@ func (s *Server) StartRPCServer() {
 		os.Exit(1)
 	}()
 
-	log.Printf("starting hello service at %d", config.RPC_SERVICE_PORT)
+	log.Printf("starting rpc server on %d", config.RPC_SERVICE_PORT)
 
 	srv := grpc.NewServer()
 
@@ -69,11 +69,12 @@ func (s *Server) StartRPCServer() {
 
 //开始监听客户端的连接
 func (s *Server) StartTcpServer() {
-	l, err := net.Listen("tcp", ":"+config.TCP_PORT)
+	l, err := net.Listen("tcp", fmt.Sprintf("0.0.0.0:%d", config.TCP_PORT))
 	if err != nil {
 		log.Fatalf("failed to listen: %v", err)
 	}
 	defer l.Close()
+	log.Printf("starting tcp server on %d", config.TCP_PORT)
 
 	for {
 		conn, err := l.Accept()
@@ -102,7 +103,7 @@ func (s *Server) handleConnection(conn net.Conn) {
 	}
 
 	//发送离线消息
-	s.CheckOfflineMsg(ses)
+	s.CheckOfflineMsgs(ses)
 }
 
 func (s *Server) authConnection(ses *mqtt.Session) (err error) {
@@ -140,7 +141,7 @@ func (s *Server) authConnection(ses *mqtt.Session) (err error) {
 	log.Debugln("come to connect,app_id: %s,clientid:%s", ses.AppID, ses.ClientID)
 
 	//合法性检验
-	err = s.Auth(svc.AppID, string(connMsg.Password()))
+	err = s.Auth(ses.AppID, string(connMsg.Password()))
 	if nil != err {
 		log.Error(err)
 		return err
@@ -148,13 +149,14 @@ func (s *Server) authConnection(ses *mqtt.Session) (err error) {
 
 	//连接成功
 	connAckMsg.SetReturnCode(message.ConnectionAccepted)
-	err = svc.SendMsg(connAckMsg)
+	err = ses.SendMsg(connAckMsg)
 	if nil != err {
 		log.Error(err)
 		return err
 	}
 
 	ses.SetTouchTime(time.Now().Unix())
+	ses.OnClose(s.OnSessionClose)
 	//启动两个goroutine进行读写
 	ses.Start()
 
@@ -162,12 +164,15 @@ func (s *Server) authConnection(ses *mqtt.Session) (err error) {
 }
 
 func (s *Server) Online(ses *mqtt.Session) error {
-	err := &session.Session{
+	ses2 := &session.Session{
 		AppID:          ses.AppID,
 		ClientID:       ses.ClientID,
 		Platform:       ses.Platform,
 		GateServerIP:   config.SERVER_IP,
-		GateServerPort: config.RPC_SERVICE_PORT}.Save()
+		GateServerPort: config.RPC_SERVICE_PORT,
+	}
+
+	err := session.Update(ses2)
 	if nil != err {
 		log.Error(err)
 		return err
@@ -178,18 +183,17 @@ func (s *Server) Online(ses *mqtt.Session) error {
 	return nil
 }
 
-func (s *Server) CheckOfflineMsg(ses *mqtt.Session) {
+func (s *Server) CheckOfflineMsgs(ses *mqtt.Session) {
 	if TARGET_PLATFORM_ANDROID == ses.Platform {
-		msgs, err := model.OfflineMsgModel().Get(ses.AppID, ses.ClientId)
+		msgs, err := model.OfflineMsgModel().Get(ses.AppID, ses.ClientID)
 		if nil != err {
 			log.Errorln(err)
 			return
 		}
 
-		log.Debugf("found %d offline msg for clientId:%s", len(msgs), clientId)
-		svc := s.Services[clientId]
-		for _, v2 := range msgs {
-			go svc.Push(uint16(v2.PacketID), []byte(v2.Content))
+		log.Debugf("found %d offline msg for app_id:%s,client_id:%s", len(msgs), ses.AppID, ses.ClientID)
+		for _, v := range msgs {
+			go ses.Push(uint16(v.PacketID), []byte(v.Content))
 		}
 	}
 }
@@ -219,4 +223,9 @@ func (s *Server) ParseClientId(clientId string) (string, error) {
 //TODO
 func (s *Server) Auth(appID, appSecret string) error {
 	return nil
+}
+
+func (s *Server) OnSessionClose(ses *mqtt.Session, err error) {
+	log.Errorf("app_id:%s,client_id:%s session close,err:%s", ses.AppID, ses.ClientID, err.Error())
+	s.Remove(ses.AppID, ses.ClientID)
 }

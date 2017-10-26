@@ -5,6 +5,7 @@ GATE对外提供RPC服务接口
 package main
 
 import (
+	"errors"
 	"gokit/log"
 	"push/pb"
 
@@ -18,13 +19,15 @@ func (*Gate) Push(ctx context.Context, req *pb.GatePushRequest) (*pb.GatePushRes
 	log.Debugln(*req)
 	resp := &pb.GatePushResponse{}
 
-	//	svc := defaultServer.Services[req.Header.AppID+req.ClientId]
-	svc := defaultServer.UserManager.Get(req.AppID, req.ClientId)
-	if nil == svc {
-		log.Debugln("not found service by:appid:clientId:", req.AppID, req.ClientId)
+	user := defaultServer.Get(req.AppID, req.ClientId)
+	if nil == user {
+		log.Errorln("not found service by:appid:clientId:", req.AppID, req.ClientId)
+		return nil, errors.New("not found")
 	}
-	err := svc.Push(uint16(req.PacketId), []byte(req.Content))
+
+	err := user.Push(uint16(req.PacketId), []byte(req.Content))
 	if nil != err {
+		log.Errorln(err)
 		return resp, err
 	}
 

@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"gokit/log"
 	"runtime/debug"
+	"time"
 
 	"github.com/surgemq/message"
 )
@@ -96,17 +97,20 @@ func (s *Session) SendMsg(msg message.Message) error {
 
 //真正的把数据发送到客户端
 func (s *Session) Send(data []byte) error {
+	s.Conn.SetWriteDeadline(time.Now().Add(s.writeTimeout * time.Second))
+
+	log.Debugf("Send begin: data %s", string(data))
 	n, err := s.Conn.Write(data)
 	if nil != err {
 		log.Error(err)
 		return err
 	}
 
-	if n == len(data) {
+	if n != len(data) {
 		err := fmt.Errorf("data size:%d,but only sent %d success", len(data), n)
 		log.Errorln(err)
 		return err
 	}
-
+	log.Debugf("Send success: data %s", string(data))
 	return nil
 }

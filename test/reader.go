@@ -2,19 +2,23 @@ package main
 
 import (
 	"encoding/binary"
+	"fmt"
 	"log"
+	"os"
+	"time"
 
 	"github.com/surgemq/message"
 )
 
 func ReadLoop() {
 	for {
+		time.Sleep(time.Second * 1)
 		msg, _, _, err := ReadMessage()
 		if nil != err {
-			log.Println(err)
+			fmt.Fprintf(os.Stdout, "%+v", err.Error())
 			return
 		}
-
+		log.Printf("%+v", msg)
 		Process(msg)
 	}
 }

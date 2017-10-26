@@ -157,6 +157,7 @@ func (s *Server) authConnection(ses *mqtt.Session) (err error) {
 
 	ses.SetTouchTime(time.Now().Unix())
 	ses.OnClose(s.OnSessionClose)
+	ses.OnReadPacket(Dispatch)
 	//启动两个goroutine进行读写
 	ses.Start()
 

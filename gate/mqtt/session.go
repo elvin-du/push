@@ -52,6 +52,7 @@ func NewSession(conn net.Conn) *Session {
 		outCh:        make(chan []byte, DEFAULT_OUT_CH_SIZE),
 		closeChan:    make(chan byte),
 		closeWait:    new(sync.WaitGroup),
+		closeFlag:    sessionFlagClosed,
 	}
 
 	ses.Conn.SetWriteDeadline(time.Now().Add(ses.writeTimeout * time.Second))
@@ -75,6 +76,7 @@ func (s *Session) Start() {
 
 func (s *Session) Close(reason error) {
 	if atomic.CompareAndSwapInt32(&s.closeFlag, sessionFlagOpen, sessionFlagClosed) {
+		fmt.Println(reason)
 		s.closeReason = reason
 		close(s.closeChan)
 		s.closeCallback(s, reason)
@@ -102,7 +104,7 @@ func (s *Session) OnReadPacket(callback func(*Session, message.Message) error) {
 }
 
 // 注册session send callback.
-func (s *Session) OnSendClose(callback func(*Session, []byte) error) {
+func (s *Session) OnSendPacket(callback func(*Session, []byte) error) {
 	s.sendPacketCallback = callback
 }
 

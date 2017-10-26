@@ -29,19 +29,30 @@ func (um *UserManager) Put(u *User) {
 	um.Lock.Lock()
 	defer um.Lock.Unlock()
 
-	um.Users[u.Session.AppID][u.Session.ClientID] = u
+	if _, exist := um.Users[u.Session.AppID]; exist {
+		um.Users[u.Session.AppID][u.Session.ClientID] = u
+	} else {
+		val := map[string]*User{u.Session.ClientID: u}
+		um.Users[u.Session.AppID] = val
+	}
 }
 
 func (um *UserManager) Get(appID, clientID string) *User {
 	um.Lock.RLock()
 	defer um.Lock.RUnlock()
 
-	return um.Users[appID][clientID]
+	if _, exist := um.Users[appID]; exist {
+		return um.Users[appID][clientID]
+	}
+
+	return nil
 }
 
 func (um *UserManager) Remove(appID, clientID string) {
 	um.Lock.Lock()
 	defer um.Lock.Unlock()
 
-	delete(um.Users[appID], clientID)
+	if _, exist := um.Users[appID]; exist {
+		delete(um.Users[appID], clientID)
+	}
 }

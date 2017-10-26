@@ -62,6 +62,10 @@ func (b *SingleMsgHandler) Process(i interface{}) error {
 		return err
 	}
 	log.Debugln("session:", ses)
+	if ses.GateServerIP == "" && "" == ses.GateServerPort {
+		log.Errorf("not found session by key :%s", data.Key())
+		return errors.New("not found session")
+	}
 
 	_, err = gateCli.Push(
 		ses.GateServerIP,

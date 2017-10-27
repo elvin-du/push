@@ -17,7 +17,7 @@ var (
 func Start() {
 	redis = dbredis.NewPool("localhost:6379")
 	var err error = nil
-	mysql, err = gorm.Open("mysql", "root:abc.123@/push_core?charset=utf8&parseTime=True&loc=Local")
+	mysql, err = gorm.Open("mysql", "root:UFDWbnYtRuQMeF9p@/push_core?charset=utf8&parseTime=True&loc=Local")
 	if nil != err {
 		log.Fatalln(err)
 	}

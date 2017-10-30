@@ -2,24 +2,18 @@ package main
 
 import (
 	"fmt"
+	"gokit/log"
 	"net"
 	"os"
 	"os/signal"
-	//	"push/common/grpclb"
 	"push/gate/model"
 	"push/gate/mqtt"
 	"push/gate/service/config"
-	//	mylog "push/gate/service/log"
 	"push/gate/service/session"
 	"push/pb"
-	"strings"
 	"syscall"
 	"time"
 
-	//	"github.com/grpc-ecosystem/go-grpc-middleware"
-	//	"github.com/grpc-ecosystem/go-grpc-middleware/logging/logrus"
-	//	"github.com/grpc-ecosystem/go-grpc-middleware/tags"
-	log "github.com/sirupsen/logrus"
 	"github.com/surgemq/message"
 	"google.golang.org/grpc"
 )
@@ -36,11 +30,6 @@ type Server struct {
 	Keepalive int64 //单位：秒
 }
 
-const (
-	TARGET_PLATFORM_ANDROID = "ANDROID"
-	TARGET_PLATFORM_IOS     = "IOS"
-)
-
 /*
 开始监听RPC端口
 */
@@ -55,11 +44,11 @@ func (s *Server) StartRPCServer() {
 	signal.Notify(ch, syscall.SIGTERM, syscall.SIGINT, syscall.SIGKILL, syscall.SIGHUP, syscall.SIGQUIT)
 	go func() {
 		stop := <-ch
-		log.Printf("receive signal '%v'", stop)
+		log.Errorf("receive signal '%v'", stop)
 		os.Exit(1)
 	}()
 
-	log.Printf("starting rpc server on %d", config.RPC_SERVICE_PORT)
+	log.Infof("starting rpc server on %d", config.RPC_SERVICE_PORT)
 
 	srv := grpc.NewServer()
 
@@ -74,7 +63,7 @@ func (s *Server) StartTcpServer() {
 		log.Fatalf("failed to listen: %v", err)
 	}
 	defer l.Close()
-	log.Printf("starting tcp server on %d", config.TCP_PORT)
+	log.Infof("starting tcp server on %d", config.TCP_PORT)
 
 	for {
 		conn, err := l.Accept()
@@ -132,13 +121,13 @@ func (s *Server) authConnection(ses *mqtt.Session) (err error) {
 	}
 
 	ses.ClientID = string(connMsg.ClientId())
-	ses.Platform, err = s.ParseClientId(ses.ClientID)
+	err = s.ValidateClientID(ses.ClientID)
 	if nil != err {
 		log.Error(err)
 		return err
 	}
 	ses.AppID = string(connMsg.Username())
-	log.Debugln("come to connect,app_id: %s,clientid:%s", ses.AppID, ses.ClientID)
+	log.Debugf("come to connect,app_id: %s,clientid:%s", ses.AppID, ses.ClientID)
 
 	//合法性检验
 	err = s.Auth(ses.AppID, string(connMsg.Password()))
@@ -168,7 +157,6 @@ func (s *Server) Online(ses *mqtt.Session) error {
 	ses2 := &session.Session{
 		AppID:          ses.AppID,
 		ClientID:       ses.ClientID,
-		Platform:       ses.Platform,
 		GateServerIP:   config.SERVER_IP,
 		GateServerPort: config.RPC_SERVICE_PORT,
 	}
@@ -186,17 +174,15 @@ func (s *Server) Online(ses *mqtt.Session) error {
 }
 
 func (s *Server) CheckOfflineMsgs(ses *mqtt.Session) {
-	if TARGET_PLATFORM_ANDROID == ses.Platform {
-		msgs, err := model.OfflineMsgModel().Get(ses.AppID, ses.ClientID)
-		if nil != err {
-			log.Errorln(err)
-			return
-		}
+	msgs, err := model.OfflineMsgModel().Get(ses.AppID, ses.ClientID)
+	if nil != err {
+		log.Errorln(err)
+		return
+	}
 
-		log.Debugf("found %d offline msg for app_id:%s,client_id:%s", len(msgs), ses.AppID, ses.ClientID)
-		for _, v := range msgs {
-			go ses.Push(uint16(v.PacketID), []byte(v.Content))
-		}
+	log.Debugf("found %d offline msg for app_id:%s,client_id:%s", len(msgs), ses.AppID, ses.ClientID)
+	for _, v := range msgs {
+		go ses.Push(uint16(v.PacketID), []byte(v.Content))
 	}
 }
 
@@ -208,18 +194,9 @@ func (s *Server) RemoveUser(appID, clientID string) {
 	s.UserManager.Remove(appID, clientID)
 }
 
-/*
-因为需要辨别每次的链接是否是同一个手机，所以需要手机根据硬件生成一个唯一标识来当作clientId,
-clientId格式：OS系统手机硬件唯一对应标识．例如：IOS+123abb,ANDROID+11213F
-*/
-func (s *Server) ParseClientId(clientId string) (string, error) {
-	if strings.HasPrefix(clientId, "IOS") {
-		return "IOS", nil
-	}
-
-	return "ANDROID", nil
-	//	log.Errorln("invalid clientId:", clientId)
-	//	return "", errors.New("clientId invalid")
+//TODO 要求长度，大小写等
+func (s *Server) ValidateClientID(clientId string) error {
+	return nil
 }
 
 //TODO

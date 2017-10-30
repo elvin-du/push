@@ -27,7 +27,6 @@ const (
 type Session struct {
 	AppID        string
 	ClientID     string
-	Platform     string
 	Conn         net.Conn
 	writeTimeout time.Duration
 	touchTime    int64

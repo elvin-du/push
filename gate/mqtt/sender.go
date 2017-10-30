@@ -99,7 +99,6 @@ func (s *Session) SendMsg(msg message.Message) error {
 func (s *Session) Send(data []byte) error {
 	s.Conn.SetWriteDeadline(time.Now().Add(s.writeTimeout * time.Second))
 
-	log.Debugf("Send begin: data %s", string(data))
 	n, err := s.Conn.Write(data)
 	if nil != err {
 		log.Error(err)
@@ -111,6 +110,6 @@ func (s *Session) Send(data []byte) error {
 		log.Errorln(err)
 		return err
 	}
-	log.Debugf("Send success: data %s", string(data))
+
 	return nil
 }

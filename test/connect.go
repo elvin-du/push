@@ -26,15 +26,15 @@ func Connect() error {
 		return err
 	}
 
-	err = connMsg.SetClientId([]byte("ANDROID123"))
+	err = connMsg.SetClientId([]byte("QQQWWWEEERRR"))
 	if nil != err {
 		log.Println(err)
 		return err
 	}
 
 	connMsg.SetCleanSession(false)
-	connMsg.SetUsername([]byte("5001"))      //api_id
-	connMsg.SetPassword([]byte("123456789")) //api_secret
+	connMsg.SetUsername([]byte("AAABBBCCCDDD")) //api_id
+	connMsg.SetPassword([]byte("123456789"))    //api_secret
 	err = Send(connMsg)
 	if nil != err {
 		log.Println(err)

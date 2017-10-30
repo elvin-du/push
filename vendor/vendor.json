@@ -183,6 +183,12 @@
 			"revisionTime": "2017-08-07T02:27:04Z"
 		},
 		{
+			"checksumSHA1": "OkanexWo7GtAN+5MdOIr43HMVHs=",
+			"path": "github.com/processout/grpc-go-pool",
+			"revision": "24a3f0a49cd8f18c0fec1fdb05f54f07b4b4f938",
+			"revisionTime": "2017-08-31T13:14:25Z"
+		},
+		{
 			"checksumSHA1": "BYvROBsiyAXK4sq6yhDe8RgT4LM=",
 			"path": "github.com/sirupsen/logrus",
 			"revision": "89742aefa4b206dcf400792f3bd35b542998eb3b",
@@ -225,7 +231,7 @@
 			"revisionTime": "2017-06-22T05:25:37Z"
 		},
 		{
-			"checksumSHA1": "IZe5/16s3WBdDSkBY2JCNrnMHqg=",
+			"checksumSHA1": "6GFP5m05Vs+GJrnagdLR7K7Kzfo=",
 			"path": "gokit/log",
 			"revision": "11a2f4ae99201640578544298cd3d3047fa41202",
 			"revisionTime": "2017-06-22T05:25:37Z"
@@ -243,7 +249,7 @@
 			"revisionTime": "2017-06-22T05:25:37Z"
 		},
 		{
-			"checksumSHA1": "+AlDc9TWpc+GnzUW3XC1UIKijjM=",
+			"checksumSHA1": "QnsjjsEnLGuCh8k8cUzMjE307CE=",
 			"path": "gokit/service",
 			"revision": "11a2f4ae99201640578544298cd3d3047fa41202",
 			"revisionTime": "2017-06-22T05:25:37Z"
@@ -457,6 +463,12 @@
 			"path": "launchpad.net/goyaml",
 			"revision": "51",
 			"revisionTime": "2014-03-05T20:04:16Z"
+		},
+		{
+			"checksumSHA1": "IaJ9sf/1xMXDVNEDpby7jcy7x9M=",
+			"path": "stathat.com/c/consistent",
+			"revision": "ad91dc4a3a642859730ff3d65929fce009bfdc23",
+			"revisionTime": "2017-07-26T18:26:18Z"
 		}
 	],
 	"rootPath": "push"

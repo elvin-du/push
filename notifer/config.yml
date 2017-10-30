@@ -11,3 +11,7 @@ nsq:
   lookupd:
     addrs:
       - 127.0.0.1:4161
+redis:
+  main:
+    addr: localhost:6379
+    pool: 100

@@ -3,6 +3,7 @@ package mqtt
 import (
 	"errors"
 	"fmt"
+	"gokit/log"
 	"net"
 	"sync"
 	"sync/atomic"
@@ -76,7 +77,7 @@ func (s *Session) Start() {
 
 func (s *Session) Close(reason error) {
 	if atomic.CompareAndSwapInt32(&s.closeFlag, sessionFlagOpen, sessionFlagClosed) {
-		fmt.Println(reason)
+		log.Warnln(reason)
 		s.closeReason = reason
 		close(s.closeChan)
 		s.closeCallback(s, reason)

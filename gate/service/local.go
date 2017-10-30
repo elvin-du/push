@@ -9,9 +9,10 @@ import (
 
 func Start() {
 	service.Register(func() {
-		config.Start()
 		log.Start()
-		db.Start()
+		config.Start()
+		db.StartMysql()
+		db.StartRedis()
 	})
 
 	service.Start()

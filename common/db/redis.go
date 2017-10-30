@@ -1,4 +1,4 @@
-package redis
+package db
 
 import (
 	"fmt"
@@ -21,7 +21,7 @@ type Option struct {
 const (
 	MAX_IDLE        = 10
 	MAX_ACTIVE      = 100
-	IDLE_TIMEOUT    = 300 * time.Second
+	IDLE_TIMEOUT    = 0 //idle connections are not closed
 	CONNECT_TIMEOUT = 30 * time.Second
 	READ_TIMEOUT    = 30 * time.Second
 	WRITE_TIMEOUT   = 30 * time.Second

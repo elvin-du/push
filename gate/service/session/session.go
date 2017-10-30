@@ -38,9 +38,15 @@ func RedisKey(appID, clientID string) string {
 
 //每次保存一次，会自动更新过期时间
 func Update(s *Session) error {
-	return db.Redis().HMSETAndEXPIRE(s.RedisKey(), s.ToMap(), TTL)
+	r := db.MainRedis()
+	defer r.Close()
+
+	return r.HMSETAndEXPIRE(s.RedisKey(), s.ToMap(), TTL)
 }
 
 func Touch(appID, clientID string) error {
-	return db.Redis().EXPIRE(RedisKey(appID, clientID), TTL)
+	r := db.MainRedis()
+	defer r.Close()
+
+	return r.EXPIRE(RedisKey(appID, clientID), TTL)
 }

@@ -180,6 +180,7 @@ func (s *Server) Online(ses *mqtt.Session) error {
 	}
 
 	s.PutUser(NewUser(ses))
+	log.Infof("app_id:%s,client_id:%s online", ses.AppID, ses.ClientID)
 
 	return nil
 }

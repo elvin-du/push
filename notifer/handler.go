@@ -56,7 +56,10 @@ func (b *SingleMsgHandler) Process(i interface{}) error {
 	}
 
 	var ses session
-	err = db.Redis().HGETALL(data.Key(), &ses)
+	redis := db.MainRedis()
+	defer redis.Close()
+
+	err = redis.HGETALL(data.Key(), &ses)
 	if nil != err {
 		log.Errorln(err)
 		return err

@@ -9,6 +9,7 @@ var (
 	HTTP_ADDR    string
 	HTTP_PROFILE bool
 	HTTP_MODE    string
+	AUTH_KEY     string
 )
 
 var (
@@ -36,6 +37,11 @@ func ParseConfig() {
 	}
 
 	err = goconfig.Get("nsqd:addr", &NSQD_ADDR)
+	if nil != err {
+		log.Fatal(err)
+	}
+
+	err = goconfig.Get("auth:key", &AUTH_KEY)
 	if nil != err {
 		log.Fatal(err)
 	}

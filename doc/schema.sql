@@ -5,7 +5,7 @@ DROP TABLE IF EXISTS apps;
 CREATE TABLE apps (
   id VARCHAR(36) NOT NULL,
   secret VARCHAR(36) NOT NULL,
-  auth_type INT(2) UNSIGNED NOT NULL, -- 1:id,secret认证
+  auth_type INT(2) UNSIGNED NOT NULL DEFAULT 1, -- 1:id,secret认证
   name VARCHAR(50) NOT NULL,
   description VARCHAR(256) NOT NULL,
   status TINYINT(1) NOT NULL DEFAULT 1, -- 1: 激活,0:未激活

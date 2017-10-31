@@ -4,8 +4,8 @@ import (
 	"encoding/json"
 	"errors"
 	"gokit/log"
+	"push/common/db"
 	gateCli "push/gate/client"
-	"push/notifer/service/db"
 	"push/pb"
 
 	"github.com/nsqio/go-nsq"

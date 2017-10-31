@@ -2,7 +2,7 @@ package session
 
 import (
 	"fmt"
-	"push/gate/service/db"
+	"push/common/db"
 )
 
 var (

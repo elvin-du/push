@@ -6,7 +6,7 @@ import (
 	"net"
 	"os"
 	"os/signal"
-	"push/gate/model"
+	"push/common/model"
 	"push/gate/mqtt"
 	"push/gate/service/config"
 	"push/gate/service/session"

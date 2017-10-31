@@ -14,3 +14,6 @@ http:
 
 nsqd:
   addr: 127.0.0.1:4150
+
+auth:
+  key: 01e9175ca8805cc2137c44eb86184922

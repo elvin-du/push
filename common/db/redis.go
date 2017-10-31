@@ -2,10 +2,52 @@ package db
 
 import (
 	"fmt"
+	"gokit/config"
+	"gokit/log"
 	"time"
 
 	libRedis "github.com/garyburd/redigo/redis"
 )
+
+var (
+	redisPools = make(map[string]*Pool)
+)
+
+func StartRedis(keys []string) {
+	for _, k := range keys {
+		startMysql(k)
+	}
+}
+
+func MainRedis() *Pool {
+	return redisPools["main"]
+}
+
+func startRedis(key string) {
+	var (
+		addr string
+		pool int
+	)
+
+	err := config.Get(fmt.Sprintf("redis:%s:addr", key), &addr)
+	if nil != err {
+		log.Fatal(err)
+	}
+	err = config.Get(fmt.Sprintf("redis:%s:pool", key), &pool)
+	if nil != err {
+		log.Fatal(err)
+	}
+
+	opt := &Option{
+		MaxIdle:        MAX_IDLE,
+		MaxActive:      pool,
+		IdleTimeout:    IDLE_TIMEOUT,
+		ConnectTimeout: CONNECT_TIMEOUT,
+		ReadTimeout:    READ_TIMEOUT,
+		WriteTimeout:   WRITE_TIMEOUT,
+	}
+	redisPools[key] = NewPoolWithOpt(addr, opt)
+}
 
 var ErrNotFound = fmt.Errorf("Not Found\n")
 

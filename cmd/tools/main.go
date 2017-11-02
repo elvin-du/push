@@ -4,8 +4,6 @@ import (
 	"fmt"
 	"gokit/util"
 
-	"encoding/base64"
-
 	"stathat.com/c/consistent"
 )
 
@@ -13,26 +11,34 @@ func main() {
 	//	GetShard("aaaa")
 	//	GetAppIDAndAppSecret()
 	AESEncryptAppIDAndAppSecret("01e9175ca8805cc2137c44eb86184922")
-	//	bin, err := util.AesDecryptFromHex([]byte("01e9175ca8805cc2137c44eb86184922"), AESEncryptAppIDAndAppSecret("01e9175ca8805cc2137c44eb86184922"))
-	//	fmt.Println(string(bin), err)
 }
 
 func AESEncryptAppIDAndAppSecret(key string) string {
 	id, secret := GetAppIDAndAppSecret()
 	data := id + ":" + secret
-	bin, err := util.AesEncryptToHex([]byte(key), []byte(data))
+	fmt.Println("raw data:", data)
+	str, err := util.RC4EncryptToBase64(key, []byte(data))
 	if nil != err {
 		fmt.Println(err)
 		return ""
 	}
 
-	fmt.Println("Bearer:", base64.StdEncoding.EncodeToString([]byte(bin)))
-	return string(bin)
+	fmt.Println("RC4 Encrypt:", str)
+
+	bin, err := util.RC4DecryptFromBase64(key, str)
+	if nil != err {
+		fmt.Println(err)
+		return ""
+	}
+
+	fmt.Println("RC4 Decrypt:", string(bin))
+
+	return str
 }
 
 func GetAppIDAndAppSecret() (id string, secret string) {
 	var err error = nil
-	id, err = util.RandomString(8)
+	id, err = util.RandomString(16)
 	if nil != err {
 		fmt.Println(err)
 		return

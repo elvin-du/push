@@ -6,6 +6,7 @@ import (
 
 type Message struct {
 	AppID    string `json:"app_id"`
+	Platform string `json:"platform"`
 	ClientID string `json:"client_id"`
 	Content  string `json:"content"`
 	Kind     int32  `json:"kind"`

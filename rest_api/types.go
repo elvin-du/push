@@ -5,38 +5,49 @@ import (
 	"errors"
 )
 
+const (
+	PUSH_PLATFORM_ANDROID = "android"
+	PUSH_PLATFORM_IOS     = "ios"
+)
+
 var (
-	APP_NAME_INVALID  = errors.New("app_name invalid")
 	CLIENT_ID_INVALID = errors.New("client_id invalid")
 	COTENT_INVALID    = errors.New("content invalid")
 	KIND_INVALID      = errors.New("kind invalid")
 )
 
 type Message struct {
-	ClientID string `json:"client_id"`
-	Content  string `json:"content"`
-	Kind     int    `json:"kind"`
-	Extra    string `json:"extra"`
+	ClientID     string `json:"client_id"`
+	Platform     string `json:"platform"` //android,ios
+	IsProduction bool   `json:"is_production"`
+	Content      string `json:"content"`
+	Kind         int    `json:"kind"`
+	Extra        string `json:"extra"`
 }
 
-func ValidMessage(bin []byte) error {
+type Info struct {
+	AppID string `json:"app_id"`
+	*Message
+}
+
+func ValidMessage(bin []byte) (*Message, error) {
 	var msg Message
 	err := json.Unmarshal(bin, &msg)
 	if nil != err {
-		return err
+		return nil, err
 	}
 
 	if "" == msg.ClientID {
-		return CLIENT_ID_INVALID
+		return nil, CLIENT_ID_INVALID
 	}
 
 	if "" == msg.Content {
-		return COTENT_INVALID
+		return nil, COTENT_INVALID
 	}
 
 	if 0 == msg.Kind {
-		return KIND_INVALID
+		return nil, KIND_INVALID
 	}
 
-	return nil
+	return &msg, nil
 }

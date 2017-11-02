@@ -12,6 +12,19 @@ var (
 	router *gin.Engine
 )
 
+type Context struct {
+	*gin.Context
+	AppID string `json:"app_id"`
+}
+
+func NewContext(ctx *gin.Context) *Context {
+	return &Context{
+		Context: ctx,
+	}
+}
+
+type HandlerFunc func(*Context)
+
 func StartHTTP() {
 	gin.SetMode(config.HTTP_MODE)
 	router = gin.Default()
@@ -19,7 +32,13 @@ func StartHTTP() {
 		SetProfile()
 	}
 
-	router.POST("/push", _push.Push)
+	router.POST("/push", AuthHandler(_push.Push))
+
+	go func() {
+		internalRouter := gin.Default()
+		internalRouter.POST("/ios/cert", AddIOSCert)
+		internalRouter.Run(config.HTTP_INTERNAL_ADDR)
+	}()
 
 	router.Run(config.HTTP_ADDR)
 }
@@ -35,5 +54,17 @@ func SetProfile() {
 func Handler(h http.Handler) gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		h.ServeHTTP(ctx.Writer, ctx.Request)
+	}
+}
+
+func AuthHandler(h HandlerFunc) gin.HandlerFunc {
+	return func(ctx *gin.Context) {
+		pCtx := NewContext(ctx)
+		err := Auth(pCtx)
+		if nil != err {
+			return
+		}
+
+		h(pCtx)
 	}
 }

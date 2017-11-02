@@ -4,29 +4,39 @@ import (
 	"errors"
 	"gokit/log"
 	"gokit/util"
+	"push/common/model"
 	"push/rest_api/service/config"
 	"strings"
-
-	"push/common/model"
-
-	"github.com/gin-gonic/gin"
 )
 
 var (
 	E_AUTH_FAILED = errors.New("Auth failed")
 )
 
-func Auth(ctx *gin.Context) error {
-	bearer := ctx.Request.Header.Get("Bearer")
+const (
+	Auth_Bearer = "Bearer"
+)
+
+func Auth(ctx *Context) error {
+	bearer := ctx.Request.Header.Get("Authorization")
 	log.Debugln("bearer", bearer)
 	if strings.TrimSpace(bearer) == "" {
 		log.Errorln("Bearer empty")
+		ctx.AbortWithError(401, E_AUTH_FAILED)
 		return E_AUTH_FAILED
 	}
 
-	bin, err := util.AesDecryptFromHex([]byte(config.AUTH_KEY), bearer)
+	if !strings.HasPrefix(bearer, Auth_Bearer) {
+		log.Errorln("Auth type invalid")
+		ctx.AbortWithError(401, E_AUTH_FAILED)
+		return E_AUTH_FAILED
+	}
+
+	bearer = strings.TrimSpace(string(bearer[len(Auth_Bearer):]))
+	bin, err := util.RC4DecryptFromBase64(config.AUTH_KEY, bearer)
 	if nil != err {
 		log.Errorln(err)
+		ctx.AbortWithError(401, E_AUTH_FAILED)
 		return E_AUTH_FAILED
 	}
 	log.Debugln("Decrypted bearer:", string(bin))
@@ -34,25 +44,17 @@ func Auth(ctx *gin.Context) error {
 	tmp := strings.Split(string(bin), ":")
 	if 2 != len(tmp) {
 		log.Errorln("Invalid Bearer:", tmp)
+		ctx.AbortWithError(401, E_AUTH_FAILED)
 		return E_AUTH_FAILED
 	}
 
-	AuthApp(tmp[0], tmp[1])
-	return nil
-}
-
-func AuthApp(id, secret string) error {
-	apps, err := model.GetApps()
+	err = model.AuthApp(tmp[0], tmp[1])
 	if nil != err {
 		log.Errorln(err)
-		return err
+		ctx.AbortWithError(401, E_AUTH_FAILED)
+		return E_AUTH_FAILED
 	}
 
-	for _, v := range apps {
-		if v.ID == id && v.Secret == secret {
-			return nil
-		}
-	}
-
-	return E_AUTH_FAILED
+	ctx.AppID = tmp[0]
+	return nil
 }

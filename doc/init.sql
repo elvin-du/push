@@ -1,0 +1,1 @@
+INSERT apps(id,secret,auth_type,name,description,status,created_at,updated_at) VALUES('8c2e1fb321f36094','4591a021d339f04dfeed738451142006',1,'','',1,UNIX_TIMESTAMP()*1000000,UNIX_TIMESTAMP()*1000000);

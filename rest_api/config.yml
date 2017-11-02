@@ -1,3 +1,10 @@
+mysql:
+  main:
+    addr: localhost:3306
+    user: root
+    passwd: abc.123
+    dbname: push_core
+    pool: 100
 #log setup
 log:
   #can set output to file, others will be outputed to std
@@ -11,6 +18,8 @@ http:
   addr: :52001
   profile: true
   mode: debug
+  internal:
+    addr: :52010
 
 nsqd:
   addr: 127.0.0.1:4150

@@ -11,12 +11,16 @@ type OfflineMsg struct {
 }
 
 type App struct {
-	ID          string
-	Secret      string
-	AuthType    uint16
-	Name        string
-	Description string
-	Status      byte
-	CreateAt    uint64
-	UpdatedAt   uint64
+	ID                     string
+	Secret                 string
+	AuthType               uint16
+	Name                   string
+	Description            string
+	Status                 byte
+	CreateAt               uint64
+	BundleID               string
+	Cert                   []byte
+	CertPassword           string
+	CertProduction         []byte
+	CertPasswordProduction string
 }

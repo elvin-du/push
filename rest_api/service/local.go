@@ -13,7 +13,7 @@ func Start() {
 		config.Start()
 		nsq.Start()
 		db.StartMysql([]string{"main"})
-		model.LoadAppCache()
+		model.InitAppCache()
 	})
 
 	service.Start()

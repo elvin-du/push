@@ -36,7 +36,10 @@ func StartHTTP() {
 
 	go func() {
 		internalRouter := gin.Default()
-		internalRouter.POST("/ios/cert", AddIOSCert)
+		internalRouter.GET("/apps", ListApp)
+		internalRouter.POST("/app", CreateApp)
+		internalRouter.PUT("/app", UpdateApp)
+		internalRouter.DELETE("/app/:id", DeleteApp)
 		internalRouter.Run(config.HTTP_INTERNAL_ADDR)
 	}()
 

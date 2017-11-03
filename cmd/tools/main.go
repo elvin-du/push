@@ -10,9 +10,21 @@ import (
 func main() {
 	//	GetShard("aaaa")
 	//	GetAppIDAndAppSecret()
-	AESEncryptAppIDAndAppSecret("01e9175ca8805cc2137c44eb86184922")
+	//	AESEncryptAppIDAndAppSecret("01e9175ca8805cc2137c44eb86184922")
+	GetBearer("01e9175ca8805cc2137c44eb86184922")
 }
 
+func GetBearer(key string) string {
+	data := "87c154323ef0d204" + ":" + "ba8ed065e670d0118261579fd3c1fd52"
+	str, err := util.RC4EncryptToBase64(key, []byte(data))
+	if nil != err {
+		fmt.Println(err)
+		return ""
+	}
+
+	fmt.Println("RC4 Encrypt:", str)
+	return str
+}
 func AESEncryptAppIDAndAppSecret(key string) string {
 	id, secret := GetAppIDAndAppSecret()
 	data := id + ":" + secret

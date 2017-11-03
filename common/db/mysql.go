@@ -20,6 +20,7 @@ func StartMysql(keys []string) {
 	for _, k := range keys {
 		startMysql(k)
 	}
+	log.Infof("mysql db pool:%+v", mysqlDBs)
 }
 
 func ShardMysql(key string) (*sql.DB, error) {

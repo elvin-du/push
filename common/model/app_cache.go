@@ -2,11 +2,16 @@ package model
 
 import (
 	"errors"
+	"gokit/log"
 	"sync"
 )
 
 var (
 	_apps []*App = nil
+)
+
+const (
+	AUTH_TYUP_SECRET = 1
 )
 
 var (
@@ -17,12 +22,23 @@ var (
 	E_NOT_FOUND = errors.New("Not found")
 )
 
-func LoadAppCache() error {
+func InitAppCache() error {
+	apps, err := AppModel().GetAll()
+	if nil != err {
+		log.Fatalln(err)
+	}
+
+	_apps = apps
+	return nil
+}
+
+func ReloadAppCache() error {
 	mu.Lock()
 	defer mu.Unlock()
 
 	apps, err := AppModel().GetAll()
 	if nil != err {
+		log.Errorln(err)
 		return err
 	}
 
@@ -65,7 +81,7 @@ func AuthApp(id, secret string) error {
 	}
 
 	for _, v := range apps {
-		if v.ID == id && v.Secret == secret {
+		if v.ID == id && v.Secret == secret && AUTH_TYUP_SECRET == v.AuthType {
 			return nil
 		}
 	}

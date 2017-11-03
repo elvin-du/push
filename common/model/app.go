@@ -25,9 +25,8 @@ func (a *app) GetAll() ([]*App, error) {
 		log.Errorln(err)
 		return nil, err
 	}
-	defer db.Close()
 
-	sqlStr := fmt.Sprintf("SELECT id,secret,auth_type,name,description,status,created_at,bundle_id,cert,cert_passwd, cert_production,cert_passwd_production FROM apps WHERE status=1")
+	sqlStr := fmt.Sprintf("SELECT id,secret,auth_type,name,description,status,created_at,updated_at,bundle_id,cert,cert_passwd, cert_production,cert_passwd_production FROM apps WHERE status=1")
 	rows, err := db.Query(sqlStr)
 	if nil != err {
 		log.Errorln(err, sqlStr)
@@ -37,7 +36,7 @@ func (a *app) GetAll() ([]*App, error) {
 	apps := make([]*App, 0, 0)
 	for rows.Next() {
 		var app App
-		err = rows.Scan(&app.ID, &app.Secret, &app.AuthType, &app.Name, &app.Description, &app.Status, &app.CreateAt, &app.BundleID, &app.Cert, &app.CertPassword, &app.CertProduction, &app.CertPasswordProduction)
+		err = rows.Scan(&app.ID, &app.Secret, &app.AuthType, &app.Name, &app.Description, &app.Status, &app.CreatedAt, &app.UpdatedAt, &app.BundleID, &app.Cert, &app.CertPassword, &app.CertProduction, &app.CertPasswordProduction)
 		if nil != err {
 			log.Errorln(err, sqlStr)
 			return nil, err
@@ -67,4 +66,103 @@ func (a *app) GetAll() ([]*App, error) {
 	}
 
 	return apps, nil
+}
+
+func (a *app) Create(app *App) error {
+	db, err := libdb.MainMysql()
+	if nil != err {
+		log.Errorln(err)
+		return err
+	}
+
+	if "" != app.CertPassword {
+		pw, err := util.RC4EncryptToBase64(CERT_PASSWORD_RC4_KEY, []byte(app.CertPassword))
+		if nil != err {
+			log.Errorln(err)
+			return err
+		}
+		app.CertPassword = pw
+	}
+
+	if "" != app.CertPasswordProduction {
+		pw, err := util.RC4EncryptToBase64(CERT_PASSWORD_RC4_KEY, []byte(app.CertPasswordProduction))
+		if nil != err {
+			log.Errorln(err)
+			return err
+		}
+		app.CertPasswordProduction = pw
+	}
+
+	sqlStr := fmt.Sprintf(`INSERT apps SET 
+		id='%s',secret='%s',auth_type=%d,name='%s',description='%s',
+		status=%d,created_at=%d,bundle_id='%s',cert='%s',cert_passwd='%s',
+		cert_production='%s',cert_passwd_production='%s',updated_at=%d`,
+		app.ID, app.Secret, app.AuthType, app.Name, app.Description,
+		app.Status, util.Timestamp(), app.BundleID, app.Cert, app.CertPassword,
+		app.CertProduction, app.CertPasswordProduction, 0)
+	_, err = db.Query(sqlStr)
+	if nil != err {
+		log.Errorln(err, sqlStr)
+		return err
+	}
+
+	return nil
+}
+
+func (a *app) Update(app *App) error {
+	db, err := libdb.MainMysql()
+	if nil != err {
+		log.Errorln(err)
+		return err
+	}
+
+	if "" != app.CertPassword {
+		pw, err := util.RC4EncryptToBase64(CERT_PASSWORD_RC4_KEY, []byte(app.CertPassword))
+		if nil != err {
+			log.Errorln(err)
+			return err
+		}
+		app.CertPassword = pw
+	}
+
+	if "" != app.CertPasswordProduction {
+		pw, err := util.RC4EncryptToBase64(CERT_PASSWORD_RC4_KEY, []byte(app.CertPasswordProduction))
+		if nil != err {
+			log.Errorln(err)
+			return err
+		}
+		app.CertPasswordProduction = pw
+	}
+
+	sqlStr := fmt.Sprintf(`UPDATE apps SET 
+		id='%s',secret='%s',auth_type=%d,name='%s',description='%s',
+		status=%d,updated_at=%d,bundle_id='%s',cert='%s',cert_passwd='%s',
+		cert_production='%s',cert_passwd_production='%s'`,
+		app.ID, app.Secret, app.AuthType, app.Name, app.Description,
+		app.Status, util.Timestamp(), app.BundleID, app.Cert, app.CertPassword,
+		app.CertProduction, app.CertPasswordProduction)
+	_, err = db.Query(sqlStr)
+	if nil != err {
+		log.Errorln(err, sqlStr)
+		return err
+	}
+
+	return nil
+}
+
+func (a *app) Delete(appID string) error {
+	db, err := libdb.MainMysql()
+	if nil != err {
+		log.Errorln(err)
+		return err
+	}
+
+	sqlStr := fmt.Sprintf(`DELETE apps WHERE id='%s'`, appID)
+	_, err = db.Query(sqlStr)
+	if nil != err {
+		log.Errorln(err, sqlStr)
+		return err
+	}
+
+	return nil
 }

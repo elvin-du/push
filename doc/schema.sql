@@ -9,12 +9,13 @@ CREATE TABLE apps (
   name VARCHAR(50) NOT NULL,
   description VARCHAR(256) NOT NULL,
   bundle_id VARCHAR(128) NOT NULL,
-  cert BLOB NOT NULL,
+  cert TEXT NOT NULL,
   cert_passwd VARCHAR(128) NOT NULL,
-  cert_production BLOB NOT NULL,
+  cert_production TEXT NOT NULL,
   cert_passwd_production VARCHAR(128) NOT NULL,
   status TINYINT(1) NOT NULL DEFAULT 1, -- 1: 激活,0:未激活
   created_at BIGINT(20) NOT NULL,
+  updated_at BIGINT(20) NOT NULL,
   PRIMARY KEY (id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 

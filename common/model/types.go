@@ -11,16 +11,17 @@ type OfflineMsg struct {
 }
 
 type App struct {
-	ID                     string
-	Secret                 string
-	AuthType               uint16
-	Name                   string
-	Description            string
-	Status                 byte
-	CreateAt               uint64
-	BundleID               string
-	Cert                   []byte
-	CertPassword           string
-	CertProduction         []byte
-	CertPasswordProduction string
+	ID                     string `json:"id"`
+	Secret                 string `json:"secret"`
+	AuthType               uint16 `json:"auth_type"`
+	Name                   string `json:"name"`
+	Description            string `json:"description"`
+	Status                 byte   `json:"status"`
+	CreatedAt              uint64 `json:"created_at"`
+	UpdatedAt              uint64 `json:"updated_at"`
+	BundleID               string `json:"bundle_id"`
+	Cert                   string `json:"cert"`
+	CertPassword           string `json:"cert_password"`
+	CertProduction         string `json:"cert_production"`
+	CertPasswordProduction string `json:"cert_password_production"`
 }

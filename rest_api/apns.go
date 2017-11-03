@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/hex"
 	"gokit/log"
 	"push/common/model"
 
@@ -16,10 +17,20 @@ func IOSPush(appID, devToken, alert string, isProduction bool) error {
 		return err
 	}
 
-	certBytes := app.Cert
+	certBytes, err := hex.DecodeString(app.Cert)
+	if nil != err {
+		log.Errorln(err)
+		return err
+	}
+
 	certPasswd := app.CertPassword
 	if isProduction {
-		certBytes = app.CertProduction
+		certBytes, err = hex.DecodeString(app.CertProduction)
+		if nil != err {
+			log.Errorln(err)
+			return err
+		}
+
 		certPasswd = app.CertPasswordProduction
 	}
 	cert, err := certificate.FromP12Bytes(certBytes, certPasswd)

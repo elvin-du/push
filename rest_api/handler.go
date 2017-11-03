@@ -40,6 +40,9 @@ func (*push) Push(ctx *Context) {
 		}
 
 		go nsq.SingleProducer.Publish(bin)
+	default:
+		ctx.AbortWithError(400, REQUEST_DATA_INVALID)
+		return
 	}
 
 	ctx.Status(http.StatusOK)

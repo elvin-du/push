@@ -15,7 +15,7 @@ var (
 
 func StartRedis(keys []string) {
 	for _, k := range keys {
-		startMysql(k)
+		startRedis(k)
 	}
 }
 

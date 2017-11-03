@@ -174,7 +174,7 @@ func (s *Server) Online(ses *mqtt.Session) error {
 }
 
 func (s *Server) CheckOfflineMsgs(ses *mqtt.Session) {
-	msgs, err := model.OfflineMsgModel().Get(ses.AppID, ses.ClientID)
+	msgs, err := model.OfflineMsgModel().List(ses.AppID, ses.ClientID)
 	if nil != err {
 		log.Errorln(err)
 		return

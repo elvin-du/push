@@ -31,7 +31,7 @@ func (s *Session) RedisKey() string {
 }
 
 func RedisKey(appID, clientID string) string {
-	return fmt.Sprintf("%s+%s", appID, clientID)
+	return fmt.Sprintf("%s:%s", appID, clientID)
 }
 
 //每次保存一次，会自动更新过期时间

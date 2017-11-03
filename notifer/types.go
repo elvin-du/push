@@ -5,8 +5,8 @@ import (
 )
 
 type Message struct {
+	ID       string `json:"id"`
 	AppID    string `json:"app_id"`
-	Platform string `json:"platform"`
 	ClientID string `json:"client_id"`
 	Content  string `json:"content"`
 	Kind     int32  `json:"kind"`
@@ -14,7 +14,7 @@ type Message struct {
 }
 
 func (m *Message) Key() string {
-	return fmt.Sprintf("%s+%s", m.AppID, m.ClientID)
+	return fmt.Sprintf("%s:%s", m.AppID, m.ClientID)
 }
 
 type session struct {

@@ -1,10 +1,11 @@
 package model
 
 type OfflineMsg struct {
+	ID       string
 	AppID    string
 	ClientID string
-	PacketID uint16
-	Kind     int
+	//	PacketID uint16
+	Kind     int32
 	Content  string
 	Extra    string
 	CreateAt uint64

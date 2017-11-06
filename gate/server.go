@@ -182,7 +182,7 @@ func (s *Server) CheckOfflineMsgs(ses *mqtt.Session) {
 
 	log.Debugf("found %d offline msg for app_id:%s,client_id:%s", len(msgs), ses.AppID, ses.ClientID)
 	for _, v := range msgs {
-		go ses.Push(uint16(v.PacketID), []byte(v.Content))
+		go ses.Push([]byte(v.Content))
 	}
 }
 

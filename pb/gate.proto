@@ -12,11 +12,11 @@ service Gate{
 }
 
 message GatePushRequest{
-	string AppID = 1;
-	string ClientId = 2;
-	uint32 PacketId = 3;
+	string ID = 1;
+	string AppID = 2;
+	string ClientId = 3;
 	string Content = 4;
-	int32 Kind = 5;
+	int32 Kind =5;
 	string Extra = 6;
 }
 
@@ -25,11 +25,11 @@ message GatePushResponse{
 }
 
 message GatePushAllRequest{
-	string AppID = 1;
-	uint32 PacketId = 2;
-	string Content = 3;
-	int32 Kind = 4;
-	string Extra = 5;
+	string ID = 1;
+	string AppID = 2;
+	string Content = 4;
+	int32 Kind =5;
+	string Extra = 6;
 }
 
 message GatePushAllResponse{

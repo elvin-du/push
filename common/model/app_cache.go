@@ -29,6 +29,7 @@ func InitAppCache() error {
 	}
 
 	_apps = apps
+	log.Infof("Init app cache success. %+v", _apps)
 	return nil
 }
 

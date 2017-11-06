@@ -5,7 +5,6 @@ package push.pb;
 option go_package = "pb";
 
 message RequestHeader{
-	string AppName = 1;
 }
 
 message ResponseHeader{

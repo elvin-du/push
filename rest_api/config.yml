@@ -5,6 +5,10 @@ mysql:
     passwd: abc.123
     dbname: push_core
     pool: 100
+mongo:
+  main:
+    #url: mongodb://myuser:mypass@localhost:27017
+    url: localhost:27017
 #log setup
 log:
   #can set output to file, others will be outputed to std

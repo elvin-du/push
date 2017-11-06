@@ -15,7 +15,7 @@ func main() {
 }
 
 func GetBearer(key string) string {
-	data := "87c154323ef0d204" + ":" + "ba8ed065e670d0118261579fd3c1fd52"
+	data := "63163c7b40f2abee" + ":" + "283abdfc9123987980d8aabaa7108e6c"
 	str, err := util.RC4EncryptToBase64(key, []byte(data))
 	if nil != err {
 		fmt.Println(err)
@@ -23,6 +23,7 @@ func GetBearer(key string) string {
 	}
 
 	fmt.Println("RC4 Encrypt:", str)
+	fmt.Println("Bearer ", str)
 	return str
 }
 func AESEncryptAppIDAndAppSecret(key string) string {

@@ -24,12 +24,10 @@ CREATE TABLE offline_msgs (
   id VARCHAR(36) NOT NULL,
   app_id VARCHAR(36) NOT NULL,
   client_id VARCHAR(36) NOT NULL,
-  -- packet_id INT(2) UNSIGNED NOT NULL, -- MQTT协议规定消息ID是16bit的整型数据
   kind INT(4) UNSIGNED NOT NULL, -- 消息类型
   content VARCHAR(500) NOT NULL,
   extra VARCHAR(500) NOT NULL, -- json格式，例如：{"order_id":"123"}
   created_at BIGINT(20) NOT NULL,
   PRIMARY KEY (id),
-  KEY offline_msgs_app_id_client_id(app_id,client_id),
-  KEY offline_msgs_packet_id(packet_id)
+  KEY offline_msgs_app_id_client_id(app_id,client_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;

@@ -3,6 +3,7 @@ package main
 import (
 	"encoding/json"
 	"errors"
+	"gokit/log"
 )
 
 const (
@@ -18,6 +19,7 @@ var (
 )
 
 type Message struct {
+	ID           string `json:"id"`
 	ClientID     string `json:"client_id"`
 	Platform     string `json:"platform"` //android,ios
 	IsProduction bool   `json:"is_production"`
@@ -35,6 +37,7 @@ func ValidMessage(bin []byte) (*Message, error) {
 	var msg Message
 	err := json.Unmarshal(bin, &msg)
 	if nil != err {
+		log.Errorln(err)
 		return nil, err
 	}
 

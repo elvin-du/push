@@ -55,10 +55,10 @@ func (s *Session) WriteLoop() {
 	}
 }
 
-func (s *Session) Push(packetId uint16, content []byte) error {
+func (s *Session) Push(content []byte) error {
 	pubMsg := message.NewPublishMessage()
 	pubMsg.SetQoS(message.QosAtLeastOnce)
-	pubMsg.SetPacketId(packetId)
+	pubMsg.SetPacketId(0)
 	pubMsg.SetTopic([]byte("*"))
 	pubMsg.SetPayload(content)
 

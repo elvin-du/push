@@ -76,3 +76,7 @@ mysql:
     passwd: abc.123
     dbname: push_shard9
     pool: 100
+mongo:
+  main:
+    #url: mongodb://myuser:mypass@localhost:27017
+    url: localhost:27017

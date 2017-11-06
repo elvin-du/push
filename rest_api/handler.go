@@ -5,6 +5,8 @@ import (
 	"io/ioutil"
 	"net/http"
 	"push/rest_api/service/nsq"
+
+	"gopkg.in/mgo.v2/bson"
 )
 
 type push struct{}
@@ -32,6 +34,7 @@ func (*push) Push(ctx *Context) {
 			return
 		}
 	case PUSH_PLATFORM_ANDROID:
+		msg.ID = bson.NewObjectId().Hex()
 		info := &Info{Message: msg, AppID: ctx.AppID}
 		bin, err = json.Marshal(info)
 		if nil != err {

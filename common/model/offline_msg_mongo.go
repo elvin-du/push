@@ -1,5 +1,3 @@
-// +build mysql
-
 package model
 
 import (

@@ -25,7 +25,7 @@ func (*Gate) Push(ctx context.Context, req *pb.GatePushRequest) (*pb.GatePushRes
 		return nil, errors.New("not found")
 	}
 
-	err := user.Push(uint16(req.PacketId), []byte(req.Content))
+	err := user.Push([]byte(req.Content))
 	if nil != err {
 		log.Errorln(err)
 		return resp, err

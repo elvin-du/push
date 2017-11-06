@@ -12,7 +12,8 @@ func Start() {
 	service.Register(func() {
 		config.Start()
 		nsq.Start()
-		db.StartMysql([]string{"main"})
+		//		db.StartMysql([]string{"main"})
+		db.StartMongo([]string{"main"})
 		model.InitAppCache()
 	})
 

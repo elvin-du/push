@@ -36,20 +36,12 @@ var _ = math.Inf
 const _ = proto.GoGoProtoPackageIsVersion2 // please upgrade the proto package
 
 type RequestHeader struct {
-	AppName string `protobuf:"bytes,1,opt,name=AppName,proto3" json:"AppName,omitempty"`
 }
 
 func (m *RequestHeader) Reset()                    { *m = RequestHeader{} }
 func (m *RequestHeader) String() string            { return proto.CompactTextString(m) }
 func (*RequestHeader) ProtoMessage()               {}
 func (*RequestHeader) Descriptor() ([]byte, []int) { return fileDescriptorCommon, []int{0} }
-
-func (m *RequestHeader) GetAppName() string {
-	if m != nil {
-		return m.AppName
-	}
-	return ""
-}
 
 type ResponseHeader struct {
 }
@@ -78,12 +70,6 @@ func (m *RequestHeader) MarshalTo(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
-	if len(m.AppName) > 0 {
-		dAtA[i] = 0xa
-		i++
-		i = encodeVarintCommon(dAtA, i, uint64(len(m.AppName)))
-		i += copy(dAtA[i:], m.AppName)
-	}
 	return i, nil
 }
 
@@ -105,24 +91,6 @@ func (m *ResponseHeader) MarshalTo(dAtA []byte) (int, error) {
 	return i, nil
 }
 
-func encodeFixed64Common(dAtA []byte, offset int, v uint64) int {
-	dAtA[offset] = uint8(v)
-	dAtA[offset+1] = uint8(v >> 8)
-	dAtA[offset+2] = uint8(v >> 16)
-	dAtA[offset+3] = uint8(v >> 24)
-	dAtA[offset+4] = uint8(v >> 32)
-	dAtA[offset+5] = uint8(v >> 40)
-	dAtA[offset+6] = uint8(v >> 48)
-	dAtA[offset+7] = uint8(v >> 56)
-	return offset + 8
-}
-func encodeFixed32Common(dAtA []byte, offset int, v uint32) int {
-	dAtA[offset] = uint8(v)
-	dAtA[offset+1] = uint8(v >> 8)
-	dAtA[offset+2] = uint8(v >> 16)
-	dAtA[offset+3] = uint8(v >> 24)
-	return offset + 4
-}
 func encodeVarintCommon(dAtA []byte, offset int, v uint64) int {
 	for v >= 1<<7 {
 		dAtA[offset] = uint8(v&0x7f | 0x80)
@@ -135,10 +103,6 @@ func encodeVarintCommon(dAtA []byte, offset int, v uint64) int {
 func (m *RequestHeader) Size() (n int) {
 	var l int
 	_ = l
-	l = len(m.AppName)
-	if l > 0 {
-		n += 1 + l + sovCommon(uint64(l))
-	}
 	return n
 }
 
@@ -190,35 +154,6 @@ func (m *RequestHeader) Unmarshal(dAtA []byte) error {
 			return fmt.Errorf("proto: RequestHeader: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field AppName", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowCommon
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthCommon
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.AppName = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
 			skippy, err := skipCommon(dAtA[iNdEx:])
@@ -398,13 +333,12 @@ var (
 func init() { proto.RegisterFile("common.proto", fileDescriptorCommon) }
 
 var fileDescriptorCommon = []byte{
-	// 126 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xe2, 0xe2, 0x49, 0xce, 0xcf, 0xcd,
+	// 106 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x09, 0x6e, 0x88, 0x02, 0xff, 0xe2, 0xe2, 0x49, 0xce, 0xcf, 0xcd,
 	0xcd, 0xcf, 0xd3, 0x2b, 0x28, 0xca, 0x2f, 0xc9, 0x17, 0x62, 0x2f, 0x28, 0x2d, 0xce, 0xd0, 0x2b,
-	0x48, 0x52, 0xd2, 0xe4, 0xe2, 0x0d, 0x4a, 0x2d, 0x2c, 0x4d, 0x2d, 0x2e, 0xf1, 0x48, 0x4d, 0x4c,
-	0x49, 0x2d, 0x12, 0x92, 0xe0, 0x62, 0x77, 0x2c, 0x28, 0xf0, 0x4b, 0xcc, 0x4d, 0x95, 0x60, 0x54,
-	0x60, 0xd4, 0xe0, 0x0c, 0x82, 0x71, 0x95, 0x04, 0xb8, 0xf8, 0x82, 0x52, 0x8b, 0x0b, 0xf2, 0xf3,
-	0x8a, 0x53, 0x21, 0x6a, 0x9d, 0x44, 0x4e, 0x3c, 0x92, 0x63, 0xbc, 0xf0, 0x48, 0x8e, 0xf1, 0xc1,
-	0x23, 0x39, 0xc6, 0x09, 0x8f, 0xe5, 0x18, 0xa2, 0x98, 0x0a, 0x92, 0x92, 0xd8, 0xc0, 0x56, 0x18,
-	0x03, 0x02, 0x00, 0x00, 0xff, 0xff, 0x85, 0xf3, 0xf8, 0x16, 0x72, 0x00, 0x00, 0x00,
+	0x48, 0x52, 0xe2, 0xe7, 0xe2, 0x0d, 0x4a, 0x2d, 0x2c, 0x4d, 0x2d, 0x2e, 0xf1, 0x48, 0x4d, 0x4c,
+	0x49, 0x2d, 0x52, 0x12, 0xe0, 0xe2, 0x0b, 0x4a, 0x2d, 0x2e, 0xc8, 0xcf, 0x2b, 0x4e, 0x85, 0x88,
+	0x38, 0x89, 0x9c, 0x78, 0x24, 0xc7, 0x78, 0xe1, 0x91, 0x1c, 0xe3, 0x83, 0x47, 0x72, 0x8c, 0x13,
+	0x1e, 0xcb, 0x31, 0x44, 0x31, 0x15, 0x24, 0x25, 0xb1, 0x81, 0x0d, 0x32, 0x06, 0x04, 0x00, 0x00,
+	0xff, 0xff, 0x1f, 0xe2, 0x99, 0xd3, 0x58, 0x00, 0x00, 0x00,
 }

@@ -5,7 +5,7 @@ import (
 	"errors"
 	"gokit/log"
 	"push/common/db"
-	"push/common/model"
+	//	"push/common/model"
 	gateCli "push/gate/client"
 	"push/pb"
 
@@ -38,20 +38,20 @@ func (b *SingleMsgHandler) Process(i interface{}) error {
 	}
 	log.Debugln("session:", ses)
 	if ses.GateServerIP == "" && "" == ses.GateServerPort {
-		log.Errorf("not found session by key :%s", data.Key())
-		offlineMsg := &model.OfflineMsg{}
-		offlineMsg.AppID = data.AppID
-		offlineMsg.ClientID = data.ClientID
-		offlineMsg.Content = data.Content
-		offlineMsg.Extra = data.Extra
-		offlineMsg.Kind = data.Kind
-		offlineMsg.ID = data.ID
+		log.Errorf("not found session by key %s", data.Key())
+		//		offlineMsg := &model.OfflineMsg{}
+		//		offlineMsg.AppID = data.AppID
+		//		offlineMsg.ClientID = data.ClientID
+		//		offlineMsg.Content = data.Content
+		//		offlineMsg.Extra = data.Extra
+		//		offlineMsg.Kind = data.Kind
+		//		offlineMsg.ID = data.ID
 
-		err = model.OfflineMsgModel().Insert(offlineMsg)
-		if nil != err {
-			log.Errorln(err)
-			return err
-		}
+		//		err = model.OfflineMsgModel().Insert(offlineMsg)
+		//		if nil != err {
+		//			log.Errorln(err)
+		//			return err
+		//		}
 
 		return errors.New("not found session")
 	}

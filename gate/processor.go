@@ -1,14 +1,20 @@
 package main
 
 import (
+	"encoding/json"
 	"errors"
 	"gokit/log"
+	"push/common/model"
 	"push/gate/mqtt"
 	"push/gate/service/session"
 	"time"
 
 	"github.com/surgemq/message"
 )
+
+type PublishAck struct {
+	MsgID string `json:"msg_id"`
+}
 
 func Dispatch(ses *mqtt.Session, msg message.Message) error {
 	switch msg := msg.(type) {
@@ -18,11 +24,32 @@ func Dispatch(ses *mqtt.Session, msg message.Message) error {
 		return processDisConn(ses, msg)
 	case *message.PingreqMessage:
 		return processPingReq(ses, msg)
+	case *message.PublishMessage:
+		return processPublish(ses, msg)
 	}
 
 	log.Errorf("unsupport msg type:%d,%s", msg.Type(), msg.Name())
 	err := errors.New("unsupport msg type")
 	return err
+}
+
+func processPublish(ses *mqtt.Session, msg *message.PublishMessage) error {
+	log.Debugf("processPublish:%+v", *msg)
+
+	ack := &PublishAck{}
+	err := json.Unmarshal(msg.Payload(), ack)
+	if nil != err {
+		log.Errorln(err)
+		return err
+	}
+	log.Debugf("got ack for %+v", ack)
+
+	err = model.OfflineMsgModel().Delete(ack.MsgID)
+	if nil != err {
+		log.Errorln(err, "msg_id:", ack.MsgID)
+		return err
+	}
+	return nil
 }
 
 func processPubAck(ses *mqtt.Session, msg *message.PubackMessage) error {

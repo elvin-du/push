@@ -1,10 +1,20 @@
 package main
 
 import (
+	"encoding/json"
 	"log"
 
 	"github.com/surgemq/message"
 )
+
+type PublishMessage struct {
+	ID      string `json:"id"`
+	Content string `json:"content"`
+}
+
+type PubAck struct {
+	MsgID string `json:"msg_id"`
+}
 
 func Process(msg message.Message) error {
 	var err error = nil
@@ -29,6 +39,33 @@ func processConnAck(msg *message.ConnackMessage) error {
 
 func processPub(msg *message.PublishMessage) error {
 	log.Println("processPub", string(msg.Payload()))
+	pubMsg := PublishMessage{}
+	err := json.Unmarshal(msg.Payload(), &pubMsg)
+	if nil != err {
+		log.Println(err)
+		return err
+	}
+
+	ack := PubAck{}
+	ack.MsgID = pubMsg.ID
+
+	bin, err := json.Marshal(ack)
+	if nil != err {
+		log.Println(err)
+		return err
+	}
+
+	ackMsg := message.NewPublishMessage()
+	ackMsg.SetQoS(message.QosAtLeastOnce)
+	ackMsg.SetPacketId(1)
+	ackMsg.SetTopic([]byte("*"))
+	ackMsg.SetPayload(bin)
+
+	err = Send(ackMsg)
+	if nil != err {
+		log.Println(err)
+		return err
+	}
 	return nil
 }
 

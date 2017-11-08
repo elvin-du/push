@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"gokit/log"
+	"io"
 	"net"
 	"sync"
 	"sync/atomic"
@@ -65,23 +66,30 @@ func (s *Session) Key() string {
 }
 
 func (s *Session) Start() {
-	s.closeWait.Add(1)
-	go s.ReadLoop()
+	if atomic.CompareAndSwapInt32(&s.closeFlag, sessionFlagClosed, sessionFlagOpen) {
+		s.closeWait.Add(1)
+		go s.ReadLoop()
 
-	s.closeWait.Add(1)
-	go s.WriteLoop()
+		s.closeWait.Add(1)
+		go s.WriteLoop()
 
-	go s.CronEvery()
+		go s.CronEvery()
+	} else {
+		log.Errorln("session status unnormal")
+	}
 }
 
 func (s *Session) Close(reason error) {
 	if atomic.CompareAndSwapInt32(&s.closeFlag, sessionFlagOpen, sessionFlagClosed) {
-		log.Warnln(reason)
+		if io.EOF == reason {
+			log.Infoln(reason)
+		} else {
+			log.Errorln(reason)
+		}
+
 		s.closeReason = reason
 		close(s.closeChan)
 		s.closeCallback(s, reason)
-	} else {
-		//TODO
 	}
 }
 
@@ -124,6 +132,11 @@ func (s *Session) CronEvery() {
 			//TODO maybe should ping first
 			err := errors.New("No Beatheart")
 			s.Close(err)
+			return
+		}
+
+		if s.IsClosed() {
+			return
 		}
 	}
 }

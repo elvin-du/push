@@ -55,6 +55,6 @@ func IOSPush(appID, devToken, alert string, isProduction bool) error {
 		return err
 	}
 
-	log.Debugf("%+v %+v %+v %+v\n", res.StatusCode, res.ApnsID, res.Reason, res.Sent())
+	log.Infof("app_id:%s,dev_token:%s,is_production:%+v,status_code:%+v,apns_id:%+v,reason:%+v,ok:%+v", appID, devToken, isProduction, res.StatusCode, res.ApnsID, res.Reason, res.Sent())
 	return nil
 }

@@ -2,7 +2,7 @@ package main
 
 import (
 	"encoding/json"
-	"io/ioutil"
+	"gokit/log"
 	"net/http"
 	"push/rest_api/service/nsq"
 
@@ -14,12 +14,13 @@ type push struct{}
 var _push *push
 
 func (*push) Push(ctx *Context) {
-	bin, err := ioutil.ReadAll(ctx.Request.Body)
+	bin, err := ctx.GetRawData()
 	if nil != err {
 		ctx.AbortWithError(400, err)
 		return
 	}
 
+	log.Debugf("Msg:%+v", string(bin))
 	msg, err := ValidMessage(bin)
 	if nil != err {
 		ctx.AbortWithError(400, err)
@@ -39,6 +40,12 @@ func (*push) Push(ctx *Context) {
 		bin, err = json.Marshal(info)
 		if nil != err {
 			ctx.AbortWithError(400, err)
+			return
+		}
+
+		err = SaveMsg(info)
+		if nil != err {
+			ctx.AbortWithError(500, err)
 			return
 		}
 

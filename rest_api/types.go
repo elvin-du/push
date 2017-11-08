@@ -37,7 +37,7 @@ func ValidMessage(bin []byte) (*Message, error) {
 	var msg Message
 	err := json.Unmarshal(bin, &msg)
 	if nil != err {
-		log.Errorln(err)
+		log.Errorln(err, string(bin))
 		return nil, err
 	}
 

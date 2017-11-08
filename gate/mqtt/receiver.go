@@ -5,6 +5,7 @@ import (
 	"errors"
 	"fmt"
 	"gokit/log"
+	"io"
 	"runtime/debug"
 
 	"github.com/surgemq/message"
@@ -32,7 +33,11 @@ func (s *Session) ReadLoop() {
 		var msg message.Message
 		msg, _, _, err = s.ReadMessage()
 		if nil != err {
-			log.Error(err)
+			//client close connection
+			if err != io.EOF {
+				log.Error(err)
+			}
+
 			return
 		}
 
@@ -76,8 +81,14 @@ func (s *Session) ReadMessage() (message.Message, []byte, int, error) {
 
 	if remLen == 0 {
 		msg, err := mtype.New()
+		if nil != err {
+			log.Error(err)
+			return nil, buf, 0, err
+		}
+
 		dn, err := msg.Decode(buf)
 		if err != nil {
+			log.Error(err)
 			return nil, buf, 0, err
 		}
 
@@ -86,6 +97,7 @@ func (s *Session) ReadMessage() (message.Message, []byte, int, error) {
 
 	_, err := s.Conn.Read(buf[n+1:]) //[len(b)+1:]
 	if err != nil {
+		log.Error(err)
 		return nil, buf, 0, err
 	}
 

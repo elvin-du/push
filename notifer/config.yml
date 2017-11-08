@@ -15,67 +15,6 @@ redis:
   main:
     addr: localhost:6379
     pool: 100
-mysql:
-  main:
-    addr: localhost:3306
-    user: root
-    passwd: abc.123
-    dbname: push_core
-    pool: 100
-  shard1:
-    addr: localhost:3306
-    user: root
-    passwd: abc.123
-    dbname: push_shard1
-    pool: 100
-  shard2:
-    addr: localhost:3306
-    user: root
-    passwd: abc.123
-    dbname: push_shard2
-    pool: 100
-  shard3:
-    addr: localhost:3306
-    user: root
-    passwd: abc.123
-    dbname: push_shard3
-    pool: 100
-  shard4:
-    addr: localhost:3306
-    user: root
-    passwd: abc.123
-    dbname: push_shard4
-    pool: 100
-  shard5:
-    addr: localhost:3306
-    user: root
-    passwd: abc.123
-    dbname: push_shard5
-    pool: 100
-  shard6:
-    addr: localhost:3306
-    user: root
-    passwd: abc.123
-    dbname: push_shard6
-    pool: 100
-  shard7:
-    addr: localhost:3306
-    user: root
-    passwd: abc.123
-    dbname: push_shard7
-    pool: 100
-  shard8:
-    addr: localhost:3306
-    user: root
-    passwd: abc.123
-    dbname: push_shard8
-    pool: 100
-  shard9:
-    addr: localhost:3306
-    user: root
-    passwd: abc.123
-    dbname: push_shard9
-    pool: 100
 mongo:
   main:
     #url: mongodb://myuser:mypass@localhost:27017

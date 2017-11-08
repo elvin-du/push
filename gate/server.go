@@ -1,8 +1,10 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
 	"gokit/log"
+	"io"
 	"net"
 	"os"
 	"os/signal"
@@ -146,7 +148,8 @@ func (s *Server) authConnection(ses *mqtt.Session) (err error) {
 
 	ses.SetTouchTime(time.Now().Unix())
 	ses.OnClose(s.OnSessionClose)
-	ses.OnReadPacket(Dispatch)
+	ses.OnReadPacket(OnRead)
+	ses.OnSendPacket(OnSend)
 	//启动两个goroutine进行读写
 	ses.Start()
 
@@ -182,7 +185,16 @@ func (s *Server) CheckOfflineMsgs(ses *mqtt.Session) {
 
 	log.Debugf("found %d offline msg for app_id:%s,client_id:%s", len(msgs), ses.AppID, ses.ClientID)
 	for _, v := range msgs {
-		go ses.Push([]byte(v.Content))
+		msg := Message{}
+		msg.Content = v.Content
+		msg.ID = v.ID
+		bin, err := json.Marshal(msg)
+		if nil != err {
+			log.Errorln(err)
+			return
+		}
+
+		go ses.Push(bin)
 	}
 }
 
@@ -205,6 +217,11 @@ func (s *Server) Auth(appID, appSecret string) error {
 }
 
 func (s *Server) OnSessionClose(ses *mqtt.Session, err error) {
-	log.Errorf("app_id:%s,client_id:%s session close,err:%s", ses.AppID, ses.ClientID, err.Error())
+	if io.EOF == err {
+		log.Infof("app_id:%s,client_id:%s session close,err:%s", ses.AppID, ses.ClientID, err.Error())
+	} else {
+		log.Errorf("app_id:%s,client_id:%s session close,err:%s", ses.AppID, ses.ClientID, err.Error())
+	}
+	log.Infof("remove user(app_id:%s,client_id:%s) session", ses.AppID, ses.ClientID)
 	s.Remove(ses.AppID, ses.ClientID)
 }

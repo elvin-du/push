@@ -1,5 +1,9 @@
 package model
 
+import (
+	"fmt"
+)
+
 type OfflineMsg struct {
 	ID       string `json:"id" bson:"_id"`
 	AppID    string `json:"app_id" bson:"app_id"`
@@ -8,6 +12,10 @@ type OfflineMsg struct {
 	Content  string
 	Extra    string
 	CreateAt uint64 `json:"created_at" bson:"created_at"`
+}
+
+func (om *OfflineMsg) Key() string {
+	return fmt.Sprintf("%s:%s", om.AppID, om.ClientID)
 }
 
 type App struct {

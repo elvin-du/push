@@ -9,6 +9,8 @@ import (
 	"push/gate/service/session"
 	"time"
 
+	gateMsg "push/gate/message"
+
 	"github.com/surgemq/message"
 )
 
@@ -44,11 +46,18 @@ func processPublish(ses *mqtt.Session, msg *message.PublishMessage) error {
 	}
 	log.Debugf("got ack for %+v", ack)
 
-	err = model.OfflineMsgModel().Delete(ack.MsgID)
-	if nil != err {
-		log.Errorln(err, "msg_id:", ack.MsgID)
-		return err
+	if gateMsg.DefaultMessageManager.IsExist(ack.MsgID) {
+		log.Infof("remove msg:%s from messageManager", ack.MsgID)
+		gateMsg.DefaultMessageManager.Delete(ack.MsgID)
+	} else {
+		log.Infof("remove msg:%s from DB", ack.MsgID)
+		err = model.OfflineMsgModel().Delete(ack.MsgID)
+		if nil != err {
+			log.Errorln(err, "msg_id:", ack.MsgID)
+			return err
+		}
 	}
+
 	return nil
 }
 

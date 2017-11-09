@@ -10,6 +10,10 @@ import (
 	"gokit/log"
 	"push/pb"
 
+	"push/gate/message"
+
+	"push/common/model"
+
 	"golang.org/x/net/context"
 )
 
@@ -23,7 +27,29 @@ type Gate struct {
 
 func (*Gate) Push(ctx context.Context, req *pb.GatePushRequest) (*pb.GatePushResponse, error) {
 	log.Debugln(*req)
-	resp := &pb.GatePushResponse{}
+
+	offlineMsg := &model.OfflineMsg{}
+	offlineMsg.AppID = req.AppID
+	offlineMsg.ClientID = req.ClientId
+	offlineMsg.Content = req.Content
+	offlineMsg.Extra = req.Extra
+	offlineMsg.Kind = req.Kind
+	offlineMsg.ID = req.ID
+	message.DefaultMessageManager.Put(offlineMsg)
+	var (
+		err error = nil
+		bin []byte
+	)
+
+	defer func() {
+		if nil != err {
+			message.DefaultMessageManager.Delete(offlineMsg.ID)
+			err = model.OfflineMsgModel().Insert(offlineMsg)
+			if nil != err {
+				log.Errorln(err)
+			}
+		}
+	}()
 
 	user := defaultServer.Get(req.AppID, req.ClientId)
 	if nil == user {
@@ -34,7 +60,7 @@ func (*Gate) Push(ctx context.Context, req *pb.GatePushRequest) (*pb.GatePushRes
 	msg := Message{}
 	msg.Content = req.Content
 	msg.ID = req.ID
-	bin, err := json.Marshal(msg)
+	bin, err = json.Marshal(msg)
 	if nil != err {
 		log.Errorln(err)
 		return nil, err
@@ -43,9 +69,10 @@ func (*Gate) Push(ctx context.Context, req *pb.GatePushRequest) (*pb.GatePushRes
 	err = user.Push(bin)
 	if nil != err {
 		log.Errorln(err)
-		return resp, err
+		return nil, err
 	}
 
+	resp := &pb.GatePushResponse{}
 	return resp, nil
 }
 

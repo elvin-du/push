@@ -9,6 +9,7 @@ import (
 	"os"
 	"os/signal"
 	"push/common/model"
+	gateMsg "push/gate/message"
 	"push/gate/mqtt"
 	"push/gate/service/config"
 	"push/gate/service/session"
@@ -29,24 +30,32 @@ var (
 
 type Server struct {
 	*UserManager
-	Keepalive int64 //单位：秒
+	Keepalive   int64 //单位：秒
+	rcpListener net.Listener
+	tcpListener net.Listener
 }
 
 /*
 开始监听RPC端口
 */
 func (s *Server) StartRPCServer() {
-	l, err := net.Listen("tcp", fmt.Sprintf("0.0.0.0:%d", config.RPC_SERVICE_PORT))
+	var err error = nil
+	s.rcpListener, err = net.Listen("tcp", fmt.Sprintf("0.0.0.0:%d", config.RPC_SERVICE_PORT))
 	if err != nil {
 		panic(err)
 	}
-	defer l.Close()
+	defer func() {
+		s.rcpListener.Close()
+		log.Infof("rpc connection closed")
+	}()
 
 	ch := make(chan os.Signal, 1)
 	signal.Notify(ch, syscall.SIGTERM, syscall.SIGINT, syscall.SIGKILL, syscall.SIGHUP, syscall.SIGQUIT)
 	go func() {
 		stop := <-ch
 		log.Errorf("receive signal '%v'", stop)
+		s.Close(stop)
+		gateMsg.DefaultMessageManager.Sync()
 		os.Exit(1)
 	}()
 
@@ -55,20 +64,25 @@ func (s *Server) StartRPCServer() {
 	srv := grpc.NewServer()
 
 	pb.RegisterGateServer(srv, &Gate{})
-	srv.Serve(l)
+	srv.Serve(s.rcpListener)
 }
 
 //开始监听客户端的连接
 func (s *Server) StartTcpServer() {
-	l, err := net.Listen("tcp", fmt.Sprintf("0.0.0.0:%d", config.TCP_PORT))
+	var err error = nil
+	s.tcpListener, err = net.Listen("tcp", fmt.Sprintf("0.0.0.0:%d", config.TCP_PORT))
 	if err != nil {
 		log.Fatalf("failed to listen: %v", err)
 	}
-	defer l.Close()
+	defer func() {
+		s.tcpListener.Close()
+		log.Infof("tcp connection closed")
+	}()
+
 	log.Infof("starting tcp server on %d", config.TCP_PORT)
 
 	for {
-		conn, err := l.Accept()
+		conn, err := s.tcpListener.Accept()
 		if nil != err {
 			log.Error(err)
 			continue //TODO 直接crash整个进程还是继续？
@@ -224,4 +238,10 @@ func (s *Server) OnSessionClose(ses *mqtt.Session, err error) {
 	}
 	log.Infof("remove user(app_id:%s,client_id:%s) session", ses.AppID, ses.ClientID)
 	s.Remove(ses.AppID, ses.ClientID)
+	gateMsg.DefaultMessageManager.SyncByAccount(ses.Key())
+}
+
+func (s *Server) Close(reason interface{}) {
+	s.tcpListener.Close()
+	s.rcpListener.Close()
 }

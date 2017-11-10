@@ -53,7 +53,8 @@ func (b *SingleMsgHandler) Process(i interface{}) error {
 			return err
 		}
 
-		return errors.New("not found session")
+		//不在线不需要nsq消息重发
+		return nil
 	}
 
 	_, err = gateCli.Push(

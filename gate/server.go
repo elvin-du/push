@@ -85,7 +85,11 @@ func (s *Server) StartTcpServer() {
 		conn, err := s.tcpListener.Accept()
 		if nil != err {
 			log.Error(err)
-			continue //TODO 直接crash整个进程还是继续？
+			if io.EOF != err {
+				return
+			}
+
+			continue
 		}
 
 		go s.handleConnection(conn)

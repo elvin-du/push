@@ -7,7 +7,7 @@ import (
 type OfflineMsg struct {
 	ID       string `json:"id" bson:"_id"`
 	AppID    string `json:"app_id" bson:"app_id"`
-	ClientID string `json:"client_id" bson:"client_id"`
+	RegID    string `json:"reg_id" bson:"reg_id"`
 	Kind     int32
 	Content  string
 	Extra    string
@@ -15,7 +15,7 @@ type OfflineMsg struct {
 }
 
 func (om *OfflineMsg) Key() string {
-	return fmt.Sprintf("%s:%s", om.AppID, om.ClientID)
+	return fmt.Sprintf("%s:%s", om.AppID, om.RegID)
 }
 
 type App struct {

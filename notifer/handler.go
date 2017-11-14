@@ -41,7 +41,7 @@ func (b *SingleMsgHandler) Process(i interface{}) error {
 		log.Errorf("not found session by key %s", data.Key())
 		offlineMsg := &model.OfflineMsg{}
 		offlineMsg.AppID = data.AppID
-		offlineMsg.ClientID = data.ClientID
+		offlineMsg.RegID = data.RegID
 		offlineMsg.Content = data.Content
 		offlineMsg.Extra = data.Extra
 		offlineMsg.Kind = data.Kind
@@ -61,12 +61,12 @@ func (b *SingleMsgHandler) Process(i interface{}) error {
 		ses.GateServerIP,
 		ses.GateServerPort,
 		&pb.GatePushRequest{
-			ID:       data.ID,
-			AppID:    data.AppID,
-			ClientId: data.ClientID,
-			Content:  data.Content,
-			Kind:     data.Kind,
-			Extra:    data.Extra,
+			ID:      data.ID,
+			AppID:   data.AppID,
+			RegID:   data.RegID,
+			Content: data.Content,
+			Kind:    data.Kind,
+			Extra:   data.Extra,
 		})
 	if nil != err {
 		log.Errorln(err)

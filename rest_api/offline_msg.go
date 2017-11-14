@@ -8,7 +8,7 @@ import (
 func SaveMsg(info *Info) error {
 	msg := &model.OfflineMsg{}
 	msg.AppID = info.AppID
-	msg.ClientID = info.ClientID
+	msg.RegID = info.RegID
 	msg.Content = info.Content
 	msg.CreateAt = util.Timestamp()
 	msg.Extra = info.Extra

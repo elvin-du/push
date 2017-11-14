@@ -14,9 +14,9 @@ service Gate{
 message GatePushRequest{
 	string ID = 1;
 	string AppID = 2;
-	string ClientId = 3;
+	string RegID = 3;
 	string Content = 4;
-	int32 Kind =5;
+	int32  Kind =5;
 	string Extra = 6;
 }
 

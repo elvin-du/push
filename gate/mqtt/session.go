@@ -2,7 +2,6 @@ package mqtt
 
 import (
 	"errors"
-	"fmt"
 	"gokit/log"
 	"io"
 	"net"
@@ -11,6 +10,7 @@ import (
 	"time"
 
 	"github.com/surgemq/message"
+	"gopkg.in/mgo.v2/bson"
 )
 
 var (
@@ -26,8 +26,7 @@ const (
 )
 
 type Session struct {
-	AppID        string
-	ClientID     string
+	ID           string
 	Conn         net.Conn
 	writeTimeout time.Duration
 	touchTime    int64
@@ -47,6 +46,7 @@ type Session struct {
 
 func NewSession(conn net.Conn) *Session {
 	ses := &Session{
+		ID:           bson.NewObjectId().Hex(),
 		Conn:         conn,
 		writeTimeout: DEFAULT_WRITE_TIMEOUT,
 		touchTime:    time.Now().Unix(),
@@ -61,9 +61,9 @@ func NewSession(conn net.Conn) *Session {
 	return ses
 }
 
-func (s *Session) Key() string {
-	return fmt.Sprintf("%s+%s", s.AppID, s.ClientID)
-}
+//func (s *Session) Key() string {
+//	return fmt.Sprintf("%s+%s", s.AppID, s.ClientID)
+//}
 
 func (s *Session) Start() {
 	if atomic.CompareAndSwapInt32(&s.closeFlag, sessionFlagClosed, sessionFlagOpen) {

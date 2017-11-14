@@ -43,6 +43,12 @@ func StartHTTP() {
 		internalRouter.Run(config.HTTP_INTERNAL_ADDR)
 	}()
 
+	//	go func() {
+	//		appRouter := gin.Default()
+	//		appRouter.POST("/register", AuthHandler(Register))
+	//		appRouter.POST("/unregister", AuthHandler(Unregister))
+	//	}()
+
 	router.Run(config.HTTP_ADDR)
 }
 

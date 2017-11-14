@@ -12,7 +12,7 @@ const (
 )
 
 var (
-	CLIENT_ID_INVALID    = errors.New("client_id invalid")
+	REG_ID_INVALID       = errors.New("reg_id invalid")
 	COTENT_INVALID       = errors.New("content invalid")
 	KIND_INVALID         = errors.New("kind invalid")
 	REQUEST_DATA_INVALID = errors.New("request data invalid")
@@ -20,7 +20,7 @@ var (
 
 type Message struct {
 	ID           string `json:"id"`
-	ClientID     string `json:"client_id"`
+	RegID        string `json:"reg_id"`
 	Platform     string `json:"platform"` //android,ios
 	IsProduction bool   `json:"is_production"`
 	Content      string `json:"content"`
@@ -41,8 +41,8 @@ func ValidMessage(bin []byte) (*Message, error) {
 		return nil, err
 	}
 
-	if "" == msg.ClientID {
-		return nil, CLIENT_ID_INVALID
+	if "" == msg.RegID {
+		return nil, REG_ID_INVALID
 	}
 
 	if "" == msg.Content {

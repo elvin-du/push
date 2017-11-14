@@ -20,6 +20,8 @@ import (
 type Message struct {
 	ID      string `json:"id"`
 	Content string `json:"content"`
+	AppID   string `json:"app_id"`
+	Kind    int    `json:"kind"`
 }
 
 type Gate struct {
@@ -30,7 +32,7 @@ func (*Gate) Push(ctx context.Context, req *pb.GatePushRequest) (*pb.GatePushRes
 
 	offlineMsg := &model.OfflineMsg{}
 	offlineMsg.AppID = req.AppID
-	offlineMsg.ClientID = req.ClientId
+	offlineMsg.RegID = req.RegID
 	offlineMsg.Content = req.Content
 	offlineMsg.Extra = req.Extra
 	offlineMsg.Kind = req.Kind
@@ -51,15 +53,17 @@ func (*Gate) Push(ctx context.Context, req *pb.GatePushRequest) (*pb.GatePushRes
 		}
 	}()
 
-	user := defaultServer.Get(req.AppID, req.ClientId)
+	user := defaultServer.Get(req.AppID, req.RegID)
 	if nil == user {
-		log.Errorln("not found session by:appid:clientId:", req.AppID, req.ClientId)
+		log.Errorln("not found session by:appID:regID:", req.AppID, req.RegID)
 		return nil, errors.New("not found")
 	}
 
 	msg := Message{}
 	msg.Content = req.Content
 	msg.ID = req.ID
+	msg.AppID = req.AppID
+	msg.Kind = int(req.Kind)
 	bin, err = json.Marshal(msg)
 	if nil != err {
 		log.Errorln(err)

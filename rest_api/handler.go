@@ -29,7 +29,7 @@ func (*push) Push(ctx *Context) {
 
 	switch msg.Platform {
 	case PUSH_PLATFORM_IOS:
-		err = IOSPush(ctx.AppID, msg.ClientID, msg.Content, msg.IsProduction)
+		err = IOSPush(ctx.AppID, msg.RegID, msg.Content, msg.IsProduction)
 		if nil != err {
 			ctx.AbortWithError(500, err)
 			return

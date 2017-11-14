@@ -2,6 +2,7 @@ package main
 
 import (
 	"encoding/json"
+	"fmt"
 	"gokit/log"
 	"push/common/model"
 	"push/gate/mqtt"
@@ -84,7 +85,7 @@ func (u *User) CheckOfflineMsgs() {
 
 	log.Debugf("found %d offline msg for app_id:%s,reg_id:%s", len(msgs), u.AppID, u.RegID)
 	for _, v := range msgs {
-		msg := Message{}
+		msg := PublishMessage{}
 		msg.Content = v.Content
 		msg.ID = v.ID
 		bin, err := json.Marshal(msg)
@@ -95,6 +96,10 @@ func (u *User) CheckOfflineMsgs() {
 
 		go u.Push(bin)
 	}
+}
+
+func (u *User) Key() string {
+	return fmt.Sprintf("%s:%s", u.AppID, u.RegID)
 }
 
 //TODO auth

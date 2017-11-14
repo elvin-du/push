@@ -14,8 +14,23 @@ import (
 	"github.com/surgemq/message"
 )
 
+const (
+	CLIENT_MESSAGE_KIND_PUB_ACK = 1
+	CLIENT_MESSAGE_KIND_SIGNOUT = 2
+)
+
 type PublishAck struct {
 	MsgID string `json:"msg_id"`
+}
+
+type SignOut struct {
+	AppID string `json:"app_id"`
+	RegID string `json:"reg_id"`
+}
+
+type ClientMessage struct {
+	Kind    int //1:publish ack 2:signout
+	Content interface{}
 }
 
 func Dispatch(ses *mqtt.Session, msg message.Message) error {
@@ -38,8 +53,49 @@ func Dispatch(ses *mqtt.Session, msg message.Message) error {
 func processPublish(ses *mqtt.Session, msg *message.PublishMessage) error {
 	log.Debugf("processPublish:%+v", *msg)
 
+	cliMsg := &ClientMessage{}
+	err := json.Unmarshal(msg.Payload(), cliMsg)
+	if nil != err {
+		log.Errorln(err)
+		return err
+	}
+
+	switch cliMsg.Kind {
+	case CLIENT_MESSAGE_KIND_PUB_ACK:
+		return handlePubAck(cliMsg.Content)
+	case CLIENT_MESSAGE_KIND_SIGNOUT:
+	}
+
+	return errors.New("Invalid message kind")
+}
+
+func handleSignOut(data interface{}) error {
+	bin, err := json.Marshal(data)
+	if nil != err {
+		log.Errorln(err)
+		return err
+	}
+
+	out := &SignOut{}
+	err = json.Unmarshal(bin, out)
+	if nil != err {
+		log.Errorln(err)
+		return err
+	}
+
+	defaultServer.RemoveUser(out.AppID, out.RegID)
+	return nil
+}
+
+func handlePubAck(data interface{}) error {
+	bin, err := json.Marshal(data)
+	if nil != err {
+		log.Errorln(err)
+		return err
+	}
+
 	ack := &PublishAck{}
-	err := json.Unmarshal(msg.Payload(), ack)
+	err = json.Unmarshal(bin, ack)
 	if nil != err {
 		log.Errorln(err)
 		return err
@@ -101,7 +157,7 @@ func processConnect(ses *mqtt.Session, msg *message.ConnectMessage) (err error) 
 			}
 
 			//TODO 直接关闭连接?
-			ses.Close(err)
+			//ses.Close(err)
 		}
 	}()
 

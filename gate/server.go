@@ -114,6 +114,6 @@ func (s *Server) PutUser(u *User) {
 	s.UserManager.Put(u)
 }
 
-func (s *Server) RemoveUser(appID, clientID string) {
-	s.UserManager.Remove(appID, clientID)
+func (s *Server) RemoveUser(appID, clientID string) *User {
+	return s.UserManager.Remove(appID, clientID)
 }

@@ -17,7 +17,7 @@ import (
 	"golang.org/x/net/context"
 )
 
-type Message struct {
+type PublishMessage struct {
 	ID      string `json:"id"`
 	Content string `json:"content"`
 	AppID   string `json:"app_id"`
@@ -59,7 +59,7 @@ func (*Gate) Push(ctx context.Context, req *pb.GatePushRequest) (*pb.GatePushRes
 		return nil, errors.New("not found")
 	}
 
-	msg := Message{}
+	msg := PublishMessage{}
 	msg.Content = req.Content
 	msg.ID = req.ID
 	msg.AppID = req.AppID

@@ -61,10 +61,6 @@ func NewSession(conn net.Conn) *Session {
 	return ses
 }
 
-//func (s *Session) Key() string {
-//	return fmt.Sprintf("%s+%s", s.AppID, s.ClientID)
-//}
-
 func (s *Session) Start() {
 	if atomic.CompareAndSwapInt32(&s.closeFlag, sessionFlagClosed, sessionFlagOpen) {
 		s.closeWait.Add(1)

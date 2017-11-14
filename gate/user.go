@@ -35,7 +35,7 @@ func Auth(ses *mqtt.Session, msg *message.ConnectMessage) (*User, error) {
 	}
 
 	appID := string(msg.Username())
-	log.Debugf("come to connect,app_id: %s,clientid:%s", appID, regID)
+	log.Debugf("come to connect,app_id: %s,reg_id:%s", appID, regID)
 	appSecret := string(msg.Password())
 
 	err = doAuth(appID, appSecret)
@@ -71,7 +71,7 @@ func (u *User) Online() error {
 	}
 
 	defaultServer.PutUser(u)
-	log.Infof("app_id:%s,client_id:%s online", u.AppID, u.RegID)
+	log.Infof("app_id:%s,reg_id:%s online", u.AppID, u.RegID)
 
 	return nil
 }

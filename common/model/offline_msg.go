@@ -25,7 +25,7 @@ func (om *offlineMsg) List(appID, regID string) ([]*OfflineMsg, error) {
 		return nil, err
 	}
 
-	sqlStr := fmt.Sprintf("SELECT id,app_id,reg_id,kind,content,extra,created_at FROM offline_msgs WHERE app_id='%s' AND client_id='%s' ORDER BY created_at ASC", appID, clientID)
+	sqlStr := fmt.Sprintf("SELECT id,app_id,reg_id,kind,content,extra,created_at FROM offline_msgs WHERE app_id='%s' AND reg_id='%s' ORDER BY created_at ASC", appID, regID)
 	rows, err := db.Query(sqlStr)
 	if nil != err {
 		log.Errorln(err, sqlStr)

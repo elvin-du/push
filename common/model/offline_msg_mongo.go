@@ -16,10 +16,10 @@ func OfflineMsgModel() *offlineMsg {
 	return _offlineMsg
 }
 
-func (om *offlineMsg) List(appID, clientID string) ([]*OfflineMsg, error) {
+func (om *offlineMsg) List(appID, regID string) ([]*OfflineMsg, error) {
 	c := libdb.MainMgoDB().C("offline.msgs")
 	msgs := []*OfflineMsg{}
-	err := c.Find(bson.M{"app_id": appID, "client_id": clientID}).All(&msgs)
+	err := c.Find(bson.M{"app_id": appID, "reg_id": regID}).All(&msgs)
 	if nil != err {
 		log.Errorln(err)
 		return nil, err

@@ -14,7 +14,7 @@
 	json格式，
 	{
 		"app_id":"123",
-		"client_id":"ANDROID+123",
+		"reg_id":"ANDROID+123",
 		"content":"恭喜您获得",
 		"kind":1,
 		"extra":"",# json格式

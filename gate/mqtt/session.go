@@ -15,8 +15,8 @@ import (
 
 var (
 	DEFAULT_OUT_CH_SIZE   = 1024
-	DEFAULT_WRITE_TIMEOUT = time.Duration(10) //sec
-	KEEPALIVE             = time.Duration(60) //sec
+	DEFAULT_WRITE_TIMEOUT = time.Duration(10)  //sec
+	KEEPALIVE             = time.Duration(120) //sec
 )
 
 // session close flag
@@ -130,7 +130,7 @@ func (s *Session) CronEvery() {
 		time.Sleep(KEEPALIVE * time.Second)
 		if !s.IsAlive() {
 			//TODO maybe should ping first
-			err := errors.New("No Beatheart")
+			err := errors.New(s.ID + " No Beatheart")
 			s.Close(err)
 			return
 		}

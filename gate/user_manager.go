@@ -53,11 +53,7 @@ func (um *UserManager) GetByID(sessionID string) []*User {
 		}
 	}
 
-	if 0 != len(users) {
-		return users
-	}
-
-	return nil
+	return users
 }
 
 func (um *UserManager) Remove(appID, regID string) *User {
@@ -65,25 +61,27 @@ func (um *UserManager) Remove(appID, regID string) *User {
 	defer um.Lock.Unlock()
 
 	if _, exist := um.Users[appID]; exist {
+		u := um.Users[appID][regID]
 		delete(um.Users[appID], regID)
-		return um.Users[appID][regID]
+		return u
 	}
 
 	return nil
 }
 
-func (um *UserManager) RemoveByID(sessionID string) *User {
+func (um *UserManager) RemoveByID(sessionID string) []*User {
 	um.Lock.Lock()
 	defer um.Lock.Unlock()
 
+	users := []*User{}
 	for _, appUsers := range um.Users {
 		for _, user := range appUsers {
 			if sessionID == user.ID {
+				users = append(users, um.Users[user.AppID][user.RegID])
 				delete(um.Users[user.AppID], user.RegID)
-				return user
 			}
 		}
 	}
 
-	return nil
+	return users
 }

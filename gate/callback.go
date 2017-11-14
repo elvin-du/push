@@ -25,19 +25,20 @@ func OnRead(ses *mqtt.Session, msg message.Message) error {
 }
 
 func OnClose(ses *mqtt.Session, err error) {
-	u := defaultServer.RemoveByID(ses.ID)
-	var appID, regID string
-	if nil != u {
-		appID = u.AppID
-		regID = u.RegID
+	users := defaultServer.RemoveByID(ses.ID)
+	for _, u := range users {
+		if nil != u {
+			log.Infof("remove user(app_id:%s,reg_id:%s,session_id:%s) session", u.AppID, u.RegID, u.ID)
+			if io.EOF == err {
+				log.Infof("app_id:%s,reg_id:%s,session_id:%s session close,err:%s", u.AppID, u.RegID, u.ID, err.Error())
+			} else {
+				log.Errorf("app_id:%s,reg_id:%s,session_id:%s session close,err:%s", u.AppID, u.RegID, u.ID, err.Error())
+			}
+		} else {
+			log.Errorf("session has nil user,ID:%s", ses.ID)
+		}
 	}
-	log.Infof("remove user(app_id:%s,reg_id:%s) session", appID, regID)
 
-	if io.EOF == err {
-		log.Infof("app_id:%s,reg_id:%s session close,err:%s", appID, regID, err.Error())
-	} else {
-		log.Errorf("app_id:%s,reg_id:%s session close,err:%s", appID, regID, err.Error())
-	}
 	//TODO
 	gateMsg.DefaultMessageManager.SyncByAccount(ses.ID)
 }

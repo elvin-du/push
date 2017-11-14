@@ -82,3 +82,5 @@ service:
     port: 50001
   tcp:
     port: 51001
+auth:
+  key: 01e9175ca8805cc2137c44eb86184922

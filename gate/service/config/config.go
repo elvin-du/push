@@ -10,6 +10,7 @@ var (
 	SERVER_IP        string
 	TCP_PORT         int
 	RPC_SERVICE_PORT int
+	AUTH_KEY         string
 )
 
 func Start() {
@@ -25,6 +26,11 @@ func ParseConfig() {
 	SERVER_IP = pushUtil.InternalIP
 
 	err = config.Get("service:tcp:port", &TCP_PORT)
+	if nil != err {
+		log.Fatal(err)
+	}
+
+	err = config.Get("auth:key", &AUTH_KEY)
 	if nil != err {
 		log.Fatal(err)
 	}

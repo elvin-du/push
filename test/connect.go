@@ -4,6 +4,8 @@ import (
 	"log"
 	"net"
 
+	"gokit/util"
+
 	"github.com/surgemq/message"
 )
 
@@ -37,9 +39,14 @@ func SingIn(appID, appSeceret, regID string) error {
 		return err
 	}
 
+	appSec, err := util.RC4EncryptToBase64("01e9175ca8805cc2137c44eb86184922", []byte(appID+":"+appSeceret))
+	if nil != err {
+		log.Println(err)
+		return err
+	}
 	connMsg.SetCleanSession(false)
-	connMsg.SetUsername([]byte(appID))      //api_id
-	connMsg.SetPassword([]byte(appSeceret)) //api_secret
+	connMsg.SetUsername([]byte(appID))  //api_id
+	connMsg.SetPassword([]byte(appSec)) //api_secret
 	//	connMsg.SetUsername([]byte("63163c7b40f2abee"))                 //api_id
 	//	connMsg.SetPassword([]byte("283abdfc9123987980d8aabaa7108e6c")) //api_secret
 

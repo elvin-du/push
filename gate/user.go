@@ -4,10 +4,13 @@ import (
 	"encoding/json"
 	"fmt"
 	"gokit/log"
+	"gokit/util"
 	"push/common/model"
+	. "push/errors"
 	"push/gate/mqtt"
 	"push/gate/service/config"
 	"push/gate/service/session"
+	"strings"
 
 	"github.com/surgemq/message"
 )
@@ -102,7 +105,30 @@ func (u *User) Key() string {
 	return fmt.Sprintf("%s:%s", u.AppID, u.RegID)
 }
 
-//TODO auth
-func doAuth(appID, regID string) error {
+func doAuth(appID, appSecret string) error {
+	bin, err := util.RC4DecryptFromBase64(config.AUTH_KEY, appSecret)
+	if nil != err {
+		log.Errorln(err)
+		return err
+	}
+	log.Debugln("Decrypted app_secret:", string(bin))
+
+	tmp := strings.Split(string(bin), ":")
+	if 2 != len(tmp) {
+		log.Errorln("Invalid app_secret:", tmp)
+		return REQ_DATA_INVALID
+	}
+
+	if appID != tmp[0] {
+		log.Errorf("Decrypted app_id:%s != parameter app_id:%s", tmp[0], appID)
+		return REQ_DATA_INVALID
+	}
+
+	err = model.AuthApp(appID, tmp[1])
+	if nil != err {
+		log.Errorln(err)
+		return err
+	}
+
 	return nil
 }

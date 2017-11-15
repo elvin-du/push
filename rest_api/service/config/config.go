@@ -8,6 +8,7 @@ import (
 var (
 	HTTP_ADDR          string
 	HTTP_INTERNAL_ADDR string
+	HTTP_APP_ADDR      string
 	HTTP_PROFILE       bool
 	HTTP_MODE          string
 	AUTH_KEY           string
@@ -28,6 +29,11 @@ func ParseConfig() {
 	}
 
 	err = goconfig.Get("http:internal:addr", &HTTP_INTERNAL_ADDR)
+	if nil != err {
+		log.Fatal(err)
+	}
+
+	err = goconfig.Get("http:app:addr", &HTTP_APP_ADDR)
 	if nil != err {
 		log.Fatal(err)
 	}

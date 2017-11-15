@@ -21,7 +21,7 @@ func (*push) Push(ctx *Context) {
 	}
 
 	log.Debugf("Msg:%+v", string(bin))
-	msg, err := ValidMessage(bin)
+	msg, err := ValidateMessage(bin)
 	if nil != err {
 		ctx.AbortWithError(400, err)
 		return

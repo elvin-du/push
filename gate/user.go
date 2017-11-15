@@ -33,7 +33,7 @@ func Auth(ses *mqtt.Session, msg *message.ConnectMessage) (*User, error) {
 	regID := string(msg.ClientId())
 	err := ValidateRegID(regID)
 	if nil != err {
-		log.Error(err)
+		log.Error(err, "reg_id", regID)
 		return nil, err
 	}
 
@@ -80,7 +80,7 @@ func (u *User) Online() error {
 }
 
 func (u *User) CheckOfflineMsgs() {
-	msgs, err := model.OfflineMsgModel().List(u.AppID, u.RegID)
+	msgs, err := model.MessageModel().List(u.AppID, u.RegID)
 	if nil != err {
 		log.Errorln(err)
 		return

@@ -12,19 +12,6 @@ var (
 	router *gin.Engine
 )
 
-type Context struct {
-	*gin.Context
-	AppID string `json:"app_id"`
-}
-
-func NewContext(ctx *gin.Context) *Context {
-	return &Context{
-		Context: ctx,
-	}
-}
-
-type HandlerFunc func(*Context)
-
 func StartHTTP() {
 	gin.SetMode(config.HTTP_MODE)
 	router = gin.Default()
@@ -43,11 +30,12 @@ func StartHTTP() {
 		internalRouter.Run(config.HTTP_INTERNAL_ADDR)
 	}()
 
-	//	go func() {
-	//		appRouter := gin.Default()
-	//		appRouter.POST("/register", AuthHandler(Register))
-	//		appRouter.POST("/unregister", AuthHandler(Unregister))
-	//	}()
+	go func() {
+		appRouter := gin.Default()
+		appRouter.POST("/register", AuthHandler(Register))
+		appRouter.DELETE("/unregister/:id", AuthHandler(Unregister))
+		appRouter.Run(config.HTTP_APP_ADDR)
+	}()
 
 	router.Run(config.HTTP_ADDR)
 }

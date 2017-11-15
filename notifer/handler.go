@@ -15,16 +15,16 @@ import (
 type SingleMsgHandler struct{}
 
 func (b *SingleMsgHandler) Process(i interface{}) error {
-	msg, ok := i.(*nsq.Message)
+	nsqMsg, ok := i.(*nsq.Message)
 	if !ok {
 		err := errors.New("parameter is not *nsq.Message type")
 		log.Errorln(err)
 		return err
 	}
-	log.Debugln(string(msg.Body))
+	log.Debugln(string(nsqMsg.Body))
 
 	data := Message{}
-	err := json.Unmarshal(msg.Body, &data)
+	err := json.Unmarshal(nsqMsg.Body, &data)
 	if nil != err {
 		log.Errorln(err)
 		return err
@@ -39,15 +39,15 @@ func (b *SingleMsgHandler) Process(i interface{}) error {
 	log.Debugln("session:", ses)
 	if ses.GateServerIP == "" && "" == ses.GateServerPort {
 		log.Errorf("not found session by key %s", data.Key())
-		offlineMsg := &model.OfflineMsg{}
-		offlineMsg.AppID = data.AppID
-		offlineMsg.RegID = data.RegID
-		offlineMsg.Content = data.Content
-		offlineMsg.Extra = data.Extra
-		offlineMsg.Kind = data.Kind
-		offlineMsg.ID = data.ID
+		msg := &model.Message{}
+		msg.AppID = data.AppID
+		msg.RegID = data.RegID
+		msg.Content = data.Content
+		msg.Extra = data.Extra
+		msg.Kind = data.Kind
+		msg.ID = data.ID
 
-		err = model.OfflineMsgModel().Insert(offlineMsg)
+		err = model.MessageModel().Insert(msg)
 		if nil != err {
 			log.Errorln(err)
 			return err

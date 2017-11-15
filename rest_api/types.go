@@ -1,22 +1,10 @@
 package main
 
 import (
-	"encoding/json"
-	"errors"
-	"gokit/log"
+	"github.com/gin-gonic/gin"
 )
 
-const (
-	PUSH_PLATFORM_ANDROID = "android"
-	PUSH_PLATFORM_IOS     = "ios"
-)
-
-var (
-	REG_ID_INVALID       = errors.New("reg_id invalid")
-	COTENT_INVALID       = errors.New("content invalid")
-	KIND_INVALID         = errors.New("kind invalid")
-	REQUEST_DATA_INVALID = errors.New("request data invalid")
-)
+type HandlerFunc func(*Context)
 
 type Message struct {
 	ID           string `json:"id"`
@@ -33,25 +21,13 @@ type Info struct {
 	*Message
 }
 
-func ValidMessage(bin []byte) (*Message, error) {
-	var msg Message
-	err := json.Unmarshal(bin, &msg)
-	if nil != err {
-		log.Errorln(err, string(bin))
-		return nil, err
-	}
+type Context struct {
+	*gin.Context
+	AppID string `json:"app_id"`
+}
 
-	if "" == msg.RegID {
-		return nil, REG_ID_INVALID
+func NewContext(ctx *gin.Context) *Context {
+	return &Context{
+		Context: ctx,
 	}
-
-	if "" == msg.Content {
-		return nil, COTENT_INVALID
-	}
-
-	if 0 == msg.Kind {
-		return nil, KIND_INVALID
-	}
-
-	return &msg, nil
 }

@@ -107,7 +107,7 @@ func handlePubAck(data interface{}) error {
 		gateMsg.DefaultMessageManager.Delete(ack.MsgID)
 	} else {
 		log.Infof("remove msg:%s from DB", ack.MsgID)
-		err = model.OfflineMsgModel().Delete(ack.MsgID)
+		err = model.MessageModel().Delete(ack.MsgID)
 		if nil != err {
 			log.Errorln(err, "msg_id:", ack.MsgID)
 			return err
@@ -152,7 +152,7 @@ func processConnect(ses *mqtt.Session, msg *message.ConnectMessage) (err error) 
 		if nil != err {
 			connAckMsg.SetReturnCode(message.ErrNotAuthorized)
 			err2 := ses.SendMsg(connAckMsg)
-			if nil != err {
+			if nil != err2 {
 				log.Error(err2)
 			}
 

@@ -30,7 +30,7 @@ type Gate struct {
 func (*Gate) Push(ctx context.Context, req *pb.GatePushRequest) (*pb.GatePushResponse, error) {
 	log.Debugln(*req)
 
-	offlineMsg := &model.OfflineMsg{}
+	offlineMsg := &model.Message{}
 	offlineMsg.AppID = req.AppID
 	offlineMsg.RegID = req.RegID
 	offlineMsg.Content = req.Content
@@ -46,7 +46,7 @@ func (*Gate) Push(ctx context.Context, req *pb.GatePushRequest) (*pb.GatePushRes
 	defer func() {
 		if nil != err {
 			message.DefaultMessageManager.Delete(offlineMsg.ID)
-			err = model.OfflineMsgModel().Insert(offlineMsg)
+			err = model.MessageModel().Insert(offlineMsg)
 			if nil != err {
 				log.Errorln(err)
 			}

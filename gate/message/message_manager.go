@@ -15,13 +15,13 @@ var DefaultMessageManager = NewMessageManager()
 
 type MessageManager struct {
 	lock *sync.RWMutex
-	Msgs map[string]*model.OfflineMsg //key = msg_id
+	Msgs map[string]*model.Message //key = msg_id
 }
 
 func NewMessageManager() *MessageManager {
 	manager := &MessageManager{
 		lock: new(sync.RWMutex),
-		Msgs: make(map[string]*model.OfflineMsg),
+		Msgs: make(map[string]*model.Message),
 	}
 	go manager.AsyncLoop()
 	return manager
@@ -34,7 +34,7 @@ func (mm *MessageManager) IsExist(msgID string) bool {
 	return ok
 }
 
-func (mm *MessageManager) Put(msg *model.OfflineMsg) {
+func (mm *MessageManager) Put(msg *model.Message) {
 	mm.lock.Lock()
 	defer mm.lock.Unlock()
 
@@ -62,7 +62,7 @@ func (mm *MessageManager) Sync() {
 
 	for msgID, msg := range mm.Msgs {
 		log.Debugf("sync %+v", msg)
-		err := model.OfflineMsgModel().Insert(msg)
+		err := model.MessageModel().Insert(msg)
 		if nil != err {
 			log.Errorln(err) //only log
 			continue
@@ -77,7 +77,7 @@ func (mm *MessageManager) SyncByAccount(account string) {
 	for msgID, msg := range mm.Msgs {
 		if account == msg.Key() {
 			log.Debugf("SyncByAccount %+v", msg)
-			err := model.OfflineMsgModel().Insert(msg)
+			err := model.MessageModel().Insert(msg)
 			if nil != err {
 				log.Errorln(err) //only log
 				continue

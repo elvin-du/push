@@ -24,9 +24,12 @@ http:
   mode: debug
   internal:
     addr: :52010
+  app:
+    addr: :52020
 
 nsqd:
   addr: 127.0.0.1:4150
 
+#RC4 key
 auth:
   key: 01e9175ca8805cc2137c44eb86184922

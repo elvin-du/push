@@ -27,15 +27,14 @@ func CreateApp(ctx *gin.Context) {
 		return
 	}
 
-	app := model.App{}
-	err = json.Unmarshal(bin, &app)
+	app, err := ValidateAppReq(bin)
 	if nil != err {
 		log.Errorln(err)
 		ctx.AbortWithError(400, err)
 		return
 	}
 
-	err = model.AppModel().Create(&app)
+	err = model.AppModel().Create(app)
 	if nil != err {
 		log.Errorln(err)
 		ctx.AbortWithError(400, err)

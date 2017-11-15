@@ -45,6 +45,12 @@ func ValidateRegisterReq(bin []byte) (*model.Registry, error) {
 		return nil, KIND_INVALID
 	}
 
+	if "ios" == reg.Kind {
+		if "" == reg.DevToken {
+			return nil, DEV_TOKEN_INVALID
+		}
+	}
+
 	return &reg, nil
 }
 

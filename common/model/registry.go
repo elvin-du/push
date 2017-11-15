@@ -40,7 +40,37 @@ func (r *registry) Get(id string) (*Registry, error) {
 	return nil, E_REGISTRY_NOT_FOUND
 }
 
+func (r *registry) GetByDevToken(appID, token string) (*Registry, error) {
+	c := libdb.MainMgoDB().C("registries")
+
+	var reg Registry
+	it := c.Find(bson.M{"app_id": appID, "dev_token": token}).Iter()
+	defer it.Close()
+
+	for it.Next(&reg) {
+		return &reg, nil
+	}
+
+	err := it.Err()
+	if nil != err {
+		log.Errorln(err)
+		return nil, err
+	}
+
+	return nil, E_REGISTRY_NOT_FOUND
+}
+
 func (r *registry) Create(appID, devToken, kind string) (*Registry, error) {
+	if "ios" == kind {
+		reg, err := r.GetByDevToken(appID, devToken)
+		if nil == err {
+			return reg, nil
+		} else if E_REGISTRY_NOT_FOUND != err {
+			log.Errorln(err)
+			return nil, err
+		}
+	}
+
 	c := libdb.MainMgoDB().C("registries")
 	var reg Registry
 	reg.AppID = appID

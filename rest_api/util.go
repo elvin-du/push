@@ -4,26 +4,19 @@ import (
 	"encoding/json"
 	"gokit/log"
 	"push/common/model"
+	"push/rest_api/client"
 )
 
-func ValidateMessage(bin []byte) (*Message, error) {
-	var msg Message
+func ValidateNotification(bin []byte) (*client.Notification, error) {
+	var msg client.Notification
 	err := json.Unmarshal(bin, &msg)
 	if nil != err {
 		log.Errorln(err, string(bin))
 		return nil, err
 	}
 
-	if "" == msg.RegID {
-		return nil, REG_ID_INVALID
-	}
-
-	if "" == msg.Content {
-		return nil, COTENT_INVALID
-	}
-
-	if 0 == msg.Kind {
-		return nil, KIND_INVALID
+	if "" == msg.Alert {
+		return nil, REQUEST_DATA_INVALID
 	}
 
 	return &msg, nil
@@ -41,11 +34,11 @@ func ValidateRegisterReq(bin []byte) (*model.Registry, error) {
 		return nil, APP_ID_INVALID
 	}
 
-	if "" == reg.Kind {
-		return nil, KIND_INVALID
+	if "" == reg.Platform {
+		return nil, PLATFORM_INVALID
 	}
 
-	if "ios" == reg.Kind {
+	if "ios" == reg.Platform {
 		if "" == reg.DevToken {
 			return nil, DEV_TOKEN_INVALID
 		}

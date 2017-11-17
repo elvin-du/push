@@ -4,6 +4,8 @@ import (
 	"gokit/log"
 	"gokit/util"
 	libdb "push/common/db"
+
+	"gopkg.in/mgo.v2/bson"
 )
 
 const (
@@ -22,7 +24,7 @@ func (a *app) GetAll() ([]*App, error) {
 	c := libdb.MainMgoDB().C("apps")
 
 	var apps = []*App{}
-	it := c.Find(nil).Iter()
+	it := c.Find(bson.M{"status": 1}).Iter()
 	defer it.Close()
 
 	var app App

@@ -25,10 +25,10 @@ CREATE TABLE messages (
   id VARCHAR(36) NOT NULL,
   app_id VARCHAR(36) NOT NULL,
   reg_id VARCHAR(36) NOT NULL,
-  kind INT(4) UNSIGNED NOT NULL, -- 消息类型
   content VARCHAR(500) NOT NULL,
-  extra VARCHAR(500) NOT NULL, -- json格式，例如：{"order_id":"123"}
-  status TINYINT(1) NOT NULL DEFAULT 1, -- 1:未读 ,2:已读
+  extras VARCHAR(500) NOT NULL, -- json格式，例如：{"order_id":"123"}
+  ttl BIGINT(20) NOT NULL,-- timestamp
+  status TINYINT(1) NOT NULL DEFAULT 0, -- 0:未读 ,1:已读
   created_at BIGINT(20) NOT NULL,
   updated_at BIGINT(20) NOT NULL,
   PRIMARY KEY (id),
@@ -41,7 +41,7 @@ CREATE TABLE registries (
   id VARCHAR(36) NOT NULL,
   app_id VARCHAR(36) NOT NULL,
   dev_token VARCHAR(64) NOT NULL,
-  kind VARCHAR(16) NOT NULL, -- android,ios
+  platform VARCHAR(16) NOT NULL, -- android,ios
   created_at BIGINT(20) NOT NULL,
   PRIMARY KEY (id),
   KEY registries_app_id(app_id)

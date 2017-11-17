@@ -2,15 +2,17 @@ package main
 
 import (
 	"fmt"
+	"push/common/types"
 )
 
 type Message struct {
-	ID      string `json:"id"`
-	AppID   string `json:"app_id"`
-	RegID   string `json:"reg_id"`
-	Content string `json:"content"`
-	Kind    int32  `json:"kind"`
-	Extra   string `json:"extra"`
+	*types.Message
+}
+
+func NewMessage() *Message {
+	return &Message{
+		&types.Message{},
+	}
 }
 
 func (m *Message) Key() string {

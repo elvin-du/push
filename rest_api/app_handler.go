@@ -21,7 +21,14 @@ func Register(ctx *Context) {
 		return
 	}
 
-	registry, err := model.RegistryModel().Create(reg.AppID, reg.DevToken, reg.Kind)
+	_, err = model.AppByID(reg.AppID)
+	if nil != err {
+		log.Errorln(err)
+		ctx.AbortWithError(400, err)
+		return
+	}
+
+	registry, err := model.RegistryModel().Create(reg.AppID, reg.DevToken, reg.Platform)
 	if nil != err {
 		log.Errorln(err)
 		ctx.AbortWithError(400, err)

@@ -12,11 +12,9 @@
 
 	```
 	json格式，
-	{
-		"app_id":"123",
-		"reg_id":"ANDROID+123",
-		"content":"恭喜您获得",
-		"kind":1,
-		"extra":"",# json格式
+		{"alert":"hi test",
+		"audience":"5a0ea86008b62f0928970a52",
+		"ttl":86400,
+		"extras":{"kind":2},
 	}
 	```

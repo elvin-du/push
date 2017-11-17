@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"errors"
 	"gokit/log"
+	"gokit/util"
 	"push/common/db"
 	"push/common/model"
 	gateCli "push/gate/client"
@@ -23,8 +24,8 @@ func (b *SingleMsgHandler) Process(i interface{}) error {
 	}
 	log.Debugln(string(nsqMsg.Body))
 
-	data := Message{}
-	err := json.Unmarshal(nsqMsg.Body, &data)
+	data := NewMessage()
+	err := json.Unmarshal(nsqMsg.Body, data)
 	if nil != err {
 		log.Errorln(err)
 		return err
@@ -41,12 +42,12 @@ func (b *SingleMsgHandler) Process(i interface{}) error {
 		log.Errorf("not found session by key %s", data.Key())
 		msg := &model.Message{}
 		msg.AppID = data.AppID
-		msg.RegID = data.RegID
 		msg.Content = data.Content
-		msg.Extra = data.Extra
-		msg.Kind = data.Kind
+		msg.Extras = data.Extras
 		msg.ID = data.ID
-
+		msg.RegID = data.RegID
+		msg.TTL = data.TTL
+		msg.CreatedAt = util.Timestamp()
 		err = model.MessageModel().Insert(msg)
 		if nil != err {
 			log.Errorln(err)
@@ -57,6 +58,12 @@ func (b *SingleMsgHandler) Process(i interface{}) error {
 		return nil
 	}
 
+	bin, err := json.Marshal(data.Extras)
+	if nil != err {
+		log.Errorln(err)
+		return err
+	}
+
 	_, err = gateCli.Push(
 		ses.GateServerIP,
 		ses.GateServerPort,
@@ -65,12 +72,13 @@ func (b *SingleMsgHandler) Process(i interface{}) error {
 			AppID:   data.AppID,
 			RegID:   data.RegID,
 			Content: data.Content,
-			Kind:    data.Kind,
-			Extra:   data.Extra,
+			TTL:     data.TTL,
+			Extras:  string(bin),
 		})
 	if nil != err {
 		log.Errorln(err)
-		return err
+		//不需要nsq消息重发
+		return nil
 	}
 
 	return nil

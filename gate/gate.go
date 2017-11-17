@@ -8,40 +8,42 @@ import (
 	"encoding/json"
 	"errors"
 	"gokit/log"
-	"push/pb"
-
-	"push/gate/message"
-
+	"gokit/util"
 	"push/common/model"
+	"push/gate/message"
+	"push/pb"
 
 	"golang.org/x/net/context"
 )
 
 type PublishMessage struct {
-	ID      string `json:"id"`
-	Content string `json:"content"`
-	AppID   string `json:"app_id"`
-	Kind    int    `json:"kind"`
+	ID      string                 `json:"id"`
+	Content string                 `json:"content"`
+	AppID   string                 `json:"app_id"`
+	Extras  map[string]interface{} `json:"extras"`
 }
 
 type Gate struct {
 }
 
-func (*Gate) Push(ctx context.Context, req *pb.GatePushRequest) (*pb.GatePushResponse, error) {
+func (*Gate) Push(ctx context.Context, req *pb.GatePushRequest) (resp *pb.GatePushResponse, err error) {
 	log.Debugln(*req)
+	resp = &pb.GatePushResponse{}
 
 	offlineMsg := &model.Message{}
 	offlineMsg.AppID = req.AppID
 	offlineMsg.RegID = req.RegID
 	offlineMsg.Content = req.Content
-	offlineMsg.Extra = req.Extra
-	offlineMsg.Kind = req.Kind
+	err = json.Unmarshal([]byte(req.Extras), &offlineMsg.Extras)
+	if nil != err {
+		log.Errorln(err)
+		return nil, err
+	}
 	offlineMsg.ID = req.ID
+	offlineMsg.CreatedAt = util.Timestamp()
+	offlineMsg.Status = 1
+	offlineMsg.TTL = req.TTL
 	message.DefaultMessageManager.Put(offlineMsg)
-	var (
-		err error = nil
-		bin []byte
-	)
 
 	defer func() {
 		if nil != err {
@@ -59,11 +61,12 @@ func (*Gate) Push(ctx context.Context, req *pb.GatePushRequest) (*pb.GatePushRes
 		return nil, errors.New("not found")
 	}
 
+	var bin []byte
 	msg := PublishMessage{}
 	msg.Content = req.Content
 	msg.ID = req.ID
 	msg.AppID = req.AppID
-	msg.Kind = int(req.Kind)
+	msg.Extras = offlineMsg.Extras
 	bin, err = json.Marshal(msg)
 	if nil != err {
 		log.Errorln(err)
@@ -76,7 +79,6 @@ func (*Gate) Push(ctx context.Context, req *pb.GatePushRequest) (*pb.GatePushRes
 		return nil, err
 	}
 
-	resp := &pb.GatePushResponse{}
 	return resp, nil
 }
 

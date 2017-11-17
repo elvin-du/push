@@ -60,8 +60,8 @@ func (r *registry) GetByDevToken(appID, token string) (*Registry, error) {
 	return nil, E_REGISTRY_NOT_FOUND
 }
 
-func (r *registry) Create(appID, devToken, kind string) (*Registry, error) {
-	if "ios" == kind {
+func (r *registry) Create(appID, devToken, platform string) (*Registry, error) {
+	if "ios" == platform {
 		reg, err := r.GetByDevToken(appID, devToken)
 		if nil == err {
 			return reg, nil
@@ -77,7 +77,7 @@ func (r *registry) Create(appID, devToken, kind string) (*Registry, error) {
 	reg.CreatedAt = util.Timestamp()
 	reg.DevToken = devToken
 	reg.ID = bson.NewObjectId().Hex()
-	reg.Kind = kind
+	reg.Platform = platform
 	err := c.Insert(&reg)
 	if nil != err {
 		log.Errorln(err)

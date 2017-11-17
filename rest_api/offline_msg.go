@@ -1,3 +1,5 @@
+//+build TODO
+
 package main
 
 import (
@@ -5,15 +7,15 @@ import (
 	"push/common/model"
 )
 
-func SaveMsg(info *Info) error {
-	msg := &model.Message{}
-	msg.AppID = info.AppID
-	msg.RegID = info.RegID
-	msg.Content = info.Content
-	msg.CreatedAt = util.Timestamp()
-	msg.Extra = info.Extra
-	msg.ID = info.ID
-	msg.Kind = int32(info.Kind)
+func SaveMsg(msg *Message) error {
+	message := &model.Message{}
+	message.AppID = msg.AppID
+	message.RegID = msg.RegID
+	message.Content = msg.Content
+	message.CreatedAt = util.Timestamp()
+	message.Extras = msg.Extras
+	message.ID = msg.ID
+	message.TTL = msg.TTL
 
-	return model.MessageModel().Insert(msg)
+	return model.MessageModel().Insert(message)
 }

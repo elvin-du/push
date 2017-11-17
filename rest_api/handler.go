@@ -4,6 +4,8 @@ import (
 	"encoding/json"
 	"gokit/log"
 	"net/http"
+	"push/common/model"
+	"push/rest_api/client"
 	"push/rest_api/service/nsq"
 
 	"gopkg.in/mgo.v2/bson"
@@ -21,39 +23,70 @@ func (*push) Push(ctx *Context) {
 	}
 
 	log.Debugf("Msg:%+v", string(bin))
-	msg, err := ValidateMessage(bin)
+	notification, err := ValidateNotification(bin)
 	if nil != err {
+		log.Errorln(err)
 		ctx.AbortWithError(400, err)
 		return
 	}
 
-	switch msg.Platform {
-	case PUSH_PLATFORM_IOS:
-		err = IOSPush(ctx.AppID, msg.RegID, msg.Content, msg.IsProduction)
+	resp := make(map[string]interface{})
+	if client.C_AUDIENCE_ALL == notification.Audience {
+		//TODO
+	} else {
+		reg, err := model.RegistryModel().Get(notification.Audience)
 		if nil != err {
-			ctx.AbortWithError(500, err)
-			return
-		}
-	case PUSH_PLATFORM_ANDROID:
-		msg.ID = bson.NewObjectId().Hex()
-		info := &Info{Message: msg, AppID: ctx.AppID}
-		bin, err = json.Marshal(info)
-		if nil != err {
+			log.Errorln(err)
 			ctx.AbortWithError(400, err)
 			return
 		}
 
-		err = SaveMsg(info)
-		if nil != err {
-			ctx.AbortWithError(500, err)
-			return
-		}
+		switch reg.Platform {
+		case client.C_PLATFORM_IOS:
+			if nil != notification.IosNotification {
+				for k, v := range notification.IosNotification.Extras {
+					notification.AddExtra(k, v)
+				}
+			}
 
-		go nsq.SingleProducer.Publish(bin)
-	default:
-		ctx.AbortWithError(400, REQUEST_DATA_INVALID)
-		return
+			apnsID, err := IOSPush(ctx.AppID, reg.DevToken, notification.Alert, notification.IosNotification.Sound,
+				notification.IosNotification.Production, notification.IosNotification.Badge, notification.TTL, notification.Extras)
+			if nil != err {
+				ctx.AbortWithError(500, err)
+				return
+			}
+			resp["msg_id"] = apnsID
+		case client.C_PLATFORM_ANDRID:
+			msg := NewMessage()
+			msg.ID = bson.NewObjectId().Hex()
+			msg.Content = notification.Alert
+			if nil != notification.AndroidNotification {
+				for k, v := range notification.AndroidNotification.Extras {
+					notification.AddExtra(k, v)
+				}
+			}
+
+			msg.Extras = notification.Extras
+			msg.AppID = ctx.AppID
+			msg.TTL = notification.TTL
+			msg.RegID = notification.Audience
+			bin, err = json.Marshal(msg)
+			if nil != err {
+				log.Errorln(err)
+				ctx.AbortWithError(400, err)
+				return
+			}
+
+			//			err = SaveMsg(msg)
+			//			if nil != err {
+			//				log.Errorln(err)
+			//				ctx.AbortWithError(500, err)
+			//				return
+			//			}
+			resp["msg_id"] = msg.ID
+			go nsq.SingleProducer.Publish(bin)
+		}
 	}
 
-	ctx.Status(http.StatusOK)
+	ctx.IndentedJSON(http.StatusOK, resp)
 }

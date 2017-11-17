@@ -16,8 +16,9 @@ message GatePushRequest{
 	string AppID = 2;
 	string RegID = 3;
 	string Content = 4;
-	int32  Kind =5;
-	string Extra = 6;
+	string Extras = 5;
+	uint64 TTL = 6;
+	map<string,bytes> m=7;
 }
 
 message GatePushResponse{

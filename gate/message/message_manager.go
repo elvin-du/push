@@ -1,3 +1,5 @@
+// +build TODO
+
 package message
 
 import (
@@ -11,7 +13,7 @@ const (
 	ASYNC_INTERNAL = time.Second * 60
 )
 
-var DefaultMessageManager = NewMessageManager()
+//var DefaultMessageManager = NewMessageManager()
 
 type MessageManager struct {
 	lock *sync.RWMutex

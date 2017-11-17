@@ -8,9 +8,9 @@ import (
 	"encoding/json"
 	"errors"
 	"gokit/log"
-	"gokit/util"
-	"push/common/model"
-	"push/gate/message"
+	//	"gokit/util"
+	//	"push/common/model"
+	//	"push/gate/message"
 	"push/pb"
 
 	"golang.org/x/net/context"
@@ -30,34 +30,37 @@ func (*Gate) Push(ctx context.Context, req *pb.GatePushRequest) (resp *pb.GatePu
 	log.Debugln(*req)
 	resp = &pb.GatePushResponse{}
 
-	offlineMsg := &model.Message{}
-	offlineMsg.AppID = req.AppID
-	offlineMsg.RegID = req.RegID
-	offlineMsg.Content = req.Content
-	err = json.Unmarshal([]byte(req.Extras), &offlineMsg.Extras)
+	var extras map[string]interface{}
+	err = json.Unmarshal([]byte(req.Extras), &extras)
 	if nil != err {
 		log.Errorln(err)
 		return nil, err
 	}
-	offlineMsg.ID = req.ID
-	offlineMsg.CreatedAt = util.Timestamp()
-	offlineMsg.Status = 1
-	offlineMsg.TTL = req.TTL
-	message.DefaultMessageManager.Put(offlineMsg)
 
-	defer func() {
-		if nil != err {
-			message.DefaultMessageManager.Delete(offlineMsg.ID)
-			err = model.MessageModel().Insert(offlineMsg)
-			if nil != err {
-				log.Errorln(err)
-			}
-		}
-	}()
+	//	offlineMsg := &model.Message{}
+	//	offlineMsg.AppID = req.AppID
+	//	offlineMsg.RegID = req.RegID
+	//	offlineMsg.Content = req.Content
+	//	offlineMsg.Extras = extras
+	//	offlineMsg.ID = req.ID
+	//	offlineMsg.CreatedAt = util.Timestamp()
+	//	offlineMsg.Status = 1
+	//	offlineMsg.TTL = req.TTL
+	//	message.DefaultMessageManager.Put(offlineMsg)
+
+	//	defer func() {
+	//		if nil != err {
+	//			message.DefaultMessageManager.Delete(offlineMsg.ID)
+	//			err = model.MessageModel().Insert(offlineMsg)
+	//			if nil != err {
+	//				log.Errorln(err)
+	//			}
+	//		}
+	//	}()
 
 	user := defaultServer.Get(req.AppID, req.RegID)
 	if nil == user {
-		log.Errorln("not found session by:appID:regID:", req.AppID, req.RegID)
+		log.Errorf("not found session by appID:%s,regID:%s", req.AppID, req.RegID)
 		return nil, errors.New("not found")
 	}
 
@@ -66,7 +69,7 @@ func (*Gate) Push(ctx context.Context, req *pb.GatePushRequest) (resp *pb.GatePu
 	msg.Content = req.Content
 	msg.ID = req.ID
 	msg.AppID = req.AppID
-	msg.Extras = offlineMsg.Extras
+	msg.Extras = extras
 	bin, err = json.Marshal(msg)
 	if nil != err {
 		log.Errorln(err)

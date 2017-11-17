@@ -4,9 +4,9 @@ import (
 	"encoding/json"
 	"errors"
 	"gokit/log"
-	"gokit/util"
+	//	"gokit/util"
 	"push/common/db"
-	"push/common/model"
+	//	"push/common/model"
 	gateCli "push/gate/client"
 	"push/pb"
 
@@ -40,19 +40,19 @@ func (b *SingleMsgHandler) Process(i interface{}) error {
 	log.Debugln("session:", ses)
 	if ses.GateServerIP == "" && "" == ses.GateServerPort {
 		log.Errorf("not found session by key %s", data.Key())
-		msg := &model.Message{}
-		msg.AppID = data.AppID
-		msg.Content = data.Content
-		msg.Extras = data.Extras
-		msg.ID = data.ID
-		msg.RegID = data.RegID
-		msg.TTL = data.TTL
-		msg.CreatedAt = util.Timestamp()
-		err = model.MessageModel().Insert(msg)
-		if nil != err {
-			log.Errorln(err)
-			return err
-		}
+		//		msg := &model.Message{}
+		//		msg.AppID = data.AppID
+		//		msg.Content = data.Content
+		//		msg.Extras = data.Extras
+		//		msg.ID = data.ID
+		//		msg.RegID = data.RegID
+		//		msg.TTL = data.TTL
+		//		msg.CreatedAt = util.Timestamp()
+		//		err = model.MessageModel().Insert(msg)
+		//		if nil != err {
+		//			log.Errorln(err)
+		//			return err
+		//		}
 
 		//不在线不需要nsq消息重发
 		return nil

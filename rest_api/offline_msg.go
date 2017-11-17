@@ -1,10 +1,9 @@
-//+build TODO
-
 package main
 
 import (
 	"gokit/util"
 	"push/common/model"
+	"time"
 )
 
 func SaveMsg(msg *Message) error {
@@ -15,7 +14,7 @@ func SaveMsg(msg *Message) error {
 	message.CreatedAt = util.Timestamp()
 	message.Extras = msg.Extras
 	message.ID = msg.ID
-	message.TTL = msg.TTL
+	message.TTL = uint64(time.Now().Add(time.Second * time.Duration(msg.TTL)).Unix())
 
 	return model.MessageModel().Insert(message)
 }

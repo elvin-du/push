@@ -12,7 +12,8 @@
 
 	```
 	json格式，
-		{"alert":"hi test",
+	{   
+	    "alert":"hi test",
 		"audience":"5a0ea86008b62f0928970a52",
 		"ttl":86400,
 		"extras":{"kind":2},

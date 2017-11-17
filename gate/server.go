@@ -7,7 +7,7 @@ import (
 	"net"
 	"os"
 	"os/signal"
-	gateMsg "push/gate/message"
+	//	gateMsg "push/gate/message"
 	"push/gate/mqtt"
 	"push/gate/service/config"
 	"push/pb"
@@ -50,7 +50,7 @@ func (s *Server) StartRPCServer() {
 		stop := <-ch
 		log.Errorf("receive signal '%v'", stop)
 		s.Close(stop)
-		gateMsg.DefaultMessageManager.Sync()
+		//		gateMsg.DefaultMessageManager.Sync()
 		os.Exit(1)
 	}()
 

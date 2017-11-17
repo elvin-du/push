@@ -77,12 +77,12 @@ func (*push) Push(ctx *Context) {
 				return
 			}
 
-			//			err = SaveMsg(msg)
-			//			if nil != err {
-			//				log.Errorln(err)
-			//				ctx.AbortWithError(500, err)
-			//				return
-			//			}
+			err = SaveMsg(msg)
+			if nil != err {
+				log.Errorln(err)
+				ctx.AbortWithError(500, err)
+				return
+			}
 			resp["msg_id"] = msg.ID
 			go nsq.SingleProducer.Publish(bin)
 		}

@@ -3,7 +3,7 @@ package main
 import (
 	"gokit/log"
 	"io"
-	gateMsg "push/gate/message"
+	//	gateMsg "push/gate/message"
 	"push/gate/mqtt"
 
 	"github.com/surgemq/message"
@@ -34,7 +34,7 @@ func OnClose(ses *mqtt.Session, err error) {
 			} else {
 				log.Errorf("app_id:%s,reg_id:%s,session_id:%s session close,err:%s", u.AppID, u.RegID, u.ID, err.Error())
 			}
-			gateMsg.DefaultMessageManager.SyncByAccount(u.Key())
+			//			gateMsg.DefaultMessageManager.SyncByAccount(u.Key())
 		} else {
 			log.Errorf("session has nil user,ID:%s", ses.ID)
 		}

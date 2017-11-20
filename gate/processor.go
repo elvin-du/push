@@ -29,8 +29,8 @@ type SignOut struct {
 }
 
 type ClientMessage struct {
-	Kind    int //1:publish ack 2:signout
-	Content interface{}
+	Kind    int         `json:"kind"` //1:publish ack 2:signout
+	Content interface{} `json:"content"`
 }
 
 func Dispatch(ses *mqtt.Session, msg message.Message) error {
@@ -52,7 +52,7 @@ func Dispatch(ses *mqtt.Session, msg message.Message) error {
 
 func processPublish(ses *mqtt.Session, msg *message.PublishMessage) error {
 	log.Debugf("processPublish:%+v", *msg)
-
+	log.Debugf("%+v", string(msg.Payload()))
 	cliMsg := &ClientMessage{}
 	err := json.Unmarshal(msg.Payload(), cliMsg)
 	if nil != err {
@@ -65,7 +65,7 @@ func processPublish(ses *mqtt.Session, msg *message.PublishMessage) error {
 		return handlePubAck(cliMsg.Content)
 	case CLIENT_MESSAGE_KIND_SIGNOUT:
 	}
-
+	log.Errorln("Invalid message kind")
 	return errors.New("Invalid message kind")
 }
 
@@ -75,7 +75,7 @@ func handleSignOut(data interface{}) error {
 		log.Errorln(err)
 		return err
 	}
-
+	log.Debugf("%+v", string(bin))
 	out := &SignOut{}
 	err = json.Unmarshal(bin, out)
 	if nil != err {

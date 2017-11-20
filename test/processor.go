@@ -13,6 +13,11 @@ type PublishMessage struct {
 }
 
 type PubAck struct {
+	Kind    int         `json:"kind"`
+	Content interface{} `json:"content"`
+}
+
+type PublishAck struct {
 	MsgID string `json:"msg_id"`
 }
 
@@ -46,10 +51,13 @@ func processPub(msg *message.PublishMessage) error {
 		return err
 	}
 
-	ack := PubAck{}
+	ret := PubAck{}
+	ack := PublishAck{}
 	ack.MsgID = pubMsg.ID
+	ret.Content = ack
+	ret.Kind = 1
 
-	bin, err := json.Marshal(ack)
+	bin, err := json.Marshal(ret)
 	if nil != err {
 		log.Println(err)
 		return err

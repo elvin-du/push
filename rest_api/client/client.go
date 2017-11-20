@@ -57,6 +57,7 @@ func (cli *Client) Push(notification *Notification) error {
 		log.Println(err)
 		return err
 	}
+	defer resp.Body.Close()
 
 	if 200 != resp.StatusCode {
 		log.Printf("%+v", resp)

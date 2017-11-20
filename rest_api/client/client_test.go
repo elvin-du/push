@@ -25,3 +25,50 @@ func TestPush(t *testing.T) {
 		t.Error(err)
 	}
 }
+
+func BenchmarkPush(b *testing.B) {
+	key := "01e9175ca8805cc2137c44eb86184922"
+	appID := "63163c7b40f2abee"
+	appSecret := "283abdfc9123987980d8aabaa7108e6c"
+	urlStr := "http://localhost:52001/push"
+	cli, err := NewClient(key, appID, appSecret, urlStr)
+	if nil != err {
+		b.Error(err)
+	}
+	for i := 0; i < b.N; i++ {
+		n := &Notification{}
+		n.Alert = "hi test"
+		n.Audience = "5a0ea86008b62f0928970a52"
+		n.TTL = 60 * 60 * 24
+		n.AddExtra("kind", 2)
+		err = cli.Push(n)
+		if nil != err {
+			b.Error(err)
+		}
+	}
+}
+
+func BenchmarkPushParallel(b *testing.B) {
+	b.RunParallel(func(pb *testing.PB) {
+		key := "01e9175ca8805cc2137c44eb86184922"
+		appID := "63163c7b40f2abee"
+		appSecret := "283abdfc9123987980d8aabaa7108e6c"
+		urlStr := "http://localhost:52001/push"
+		cli, err := NewClient(key, appID, appSecret, urlStr)
+		if nil != err {
+			b.Error(err)
+		}
+
+		for pb.Next() {
+			n := &Notification{}
+			n.Alert = "hi test"
+			n.Audience = "5a0ea86008b62f0928970a52"
+			n.TTL = 60 * 60 * 24
+			n.AddExtra("kind", 2)
+			err = cli.Push(n)
+			if nil != err {
+				b.Error(err)
+			}
+		}
+	})
+}

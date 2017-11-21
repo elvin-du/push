@@ -180,6 +180,13 @@ func (p *Pool) HGETALL(key string, v interface{}) error {
 	return libRedis.ScanStruct(valueInterfaces, v)
 }
 
+func (p *Pool) HGETALL2Bytes(key string) ([][]byte, error) {
+	c := p.Get()
+	defer c.Close()
+
+	return libRedis.ByteSlices(c.Do("HGETALL", key))
+}
+
 func (p *Pool) DEL(keys []interface{}) error {
 	c := p.Get()
 	defer c.Close()
@@ -193,4 +200,10 @@ func (p *Pool) DEL(keys []interface{}) error {
 	}
 
 	return nil
+}
+
+func (p *Pool) HGET(key, field string) ([]byte, error) {
+	c := p.Get()
+	defer c.Close()
+	return libRedis.Bytes(c.Do("HGET", key, field))
 }

@@ -41,12 +41,12 @@ func CreateApp(ctx *gin.Context) {
 		return
 	}
 
-	err = model.ReloadAppCache()
-	if nil != err {
-		log.Errorln(err)
-		ctx.AbortWithError(400, err)
-		return
-	}
+	//	err = model.ReloadAppCache()
+	//	if nil != err {
+	//		log.Errorln(err)
+	//		ctx.AbortWithError(400, err)
+	//		return
+	//	}
 }
 
 func UpdateApp(ctx *gin.Context) {
@@ -72,12 +72,12 @@ func UpdateApp(ctx *gin.Context) {
 		return
 	}
 
-	err = model.ReloadAppCache()
-	if nil != err {
-		log.Errorln(err)
-		ctx.AbortWithError(400, err)
-		return
-	}
+	//	err = model.ReloadAppCache()
+	//	if nil != err {
+	//		log.Errorln(err)
+	//		ctx.AbortWithError(400, err)
+	//		return
+	//	}
 }
 
 func DeleteApp(ctx *gin.Context) {
@@ -89,10 +89,10 @@ func DeleteApp(ctx *gin.Context) {
 		return
 	}
 
-	err = model.ReloadAppCache()
-	if nil != err {
-		log.Errorln(err)
-		ctx.AbortWithError(400, err)
-		return
-	}
+	//	err = model.ReloadAppCache()
+	//	if nil != err {
+	//		log.Errorln(err)
+	//		ctx.AbortWithError(400, err)
+	//		return
+	//	}
 }

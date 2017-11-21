@@ -36,7 +36,7 @@ RC4_KEY: 01e9175ca8805cc2137c44eb86184922
 #### INTERNAL REST_API :52010 //内部使用，不可以公开端口
 * GET /apps 所有APP信息
 * POST /app 创建APP 
-* PUT /app 更新APP信息
+* PUT /app 更新APP信息,必须包含所有内容
 * DELETE /app/:id 删除APP
 		
 #### REGISTRY REST_API :52020 

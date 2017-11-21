@@ -26,3 +26,8 @@ nsqd:
 #RC4 key
 auth:
   key: 01e9175ca8805cc2137c44eb86184922
+
+redis:
+  main:
+    addr: localhost:6379
+    pool: 100

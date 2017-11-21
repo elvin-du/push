@@ -36,10 +36,29 @@ type App struct {
 	CertPasswordProduction string `json:"cert_password_production" bson:"cert_password_production"`
 }
 
+//func (a *App) ToMap() map[string]interface{} {
+//	m := make(map[string]interface{})
+//	m["id"] = a.ID
+//	m["secret"] = a.Secret
+//	m["auth_type"] = a.AuthType
+//	m["name"] = a.Name
+//	m["description"] = a.Description
+//	m["status"] = a.Status
+//	m["created_at"] = a.CreatedAt
+//	m["updated_at"] = a.UpdatedAt
+//	m["bundle_id"] = a.BundleID
+//	m["cert"] = a.Cert
+//	m["cert_password"] = a.CertPassword
+//	m["cert_production"] = a.CertProduction
+//	m["cert_password_production"] = a.CertPasswordProduction
+
+//	return m
+//}
+
 type Registry struct {
 	ID        string `json:"id" bson:"_id"`
 	AppID     string `json:"app_id" bson:"app_id"`
 	DevToken  string `json:"dev_token" bson:"dev_token"`
-	Platform  string
+	Platform  string `json:"platform" bson:"platform"`
 	CreatedAt uint64 `json:"created_at" bson:"created_at"`
 }

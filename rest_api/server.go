@@ -33,7 +33,7 @@ func StartHTTP() {
 	go func() {
 		appRouter := gin.Default()
 		appRouter.POST("/register", AuthHandler(Register))
-		appRouter.DELETE("/unregister/:id", AuthHandler(Unregister))
+		appRouter.DELETE("/register/:id", AuthHandler(Unregister))
 		appRouter.Run(config.HTTP_APP_ADDR)
 	}()
 

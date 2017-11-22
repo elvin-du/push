@@ -18,6 +18,7 @@ var _push *push
 func (*push) Push(ctx *Context) {
 	bin, err := ctx.GetRawData()
 	if nil != err {
+		log.Errorln(err)
 		ctx.AbortWithError(400, err)
 		return
 	}
@@ -87,6 +88,6 @@ func (*push) Push(ctx *Context) {
 			go nsq.SingleProducer.Publish(bin)
 		}
 	}
-
+	log.Infof("push success,data:%+v,msg_id:%s", notification, resp["msg_id"])
 	ctx.IndentedJSON(http.StatusOK, resp)
 }

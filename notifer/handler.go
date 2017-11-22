@@ -4,9 +4,7 @@ import (
 	"encoding/json"
 	"errors"
 	"gokit/log"
-	//	"gokit/util"
 	"push/common/db"
-	//	"push/common/model"
 	gateCli "push/gate/client"
 	"push/pb"
 
@@ -22,7 +20,7 @@ func (b *SingleMsgHandler) Process(i interface{}) error {
 		log.Errorln(err)
 		return err
 	}
-	log.Debugln(string(nsqMsg.Body))
+	log.Debugf("received data:%s", string(nsqMsg.Body))
 
 	data := NewMessage()
 	err := json.Unmarshal(nsqMsg.Body, data)
@@ -37,9 +35,9 @@ func (b *SingleMsgHandler) Process(i interface{}) error {
 		log.Errorln(err)
 		return err
 	}
-	log.Debugln("session:", ses)
+	log.Debugf("msg_id:%s,session:%+v", data.ID, ses)
 	if ses.GateServerIP == "" && "" == ses.GateServerPort {
-		log.Errorf("not found session by key %s", data.Key())
+		log.Errorf("session not found by key:%s,msg_id:%s", data.Key(), data.ID)
 		//		msg := &model.Message{}
 		//		msg.AppID = data.AppID
 		//		msg.Content = data.Content
@@ -76,11 +74,12 @@ func (b *SingleMsgHandler) Process(i interface{}) error {
 			Extras:  string(bin),
 		})
 	if nil != err {
-		log.Errorln(err)
+		log.Errorf("push failed,msg_id:%s,err:%s", data.ID, err.Error())
 		//不需要nsq消息重发
 		return nil
 	}
 
+	log.Infof("push success,msg_id:%s", data.ID)
 	return nil
 }
 

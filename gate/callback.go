@@ -10,12 +10,18 @@ import (
 )
 
 func OnSend(ses *mqtt.Session, data []byte) error {
-	//	msg := message.NewPublishMessage()
-	//	_, err := msg.Decode(data)
-	//	if nil != err {
-	//		log.Errorln(err)
-	//		return err
-	//	}
+	msg, err := mqtt.NewMessage(data)
+	if nil != err {
+		log.Errorln(err)
+		return err
+	}
+
+	switch msg := msg.(type) {
+	case *message.PublishMessage:
+		log.Infof("push sucess,data:%+v", *msg)
+	default:
+		return nil //TODO
+	}
 
 	return nil
 }

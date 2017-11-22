@@ -38,7 +38,7 @@ func (s *Session) WriteLoop() {
 			}
 
 			if nil != s.sendPacketCallback {
-				s.sendPacketCallback(s, out)
+				go s.sendPacketCallback(s, out)
 			}
 		case <-s.closeChan:
 			s.Conn.Close()

@@ -29,6 +29,7 @@ type Gate struct {
 func (*Gate) Push(ctx context.Context, req *pb.GatePushRequest) (resp *pb.GatePushResponse, err error) {
 	log.Debugln(*req)
 	resp = &pb.GatePushResponse{}
+	log.Infof("process msg_id:%s,app_id:%s,reg_id:%s", req.ID, req.AppID, req.RegID)
 
 	var extras map[string]interface{}
 	err = json.Unmarshal([]byte(req.Extras), &extras)
@@ -81,7 +82,7 @@ func (*Gate) Push(ctx context.Context, req *pb.GatePushRequest) (resp *pb.GatePu
 		log.Errorln(err)
 		return nil, err
 	}
-
+	log.Infof("send msg success, msg_id:%s,app_id:%s,reg_id:%s", req.ID, req.AppID, req.RegID)
 	return resp, nil
 }
 

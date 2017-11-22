@@ -2,6 +2,8 @@ package model
 
 import (
 	"fmt"
+	"gokit/log"
+	"gokit/util"
 )
 
 type Message struct {
@@ -34,6 +36,52 @@ type App struct {
 	CertPassword           string `json:"cert_password" bson:"cert_password"`
 	CertProduction         string `json:"cert_production" bson:"cert_production"`
 	CertPasswordProduction string `json:"cert_password_production" bson:"cert_password_production"`
+}
+
+func (a *App) Encrypt() error {
+	if "" != a.CertPassword {
+		pw, err := util.RC4EncryptToBase64(CERT_PASSWORD_RC4_KEY, []byte(a.CertPassword))
+		if nil != err {
+			log.Errorln(err)
+			return err
+		}
+		a.CertPassword = pw
+	}
+
+	if "" != a.CertPasswordProduction {
+		pw, err := util.RC4EncryptToBase64(CERT_PASSWORD_RC4_KEY, []byte(a.CertPasswordProduction))
+		if nil != err {
+			log.Errorln(err)
+			return err
+		}
+		a.CertPasswordProduction = pw
+	}
+
+	return nil
+}
+
+func (a *App) Decrypt() error {
+	if "" != a.CertPassword {
+		bin, err := util.RC4DecryptFromBase64(CERT_PASSWORD_RC4_KEY, a.CertPassword)
+		if nil != err {
+			log.Errorln(err)
+			return err
+		}
+
+		a.CertPassword = string(bin)
+	}
+
+	if "" != a.CertPasswordProduction {
+		bin, err := util.RC4DecryptFromBase64(CERT_PASSWORD_RC4_KEY, a.CertPasswordProduction)
+		if nil != err {
+			log.Errorln(err)
+			return err
+		}
+
+		a.CertPasswordProduction = string(bin)
+	}
+
+	return nil
 }
 
 //func (a *App) ToMap() map[string]interface{} {

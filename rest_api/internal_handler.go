@@ -34,7 +34,7 @@ func CreateApp(ctx *gin.Context) {
 		return
 	}
 
-	err = model.AppModel().Create(app)
+	err = model.SetApp(app)
 	if nil != err {
 		log.Errorln(err)
 		ctx.AbortWithError(400, err)
@@ -72,6 +72,13 @@ func UpdateApp(ctx *gin.Context) {
 		return
 	}
 
+	err = model.SetApp2Cache(&app)
+	if nil != err {
+		log.Errorln(err)
+		ctx.AbortWithError(500, err)
+		return
+	}
+
 	//	err = model.ReloadAppCache()
 	//	if nil != err {
 	//		log.Errorln(err)
@@ -83,6 +90,13 @@ func UpdateApp(ctx *gin.Context) {
 func DeleteApp(ctx *gin.Context) {
 	appID := ctx.Param("id")
 	err := model.AppModel().Delete(appID)
+	if nil != err {
+		log.Errorln(err)
+		ctx.AbortWithError(400, err)
+		return
+	}
+
+	err = model.DeleteAppFromCache(appID)
 	if nil != err {
 		log.Errorln(err)
 		ctx.AbortWithError(400, err)

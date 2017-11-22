@@ -47,6 +47,7 @@ func startRedis(key string) {
 		WriteTimeout:   WRITE_TIMEOUT,
 	}
 	redisPools[key] = NewPoolWithOpt(addr, opt)
+	log.Infof("start %s redis success", key)
 }
 
 var ErrNotFound = fmt.Errorf("Not Found\n")
@@ -125,6 +126,7 @@ func (p *Pool) HMSET(key string, fields map[string]interface{}) error {
 		return err
 	}
 
+	log.Debugf("hmset success for key:%s", key)
 	return nil
 }
 
@@ -158,6 +160,7 @@ func (p *Pool) HMSETAndEXPIRE(key string, fields map[string]interface{}, TTL int
 		return err
 	}
 
+	log.Debugf("HMSETAndEXPIRE success for key:%s", key)
 	return nil
 }
 
@@ -196,7 +199,7 @@ func (p *Pool) DEL(keys []interface{}) error {
 		return err
 	}
 	if len(keys) != number {
-		return fmt.Errorf("deleted %d keys,but expected delete %d keys", number, len(keys))
+		return fmt.Errorf("deleted %d count of keys,but expected delete %d count of keys", number, len(keys))
 	}
 
 	return nil

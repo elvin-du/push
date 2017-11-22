@@ -2,10 +2,7 @@ package model
 
 import (
 	"gokit/log"
-	"gokit/util"
 	libdb "push/common/db"
-
-	"gopkg.in/mgo.v2/bson"
 )
 
 const (
@@ -24,29 +21,15 @@ func (a *app) GetAll() ([]*App, error) {
 	c := libdb.MainMgoDB().C("apps")
 
 	var apps = []*App{}
-	it := c.Find(bson.M{"status": 1}).Iter()
+	it := c.Find(nil).Iter()
 	defer it.Close()
 
 	var app App
 	for it.Next(&app) {
-		if "" != app.CertPassword {
-			bin, err := util.RC4DecryptFromBase64(CERT_PASSWORD_RC4_KEY, app.CertPassword)
-			if nil != err {
-				log.Errorln(err)
-				return nil, err
-			}
-
-			app.CertPassword = string(bin)
-		}
-
-		if "" != app.CertPasswordProduction {
-			bin, err := util.RC4DecryptFromBase64(CERT_PASSWORD_RC4_KEY, app.CertPasswordProduction)
-			if nil != err {
-				log.Errorln(err)
-				return nil, err
-			}
-
-			app.CertPasswordProduction = string(bin)
+		err := app.Decrypt()
+		if nil != err {
+			log.Errorln(err)
+			return nil, err
 		}
 
 		apps = append(apps, &app)
@@ -56,26 +39,14 @@ func (a *app) GetAll() ([]*App, error) {
 }
 
 func (a *app) Create(app *App) error {
-	if "" != app.CertPassword {
-		pw, err := util.RC4EncryptToBase64(CERT_PASSWORD_RC4_KEY, []byte(app.CertPassword))
-		if nil != err {
-			log.Errorln(err)
-			return err
-		}
-		app.CertPassword = pw
-	}
-
-	if "" != app.CertPasswordProduction {
-		pw, err := util.RC4EncryptToBase64(CERT_PASSWORD_RC4_KEY, []byte(app.CertPasswordProduction))
-		if nil != err {
-			log.Errorln(err)
-			return err
-		}
-		app.CertPasswordProduction = pw
+	err := app.Encrypt()
+	if nil != err {
+		log.Errorln(err)
+		return err
 	}
 
 	c := libdb.MainMgoDB().C("apps")
-	err := c.Insert(app)
+	err = c.Insert(app)
 	if nil != err {
 		log.Errorln(err)
 		return err
@@ -85,26 +56,14 @@ func (a *app) Create(app *App) error {
 }
 
 func (a *app) Update(app *App) error {
-	if "" != app.CertPassword {
-		pw, err := util.RC4EncryptToBase64(CERT_PASSWORD_RC4_KEY, []byte(app.CertPassword))
-		if nil != err {
-			log.Errorln(err)
-			return err
-		}
-		app.CertPassword = pw
-	}
-
-	if "" != app.CertPasswordProduction {
-		pw, err := util.RC4EncryptToBase64(CERT_PASSWORD_RC4_KEY, []byte(app.CertPasswordProduction))
-		if nil != err {
-			log.Errorln(err)
-			return err
-		}
-		app.CertPasswordProduction = pw
+	err := app.Encrypt()
+	if nil != err {
+		log.Errorln(err)
+		return err
 	}
 
 	c := libdb.MainMgoDB().C("apps")
-	err := c.UpdateId(app.ID, app)
+	err = c.UpdateId(app.ID, app)
 	if nil != err {
 		log.Errorln(err)
 		return err
@@ -122,4 +81,24 @@ func (a *app) Delete(appID string) error {
 	}
 
 	return nil
+}
+
+func (a *app) Get(id string) (*App, error) {
+	c := libdb.MainMgoDB().C("apps")
+
+	it := c.FindId(id).Iter()
+	defer it.Close()
+
+	var app App
+	for it.Next(&app) {
+		err := app.Decrypt()
+		if nil != err {
+			log.Errorln(err)
+			return nil, err
+		}
+
+		return &app, nil
+	}
+
+	return nil, E_NOT_FOUND
 }

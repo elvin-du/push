@@ -126,7 +126,7 @@ func (s *Session) CronEvery() {
 		time.Sleep(KEEPALIVE * time.Second)
 		if !s.IsAlive() {
 			//TODO maybe should ping first
-			err := errors.New(s.ID + " No Beatheart")
+			err := errors.New("session_id:" + s.ID + " no beatheart,so close socket")
 			s.Close(err)
 			return
 		}

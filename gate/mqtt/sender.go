@@ -20,7 +20,7 @@ func (s *Session) WriteLoop() {
 	defer func() {
 		// handle panic
 		if r := recover(); r != nil {
-			log.Errorf("session WriteLoop recover: %v, DEBUG.STACK=%v", r, string(debug.Stack()))
+			log.Errorf("session(id:%s) WriteLoop recover: %v, DEBUG.STACK=%v", s.ID, r, string(debug.Stack()))
 		}
 
 		s.closeWait.Done()
@@ -67,7 +67,7 @@ func (s *Session) Push(content []byte) error {
 
 //只是把信息放到队列，等待发送Goroutine读取并发送
 func (s *Session) WriteMsg(msg message.Message) error {
-	log.Debugln("write:", msg.Desc())
+	log.Infof("write message type:%s,session_id:%s", msg.Desc(), s.ID)
 
 	buf := make([]byte, msg.Len())
 	n, err := msg.Encode(buf)
@@ -83,7 +83,7 @@ func (s *Session) WriteMsg(msg message.Message) error {
 }
 
 func (s *Session) SendMsg(msg message.Message) error {
-	log.Debugln("SendMsg:", msg.Desc())
+	log.Infof("send message:%s,sesssion_id:%s", msg.Desc(), s.ID)
 
 	buf := make([]byte, msg.Len())
 	n, err := msg.Encode(buf)

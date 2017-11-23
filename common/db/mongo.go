@@ -35,6 +35,7 @@ func startMongo(key string) {
 		log.Fatal(err)
 	}
 	mongoSessions[key] = ses
+	log.Infof("start %s mongo success", key)
 }
 
 func MainMgo() *mgo.Session {

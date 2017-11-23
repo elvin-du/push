@@ -33,9 +33,9 @@ func (s *Session) ReadLoop() {
 		var msg message.Message
 		msg, _, _, err = s.ReadMessage()
 		if nil != err {
-			//client close connection
+			//not client peer close connection
 			if err != io.EOF {
-				log.Error(err)
+				log.Errorf("read message failed, err:%s", err.Error())
 			}
 
 			return

@@ -17,6 +17,7 @@ func StartRedis(keys []string) {
 	for _, k := range keys {
 		startRedis(k)
 	}
+	log.Infof("redis pool:%+v", redisPools)
 }
 
 func MainRedis() *Pool {

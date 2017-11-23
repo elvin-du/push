@@ -18,7 +18,7 @@ func OnSend(ses *mqtt.Session, data []byte) error {
 
 	switch msg := msg.(type) {
 	case *message.PublishMessage:
-		log.Infof("push sucess,data:%+v", *msg)
+		log.Infof("push success,data:%+v", string(msg.Payload()))
 	default:
 		return nil //TODO
 	}

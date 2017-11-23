@@ -29,7 +29,7 @@ func InitAppCache() {
 		return
 	}
 
-	log.Infof("Init app cache success")
+	log.Infof("init app cache success")
 }
 
 func AppByIDFromCache(id string) (*App, error) {

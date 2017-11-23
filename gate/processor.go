@@ -45,13 +45,13 @@ func Dispatch(ses *mqtt.Session, msg message.Message) error {
 		return processConnect(ses, msg)
 	}
 
-	log.Errorf("unsupport msg type:%d,%s", msg.Type(), msg.Name())
-	err := errors.New("unsupport msg type")
+	log.Errorf("unsupport message type:%d,%s", msg.Type(), msg.Name())
+	err := errors.New("unsupport message type")
 	return err
 }
 
 func processPublish(ses *mqtt.Session, msg *message.PublishMessage) error {
-	log.Debugf("processPublish:%+v", *msg)
+	log.Debugf("process publish msg:%+v", string(msg.Payload()))
 	log.Debugf("%+v", string(msg.Payload()))
 	cliMsg := &ClientMessage{}
 	err := json.Unmarshal(msg.Payload(), cliMsg)
@@ -100,13 +100,13 @@ func handlePubAck(data interface{}) error {
 		log.Errorln(err)
 		return err
 	}
-	log.Debugf("got ack for %+v", ack)
+	log.Debugf("got publish message ack for %+v", ack)
 
 	//	if gateMsg.DefaultMessageManager.IsExist(ack.MsgID) {
 	//		log.Infof("remove msg:%s from messageManager", ack.MsgID)
 	//		gateMsg.DefaultMessageManager.Delete(ack.MsgID)
 	//	} else {
-	log.Infof("remove msg:%s from DB", ack.MsgID)
+	log.Infof("remove message msg_id:%s from DB", ack.MsgID)
 	err = model.MessageModel().Delete(ack.MsgID)
 	if nil != err {
 		log.Errorln(err, "msg_id:", ack.MsgID)
@@ -124,7 +124,7 @@ func processDisConn(ses *mqtt.Session, msg *message.DisconnectMessage) error {
 }
 
 func processPingReq(ses *mqtt.Session, msg *message.PingreqMessage) error {
-	log.Debugln("ping came")
+	log.Infof("ping message came,session_id:%s", ses.ID)
 
 	pingResp := message.NewPingrespMessage()
 	err := ses.WriteMsg(pingResp)
@@ -144,7 +144,7 @@ func processPingReq(ses *mqtt.Session, msg *message.PingreqMessage) error {
 }
 
 func processConnect(ses *mqtt.Session, msg *message.ConnectMessage) (err error) {
-	log.Debugln("connect came")
+	log.Debugln("connect message came")
 	connAckMsg := message.NewConnackMessage()
 
 	defer func() {

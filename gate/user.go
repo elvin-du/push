@@ -74,7 +74,7 @@ func (u *User) Online() error {
 	}
 
 	defaultServer.PutUser(u)
-	log.Infof("app_id:%s,reg_id:%s online", u.AppID, u.RegID)
+	log.Infof("user app_id:%s,reg_id:%s online", u.AppID, u.RegID)
 
 	return nil
 }

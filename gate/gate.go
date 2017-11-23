@@ -27,9 +27,9 @@ type Gate struct {
 }
 
 func (*Gate) Push(ctx context.Context, req *pb.GatePushRequest) (resp *pb.GatePushResponse, err error) {
-	log.Debugln(*req)
+	log.Debugf("rpc push request:%+v", *req)
 	resp = &pb.GatePushResponse{}
-	log.Infof("process msg_id:%s,app_id:%s,reg_id:%s", req.ID, req.AppID, req.RegID)
+	log.Infof("got msg_id:%s,app_id:%s,reg_id:%s to push", req.ID, req.AppID, req.RegID)
 
 	var extras map[string]interface{}
 	err = json.Unmarshal([]byte(req.Extras), &extras)
@@ -61,7 +61,7 @@ func (*Gate) Push(ctx context.Context, req *pb.GatePushRequest) (resp *pb.GatePu
 
 	user := defaultServer.Get(req.AppID, req.RegID)
 	if nil == user {
-		log.Errorf("not found session by appID:%s,regID:%s", req.AppID, req.RegID)
+		log.Errorf("session not found for appID:%s,regID:%s", req.AppID, req.RegID)
 		return nil, errors.New("not found")
 	}
 
@@ -82,7 +82,7 @@ func (*Gate) Push(ctx context.Context, req *pb.GatePushRequest) (resp *pb.GatePu
 		log.Errorln(err)
 		return nil, err
 	}
-	log.Infof("send msg success, msg_id:%s,app_id:%s,reg_id:%s", req.ID, req.AppID, req.RegID)
+	log.Infof("send message success, msg_id:%s,app_id:%s,reg_id:%s,session_id:%s", req.ID, req.AppID, req.RegID, user.ID)
 	return resp, nil
 }
 

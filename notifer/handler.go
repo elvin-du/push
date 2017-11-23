@@ -20,7 +20,7 @@ func (b *SingleMsgHandler) Process(i interface{}) error {
 		log.Errorln(err)
 		return err
 	}
-	log.Debugf("received data:%s", string(nsqMsg.Body))
+	log.Debugf("received data from NSQ:%s ", string(nsqMsg.Body))
 
 	data := NewMessage()
 	err := json.Unmarshal(nsqMsg.Body, data)
@@ -35,7 +35,7 @@ func (b *SingleMsgHandler) Process(i interface{}) error {
 		log.Errorln(err)
 		return err
 	}
-	log.Debugf("msg_id:%s,session:%+v", data.ID, ses)
+	log.Debugf("get session info:%+v for app_id:%s,reg_id:%s,msg_id:%s", ses, data.AppID, data.RegID, data.ID)
 	if ses.GateServerIP == "" && "" == ses.GateServerPort {
 		log.Errorf("session not found by key:%s,msg_id:%s", data.Key(), data.ID)
 		//		msg := &model.Message{}
@@ -74,12 +74,12 @@ func (b *SingleMsgHandler) Process(i interface{}) error {
 			Extras:  string(bin),
 		})
 	if nil != err {
-		log.Errorf("push failed,msg_id:%s,err:%s", data.ID, err.Error())
+		log.Errorf("push failed for app_id:%s,reg_id:%s,msg_id:%s,err:(%s)", data.AppID, data.RegID, data.ID, err.Error())
 		//不需要nsq消息重发
 		return nil
 	}
 
-	log.Infof("push success,msg_id:%s", data.ID)
+	log.Infof("push success for app_id:%s,reg_id:%s,msg_id:%s", data.AppID, data.RegID, data.ID)
 	return nil
 }
 

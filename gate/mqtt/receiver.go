@@ -21,7 +21,7 @@ func (s *Session) ReadLoop() {
 	defer func() {
 		// handle panic
 		if r := recover(); r != nil {
-			log.Errorf("session ReadLoop recover: %v, DEBUG.STACK=%v", r, string(debug.Stack()))
+			log.Errorf("session(id:%s) ReadLoop recover: %v, DEBUG.STACK=%v", s.ID, r, string(debug.Stack()))
 		}
 
 		s.closeWait.Done()

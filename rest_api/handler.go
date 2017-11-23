@@ -23,7 +23,7 @@ func (*push) Push(ctx *Context) {
 		return
 	}
 
-	log.Debugf("Msg:%+v", string(bin))
+	log.Debugf("message:%+v", string(bin))
 	notification, err := ValidateNotification(bin)
 	if nil != err {
 		log.Errorln(err)

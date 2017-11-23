@@ -100,6 +100,7 @@ password: BASE64(RC4(app_id:app_secret)
 	2. GIN WEB框架
 	3. Redis 保存session
 	4. MongoDB 数据库
-	
 
+### 架构
 
+	session信息按照Hash表结构存放在Redis里面，具体形式为{"app_id":"","reg_id":"","gate_server_ip":"","gate_server_port":""},哈希KEY是app_id:reg_id。

@@ -61,12 +61,12 @@ func (np *NsqProducer) WriteLoop() {
 	for {
 		select {
 		case msg := <-np.cacheOutCh:
-			log.Debugf("%s push", string(msg))
 			err := np.publish(np.topic, msg)
 			if nil != err {
-				log.Errorln(err)
+				log.Errorf("message:%s into nsq failed,err:%s", string(msg), err.Error())
 				continue
 			}
+			log.Debugf("message:%s into nsq succcess", string(msg))
 		}
 	}
 }
@@ -76,7 +76,7 @@ func (np *NsqProducer) publish(topic string, data []byte) error {
 }
 
 func (np *NsqProducer) Publish(data []byte) error {
-	log.Infof("%s into out queue", string(data))
+	log.Infof("message:%s into out queue", string(data))
 	np.cacheInCh <- data
 	return nil
 }

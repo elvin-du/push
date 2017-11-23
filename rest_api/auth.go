@@ -19,7 +19,7 @@ const (
 
 func Auth(ctx *Context) error {
 	bearer := ctx.Request.Header.Get("Authorization")
-	log.Debugln("bearer", bearer)
+	log.Debugln("raw bearer:", bearer)
 	if strings.TrimSpace(bearer) == "" {
 		log.Errorln("Bearer empty")
 		ctx.AbortWithError(401, E_AUTH_FAILED)

@@ -35,7 +35,7 @@ func Get(ip, port string) (*grpcpool.ClientConn, error) {
 		}
 		pools[target(ip, port)] = pool
 	}
-	log.Infof("pool capacity:%d,available:%d", pool.Capacity(), pool.Available())
+	log.Infof("grpcpool capacity:%d,available:%d", pool.Capacity(), pool.Available())
 
 	ctx, _ := context.WithTimeout(context.Background(), 10*time.Second)
 	return pool.Get(ctx)

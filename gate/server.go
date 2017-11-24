@@ -7,7 +7,6 @@ import (
 	"net"
 	"os"
 	"os/signal"
-	//	gateMsg "push/gate/message"
 	"push/gate/mqtt"
 	"push/gate/service/config"
 	"push/pb"
@@ -19,13 +18,11 @@ import (
 var (
 	defaultServer = &Server{
 		UserManager: NewUserManager(),
-		Keepalive:   60 * 5, //五分钟检查一次客户端连接情况
 	}
 )
 
 type Server struct {
 	*UserManager
-	Keepalive   int64 //单位：秒
 	rpcListener net.Listener
 	tcpListener net.Listener
 }
@@ -102,10 +99,12 @@ func (s *Server) handleConnection(conn net.Conn) {
 
 func (s *Server) Close(reason interface{}) {
 	if nil != s.tcpListener {
+		log.Infof("tcp closing")
 		s.tcpListener.Close()
 	}
 
 	if nil != s.rpcListener {
+		log.Infof("rpc closing")
 		s.rpcListener.Close()
 	}
 }

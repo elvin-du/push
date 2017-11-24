@@ -11,6 +11,7 @@ import (
 	"push/gate/service/config"
 	"push/gate/service/session"
 	"strings"
+	"time"
 
 	"github.com/surgemq/message"
 )
@@ -55,6 +56,7 @@ func Auth(ses *mqtt.Session, msg *message.ConnectMessage) (*User, error) {
 		log.Error(err)
 		return nil, err
 	}
+	u.SetTouchTime(time.Now().Unix())
 
 	return u, nil
 }
@@ -111,16 +113,16 @@ func doAuth(appID, appSecret string) error {
 		log.Errorln(err)
 		return err
 	}
-	log.Debugln("Decrypted app_secret:", string(bin))
+	log.Debugln("decrypted raw app_secret:", string(bin))
 
 	tmp := strings.Split(string(bin), ":")
 	if 2 != len(tmp) {
-		log.Errorln("Invalid app_secret:", tmp)
+		log.Errorln("invalid app_secret:", tmp)
 		return REQ_DATA_INVALID
 	}
 
 	if appID != tmp[0] {
-		log.Errorf("Decrypted app_id:%s != parameter app_id:%s", tmp[0], appID)
+		log.Errorf("decrypted app_id:%s != parameter app_id:%s", tmp[0], appID)
 		return REQ_DATA_INVALID
 	}
 

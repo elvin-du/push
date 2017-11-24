@@ -37,7 +37,6 @@ func (s *Session) ReadLoop() {
 			if err != io.EOF {
 				log.Errorf("read message failed, err:%s", err.Error())
 			}
-
 			return
 		}
 

@@ -33,7 +33,7 @@ type Session struct {
 	outCh        chan []byte
 
 	//close
-	closeChan   chan byte // close write loop
+	//	closeChan   chan byte // close write loop
 	closeWait   *sync.WaitGroup
 	closeFlag   int32
 	closeReason error
@@ -51,9 +51,9 @@ func NewSession(conn net.Conn) *Session {
 		writeTimeout: DEFAULT_WRITE_TIMEOUT,
 		touchTime:    time.Now().Unix(),
 		outCh:        make(chan []byte, DEFAULT_OUT_CH_SIZE),
-		closeChan:    make(chan byte),
-		closeWait:    new(sync.WaitGroup),
-		closeFlag:    sessionFlagClosed,
+		//		closeChan:    make(chan byte),
+		closeWait: new(sync.WaitGroup),
+		closeFlag: sessionFlagClosed,
 	}
 
 	ses.Conn.SetWriteDeadline(time.Now().Add(ses.writeTimeout * time.Second))
@@ -84,7 +84,9 @@ func (s *Session) Close(reason error) {
 		}
 
 		s.closeReason = reason
-		close(s.closeChan)
+		//		close(s.closeChan)
+		s.Conn.Close()
+		s.closeWait.Wait()
 		s.closeCallback(s, reason)
 	}
 }

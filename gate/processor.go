@@ -9,8 +9,6 @@ import (
 	"push/gate/service/session"
 	"time"
 
-	//	gateMsg "push/gate/message"
-
 	"github.com/surgemq/message"
 )
 
@@ -52,7 +50,7 @@ func Dispatch(ses *mqtt.Session, msg message.Message) error {
 
 func processPublish(ses *mqtt.Session, msg *message.PublishMessage) error {
 	log.Debugf("process publish msg:%+v", string(msg.Payload()))
-	log.Debugf("%+v", string(msg.Payload()))
+
 	cliMsg := &ClientMessage{}
 	err := json.Unmarshal(msg.Payload(), cliMsg)
 	if nil != err {
@@ -64,8 +62,10 @@ func processPublish(ses *mqtt.Session, msg *message.PublishMessage) error {
 	case CLIENT_MESSAGE_KIND_PUB_ACK:
 		return handlePubAck(cliMsg.Content)
 	case CLIENT_MESSAGE_KIND_SIGNOUT:
+		return handleSignOut(cliMsg.Content)
 	}
-	log.Errorln("Invalid message kind")
+
+	log.Errorln("invalid message kind")
 	return errors.New("Invalid message kind")
 }
 
@@ -75,7 +75,7 @@ func handleSignOut(data interface{}) error {
 		log.Errorln(err)
 		return err
 	}
-	log.Debugf("%+v", string(bin))
+	log.Debugf("signout message data:%+v", string(bin))
 	out := &SignOut{}
 	err = json.Unmarshal(bin, out)
 	if nil != err {
@@ -83,6 +83,7 @@ func handleSignOut(data interface{}) error {
 		return err
 	}
 
+	log.Infof("remove user(app_id:%s,reg_id:%s) cache from mem", out.AppID, out.RegID)
 	defaultServer.RemoveUser(out.AppID, out.RegID)
 	return nil
 }
@@ -100,7 +101,7 @@ func handlePubAck(data interface{}) error {
 		log.Errorln(err)
 		return err
 	}
-	log.Debugf("got publish message ack for %+v", ack)
+	log.Debugf("publish message ack data: %+v", ack)
 
 	//	if gateMsg.DefaultMessageManager.IsExist(ack.MsgID) {
 	//		log.Infof("remove msg:%s from messageManager", ack.MsgID)
@@ -109,7 +110,7 @@ func handlePubAck(data interface{}) error {
 	log.Infof("remove message msg_id:%s from DB", ack.MsgID)
 	err = model.MessageModel().Delete(ack.MsgID)
 	if nil != err {
-		log.Errorln(err, "msg_id:", ack.MsgID)
+		log.Errorf("mark message(id:%s) already read failed,err:%s ", ack.MsgID, err.Error())
 		return err
 	}
 	//	}
@@ -168,7 +169,6 @@ func processConnect(ses *mqtt.Session, msg *message.ConnectMessage) (err error) 
 		log.Error(err)
 		return err
 	}
-	u.SetTouchTime(time.Now().Unix())
 
 	//连接成功
 	connAckMsg.SetReturnCode(message.ConnectionAccepted)

@@ -33,24 +33,24 @@ func (s *Session) WriteLoop() {
 			err = s.Send(out)
 			if nil != err {
 				log.Errorln(err)
-				//TODO 直接断开连接？等待心跳机制检查时删除本服务？
+				//TODO 直接return?
 				return
 			}
 
 			if nil != s.sendPacketCallback {
 				go s.sendPacketCallback(s, out)
 			}
-		case <-s.closeChan:
-			s.Conn.Close()
+			//		case <-s.closeChan:
+			//			s.Conn.Close()
 
-			s.closeWait.Wait()
+			//			s.closeWait.Wait()
 
-			// invoke session close callback
-			if s.closeCallback != nil {
-				s.closeCallback(s, s.closeReason)
-			}
+			//			// invoke session close callback
+			//			if s.closeCallback != nil {
+			//				s.closeCallback(s, s.closeReason)
+			//			}
 
-			return
+			//			return
 		}
 	}
 }

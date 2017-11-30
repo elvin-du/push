@@ -94,7 +94,7 @@ func (s *Session) ReadMessage() (message.Message, []byte, int, error) {
 		return msg, nil, dn, nil
 	}
 
-	_, err := s.Conn.Read(buf[n+1:]) //[len(b)+1:]
+	_, err := io.ReadFull(s.Conn, buf[n+1:]) //[len(b)+1:]
 	if err != nil {
 		log.Error(err)
 		return nil, buf, 0, err

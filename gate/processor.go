@@ -110,7 +110,7 @@ func handlePubAck(data interface{}) error {
 	log.Infof("remove message msg_id:%s from DB", ack.MsgID)
 	err = model.MessageModel().Delete(ack.MsgID)
 	if nil != err {
-		log.Errorf("mark message(id:%s) already read failed,err:%s ", ack.MsgID, err.Error())
+		log.Errorf("delete message(id:%s) failed,err:%s ", ack.MsgID, err.Error())
 		return err
 	}
 	//	}

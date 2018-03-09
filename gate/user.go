@@ -34,7 +34,7 @@ func Auth(ses *mqtt.Session, msg *message.ConnectMessage) (*User, error) {
 	regID := string(msg.ClientId())
 	err := ValidateRegID(regID)
 	if nil != err {
-		log.Error(err, "reg_id", regID)
+		log.Errorf("validate reg_id failed,err:%s,reg_id:%s", err.Error(), regID)
 		return nil, err
 	}
 
